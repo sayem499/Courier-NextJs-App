@@ -85,19 +85,51 @@ const logoutUser = asyncHandler ( (req, res) => {
 //@route    GET /api/users/profile
 //@access   Private
 const getUserProfile = asyncHandler ( (req, res) => {
-    res.status(200).json({ message: 'User Profile' });
+    const user = {
+        _id: req.user._id,
+        user_firstname: req.user.user_firstname,
+        user_lastname: req.user.user_lastname,
+        user_email: req.user.user_email,
+        user_phonenumber: req.user.user_phonenumber
+    }
+    res.status(200).json(user);
 });
 
 //@desc     Get user profile
 //@route    PUT /api/users/profile
 //@access   Private
-const updateUserProfile = asyncHandler ( (req, res) => {
-    res.status(200).json({ message: 'Update User Profile' });
+const updateUserProfile = asyncHandler ( async (req, res) => {
+    const user = await Users.findById(req.user._id);
+    if(user){
+        user.user_firstname = req.body.user_firstname || user.user_firstname;
+        user.user_lastname = req.body.user_lastname || user.user_lastname;
+        user.user_email = req.body.user_email || user.user_email;
+        user.user_phonenumber = req.body.user_phonenumber || user.user_phonenumber;
+
+        if(req.body.user_password){
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(req.body.user_password, salt);
+            user.user_password = hashedPassword;
+        }
+
+        const updatedUser = await user.save();
+        res.status(200).json({
+            _id: updatedUser._id,
+            user_firstname: updatedUser.user_firstname,
+            user_lastname: updatedUser.user_lastname,
+            user_email: updatedUser.user_email,
+            user_phonenumber: updatedUser.user_phonenumber
+        }); 
+
+    } else {
+        res.status(400);
+        throw new Error('User not found!');
+    }
 });
 
 //Generate JWT token in cookie
-const generateToken = (res, id) => {
-   const token = jwt.sign({id}, process.env.JWT_SECRET, {
+const generateToken = (res, _id) => {
+   const token = jwt.sign({_id}, process.env.JWT_SECRET, {
         expiresIn: '1d',
     }); 
 
