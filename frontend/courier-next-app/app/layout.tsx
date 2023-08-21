@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Courier NextJS App',
-  description: 'Built using nextJS.',
+  description: 'Built using NextJS.',
 }
 
 export default function RootLayout({
@@ -16,7 +16,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} w-full h-full bg-slate-900 text-slate-100 flex-grow `}>{children}</body>
+      <body className={`${inter.className} w-full h-full dark:bg-slate-900
+       bg-slate-200 text-black dark:text-slate-300`}>{children}</body>
     </html>
   )
 }
