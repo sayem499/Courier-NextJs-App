@@ -33,7 +33,7 @@ export default function Header() {
 
     return (
         <>
-            <header className="flex w-full h-20 justify-between items-center bg-slate-700 ">
+            <header className="flex w-full h-20 justify-between items-center dark:bg-slate-700  bg-slate-500">
 
                 <span className="text-sm text-slate-300 md:text-xl xl:text-3xl ml-5 ">NextCourier-&gt;</span>
 
@@ -52,7 +52,7 @@ export default function Header() {
                         className='text-slate-300'/></button>}
 
                     <button className="mr-5 rounded-full 
-        bg-slate-600 px-4 py-2 text-slate-300 hover:text-white">Login</button>
+        bg-green-500 px-4 py-2 text-gray-700 hover:text-white">Login</button>
                 </div>
 
                 <div className='sm: mr-5 items-center cursor-pointer md:hidden'>
@@ -61,7 +61,7 @@ export default function Header() {
                         <button className='m-5' onClick={(event) => changeMode(event, 'light')}><DarkModeOutlinedIcon 
                         className='text-slate-300 ' /></button>}
 
-                    <MenuIcon className='text-slate-300 ' onClick={(e) => menuOpen(e)} />
+                    <MenuIcon className='text-slate-300 ' onClick={(event:React.MouseEvent<SVGSVGElement>) => menuOpen(event)} />
 
                     {isMenuOpen && <Dropdownmenu />}
 
