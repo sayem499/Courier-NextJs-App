@@ -1,31 +1,42 @@
+
 import Imageslider from '@/components/imageslider';
 import Header from '../components/header';
+import Choice from '@/components/choice_section';
+
 interface Slide {
   url: string;
 }
 
 type SlideArray = Slide[];
 
+
+
 export default function Home() {
   const slides: SlideArray = [
-    {url: "/front_image_3.png"},
-    {url: "/front_image_2.jpeg"},
-    {url: "/front_image_1.jpg"},
- ]
+    { url: "/front_image_3.png" },
+    { url: "/front_image_2.jpeg" },
+    { url: "/front_image_1.jpg" },
+  ]
+
+  const messages: string[] = [
+    "Client satisfaction is \nour first priority",
+    "Our employees are \ntrained professionals",
+    "We deliver all over \nBangladesh",
+  ]
 
   return (
     <>
 
       <Header />
-      <div className="flex w-full h-full flex-col justify-center md:justify-start">
-        <div className='flex w-full h-screen md:justify-start 
+      <div className="flex w-full h-[90%] flex-col justify-center md:justify-start overflow-auto">
+        <div className='flex w-full h-full md:justify-start 
           justify-center sm:flex-row sm:h-full flex-col'>
 
           <div className='flex w-full  sm:w-4/5 h-1/2 sm:h-full justify-center'>
-            <Imageslider  slides= {slides}/>
+            <Imageslider messages={messages} slides={slides} />
           </div>
 
-          <div className='flex w-full h-1/2 sm:mr-3 sm:h-screen justify-center 
+          <div className='flex w-full h-1/2 sm:mr-3 sm:h-full justify-center 
             md:justify-start sm:w-1/4 '>
 
             <div className='flex flex-col w-full sm:w-full h-full sm:h-4/5 
@@ -63,28 +74,27 @@ export default function Home() {
                 <span className='mr-2 ml-2'>or</span>
                 <span className='border border-slate-300 w-1/2'></span>
               </div>
-              
+
               <span className='sm:mt-3 text-lg'>Track your package.</span>
               <div className='flex items-center w-4/5 '>
-              
+
                 <input className='text-sm mt-2 mb-2 p-2 w-4/5 rounded-l sm:text-xs'
                   placeholder='Track courier'
                   type='text' name='track_id'></input>
 
-                  <button className="bg-blue-500 w-1/5 h-auto sm:w-2/5
+                <button className="bg-blue-500 w-1/5 h-auto sm:w-2/5
                    hover:bg-blue-700 text-white sm:text-xs text-sm p-2 
                     item-center  rounded-r mt-2 mb-2">
-                    Track
-                  </button>
+                  Track
+                </button>
               </div>
 
             </div>
           </div>
         </div>
-
-
-
       </div>
+
+      <Choice/>
 
     </>
   )

@@ -33,7 +33,7 @@ export default function Header() {
 
     return (
         <>
-            <header className="flex w-full h-20 justify-between items-center dark:bg-slate-700  bg-slate-500">
+            <header className="flex w-full h-[10%] justify-between items-center dark:bg-slate-700  bg-slate-500">
 
                 <span className="text-sm text-slate-300 md:text-xl xl:text-3xl ml-5 ">NextCourier-&gt;</span>
 
@@ -52,7 +52,7 @@ export default function Header() {
                         className='text-slate-300'/></button>}
 
                     <button className="mr-5 rounded-full 
-        bg-green-500 px-4 py-2 text-gray-700 hover:text-white">Login</button>
+        bg-green-700 px-4 py-2 text-gray-200 hover:text-white">Login</button>
                 </div>
 
                 <div className='sm: mr-5 items-center cursor-pointer md:hidden'>
