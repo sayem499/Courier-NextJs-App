@@ -1,4 +1,4 @@
-
+import Footer from '@/components/footer';
 import Imageslider from '@/components/imageslider';
 import Header from '../components/header';
 import Choice from '@/components/choice_section';
@@ -95,6 +95,7 @@ export default function Home() {
       </div>
 
       <Choice/>
+      <Footer/>
 
     </>
   )

@@ -33,35 +33,35 @@ export default function Header() {
 
     return (
         <>
-            <header className="flex w-full h-[10%] justify-between items-center dark:bg-slate-700  bg-slate-500">
+            <header className="flex w-full h-[10%] justify-between items-center dark:bg-slate-700  bg-slate-50">
 
-                <span className="text-sm text-slate-300 md:text-xl xl:text-3xl ml-5 ">NextCourier-&gt;</span>
+                <span className="text-sm text-slate-900 dark:text-slate-300 md:text-xl xl:text-3xl ml-5 italic ">NextCourier-&gt;</span>
 
                 <div>
                     <ul className="sm: hidden md:flex justify-between items-center">
-                        <li className='mr-5 text-slate-300 hover:text-white cursor-pointer'>Enterprise</li>
-                        <li className='ml-5 text-slate-300 hover:text-white cursor-pointer '>Courier</li>
+                        <li className='mr-5 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg dark:hover:text-white cursor-pointer'>Enterprise</li>
+                        <li className='ml-5 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg dark:hover:text-white cursor-pointer '>Courier</li>
                     </ul>
                 </div>
 
                 <div className='md:flex items-center justify-between sm: hidden'>
 
                     {appMode === 'light' ? <button className='m-5' onClick={(event) => changeMode(event, 'dark')}>
-                        <LightModeOutlinedIcon className='text-slate-300' /></button> :
+                        <LightModeOutlinedIcon className='text-slate-900 dark:text-slate-300' /></button> :
                         <button className='m-5' onClick={(event) => changeMode(event, 'light')}><DarkModeOutlinedIcon  
                         className='text-slate-300'/></button>}
 
                     <button className="mr-5 rounded-full 
-        bg-green-700 px-4 py-2 text-gray-200 hover:text-white">Login</button>
+        bg-green-500 px-4 py-2 text-gray-50 hover:text-white">Login</button>
                 </div>
 
                 <div className='sm: mr-5 items-center cursor-pointer md:hidden'>
                     {appMode === 'light' ? <button className='m-5' onClick={(event) => changeMode(event, 'dark')}>
-                        <LightModeOutlinedIcon className='text-slate-300' /></button> :
+                        <LightModeOutlinedIcon className='text-slate-900 dark:text-slate-300' /></button> :
                         <button className='m-5' onClick={(event) => changeMode(event, 'light')}><DarkModeOutlinedIcon 
                         className='text-slate-300 ' /></button>}
 
-                    <MenuIcon className='text-slate-300 ' onClick={(event:React.MouseEvent<SVGSVGElement>) => menuOpen(event)} />
+                    <MenuIcon className='dark:text-slate-300 text-black' onClick={(event:React.MouseEvent<SVGSVGElement>) => menuOpen(event)} />
 
                     {isMenuOpen && <Dropdownmenu />}
 
