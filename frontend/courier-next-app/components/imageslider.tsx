@@ -43,7 +43,7 @@ const Imageslider: React.FC<{ slides: SlideArray, messages: string[] }> =
     }
 
     return (
-      <div className="sm:w-full sm:h-[78%] items-center group bg-black">
+      <div className="sm:w-full sm:h-[78%] items-center group bg-black overflow-hidden z-0">
 
         <img src={slides[index].url} alt=''
           className="object-fill w-full sm:h-[100%] opacity-50 "></img>

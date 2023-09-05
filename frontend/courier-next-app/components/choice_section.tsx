@@ -11,7 +11,7 @@ import React from 'react'
 
 const Choice : React.FC = () => {
   return (
-    <div id='choose' className='w-full h-screen sm:w-[100%] sm:h-screen bg-white dark:bg-slate-900  flex-col overflow-auto'>
+    <div id='choose' className='w-full h-screen sm:w-[100%] sm:h-screen bg-white dark:bg-slate-900  flex-col overflow-auto z-0'>
         
         <section className='flex w-full h-[10%] justify-center items-center mt-10 sm:m-0'>
           <motion.span 
@@ -26,7 +26,7 @@ const Choice : React.FC = () => {
           <motion.section 
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView = {{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1, type: "spring", stiffness: 200 }}
+            transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
             viewport={{ once: true }}
             className='flex flex-col bg-slate-50 dark:bg-slate-600 w-[50%] sm:w-[20%] h-[100%] m-5 sm:m-10 items-center sm:justify-start justify-center'>
               <SpeedIcon className='w-[50%] h-[50%] mt-2'/>
@@ -37,7 +37,7 @@ const Choice : React.FC = () => {
           <motion.section 
             initial={{ opacity: 0, scale: 0.5 }} 
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{  delay: 1, type: "spring", stiffness: 200 }} 
+            transition={{  delay: 0.5, type: "spring", stiffness: 200 }} 
             viewport={{ once: true }}
             className='flex flex-col bg-slate-50 dark:bg-slate-600 w-[50%] sm:w-[20%] h-[100%] m-5 sm:m-10 items-center sm:justify-start justify-center'>
               <VerifiedUserOutlinedIcon className='w-[50%] h-[50%] mt-2'/>
@@ -48,7 +48,7 @@ const Choice : React.FC = () => {
           <motion.section 
             initial={{ opacity: 0, scale: 0.5 }} 
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{  delay: 1,type: "spring", stiffness: 200 }} 
+            transition={{  delay: 0.5,type: "spring", stiffness: 200 }} 
             viewport={{ once: true }}
             className='flex flex-col bg-slate-50 dark:bg-slate-600 w-[50%] sm:w-[20%] h-[100%] m-5 sm:m-10 items-center sm:justify-start justify-center'>
               <ThumbUpAltOutlinedIcon className='w-[50%] h-[50%] mt-2'/>
@@ -62,7 +62,7 @@ const Choice : React.FC = () => {
           <motion.section 
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView = {{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1, type: "spring", stiffness: 200 }}
+            transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
             viewport={{ once: true }}
             className='flex flex-col bg-slate-50 dark:bg-slate-600 w-[50%] sm:w-[20%] h-[100%] m-5 sm:m-10 items-center sm:justify-start justify-center'>
               <PlaceOutlinedIcon className='w-[50%] h-[50%] mt-2'/>
@@ -73,7 +73,7 @@ const Choice : React.FC = () => {
           <motion.section 
             initial={{ opacity: 0, scale: 0.5 }} 
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{  delay: 1, type: "spring", stiffness: 200 }} 
+            transition={{  delay: 0.5, type: "spring", stiffness: 200 }} 
             viewport={{ once: true }}
             className='flex flex-col bg-slate-50 dark:bg-slate-600 w-[50%] sm:w-[20%] h-[100%] m-5 sm:m-10 items-center sm:justify-start justify-center'>
               <PriceCheckIcon className='w-[50%] h-[50%] mt-2'/>
@@ -84,7 +84,7 @@ const Choice : React.FC = () => {
           <motion.section 
             initial={{ opacity: 0, scale: 0.5 }} 
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{  delay: 1,type: "spring", stiffness: 200 }}
+            transition={{  delay: 0.5,type: "spring", stiffness: 200 }}
             viewport={{ once: true }} 
             className='flex flex-col bg-slate-50 dark:bg-slate-600 w-[50%] sm:w-[20%] h-[100%] m-5 sm:m-10 items-center sm:justify-start justify-center'>
               <LocalShippingOutlinedIcon className='w-[50%] h-[50%] mt-2'/>

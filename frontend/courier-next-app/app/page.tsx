@@ -1,7 +1,6 @@
-import Footer from '@/components/footer';
 import Imageslider from '@/components/imageslider';
-import Header from '../components/header';
 import Choice from '@/components/choice_section';
+import Signup from '@/components/signup_section';
 
 interface Slide {
   url: string;
@@ -27,8 +26,8 @@ export default function Home() {
   return (
     <>
 
-      <Header />
-      <div className="flex w-full h-[90%] flex-col justify-center md:justify-start overflow-auto">
+    
+      <div className="flex w-full h-[100%] flex-col justify-center md:justify-start overflow-auto">
         <div className='flex w-full h-full md:justify-start 
           justify-center sm:flex-row sm:h-full flex-col'>
 
@@ -36,66 +35,12 @@ export default function Home() {
             <Imageslider messages={messages} slides={slides} />
           </div>
 
-          <div className='flex w-full h-1/2 sm:mr-3 sm:h-full justify-center 
-            md:justify-start sm:w-1/4 '>
-
-            <div className='flex flex-col w-full sm:w-full h-full sm:h-4/5 
-             bg-slate-400 dark:bg-slate-600 rounded-b-2xl 
-             items-center text-slate-600 dark:text-slate-300 overflow-auto'>
-
-              <span className='sm:mt-10 text-xl'>Sign up</span>
-
-              <div className='flex w-full flex-col 
-               items-center mt-2 justify-center'>
-
-                <input className='text-black text-sm m-2 p-2 w-4/5 rounded'
-                  placeholder='Email'
-                  type='text' name='user_email'></input>
-
-                <input className='text-black text-sm m-2 p-2 w-4/5 rounded'
-                  placeholder='Phonenumber'
-                  type='text' name='user_phonenumber'></input>
-
-                <input className='text-black text-sm m-2 p-2 w-4/5 rounded'
-                  placeholder='Password'
-                  type='text' name='user_password'></input>
-
-                <input className='text-black text-sm m-2 p-2 w-4/5 rounded'
-                  placeholder='Retype password'
-                  type='text' name='user_passwordR'></input>
-
-                <button className="bg-blue-500 mt-2 ml-2 mr-2 mb-5 w-4/5 
-                hover:bg-blue-700 text-white  py-2 px-4 rounded">
-                  Sign up
-                </button>
-              </div>
-              <div className='flex items-center w-4/5 h-fit-content mt-3 mb-3'>
-                <span className='border border-slate-300 w-1/2'></span>
-                <span className='mr-2 ml-2'>or</span>
-                <span className='border border-slate-300 w-1/2'></span>
-              </div>
-
-              <span className='sm:mt-3 text-lg'>Track your package.</span>
-              <div className='flex items-center w-4/5 '>
-
-                <input className='text-sm mt-2 mb-2 p-2 w-4/5 rounded-l sm:text-xs'
-                  placeholder='Track courier'
-                  type='text' name='track_id'></input>
-
-                <button className="bg-blue-500 w-1/5 h-auto sm:w-2/5
-                   hover:bg-blue-700 text-white sm:text-xs text-sm p-2 
-                    item-center  rounded-r mt-2 mb-2">
-                  Track
-                </button>
-              </div>
-
-            </div>
-          </div>
+          <Signup />
         </div>
       </div>
 
-      <Choice/>
-      <Footer/>
+      <Choice />
+      
 
     </>
   )
