@@ -15,6 +15,8 @@ const authUser = asyncHandler ( async (req, res) => {
         generateToken(res, user._id);
         res.status(201).json({
             _id: user._id,
+            user_firstname: user.user_firstname,
+            user_lastname: user.user_lastname,
             user_email: user.user_email,
         });
     } else {
@@ -60,6 +62,8 @@ const registerUser = asyncHandler ( async (req, res) => {
         generateToken(res, user._id);
         res.status(201).json({
             _id: user._id,
+            user_firstname: user.user_firstname,
+            user_lastname: user.user_lastname,
             user_email: user.user_email,
         });
     } else {

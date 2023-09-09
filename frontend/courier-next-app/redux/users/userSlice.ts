@@ -12,10 +12,10 @@ interface User {
 
 
 
-type UserArray = User[];
+
 
 type UserState = {
-    user: UserArray | null;
+    user: User | null;
 }
 
 const currentUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
@@ -30,7 +30,7 @@ export const userSlice = createSlice({
     reducers: {
         resetUser: () => initialState,
         
-        setUserData: (state, action: PayloadAction<UserArray>) => {
+        setUserData: (state, action: PayloadAction<User>) => {
             state.user = action.payload;
             localStorage.setItem('user', JSON.stringify(action.payload));
         },

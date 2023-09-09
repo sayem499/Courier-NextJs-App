@@ -46,7 +46,7 @@ const Signup: React.FC = () => {
 
   return (
     <div className='flex w-full h-1/2 sm:mr-3 sm:h-full justify-center 
-            md:justify-start sm:w-1/4 z-0'>
+            md:justify-start sm:w-1/4'>
 
             <div className='flex flex-col w-full sm:w-full h-full sm:h-[85%] 
              bg-slate-400 dark:bg-slate-600 rounded-b-2xl 

@@ -9,12 +9,14 @@ import { logout } from '@/redux/users/userSlice';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useRouter } from 'next/navigation';
 import Login from './login';
+import Nav from './nav_options';
+import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 
 
- const Header: React.FC = () => {
+const Header: React.FC = () => {
     const [appMode, setAppMode] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [showLogin, setShowLogin]  = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -66,25 +68,31 @@ import Login from './login';
 
     return (
         <>
-            <header className="flex w-full h-[10%] justify-between items-center dark:bg-slate-700  bg-slate-50 z-0">
+            <header className={`flex w-full h-[10%] justify-between items-center dark:bg-slate-700  bg-slate-50 ${showLogin ? '' : 'drop-shadow-md'}`}>
 
                 <span className="text-sm text-slate-900 dark:text-slate-300 md:text-xl xl:text-3xl ml-5 italic ">NextCourier-&gt;</span>
 
-                <div>
-                    <ul className="sm: hidden md:flex justify-between items-center">
-                        <li className='mr-5 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg dark:hover:text-white cursor-pointer'>Enterprise</li>
-                        <li className='ml-5 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg dark:hover:text-white cursor-pointer '>Courier</li>
-                    </ul>
-                </div>
+                { user && <button className=' sm:flex items-center justify-center hidden h-[60%] w-[10%]  dark:border  rounded-lg text-sm shadow-md'><GpsFixedIcon className='text-sm mr-1' />Track Parcel</button> }
 
-                <div className='md:flex items-center justify-between sm: hidden'>
+                <Nav user={user} />
 
+
+                {user && <div className='sm:flex items-center justify-center hidden w-[10%] h-[60%]'>
+
+                    <button className='h-[100%] w-[100%] border rounded-lg text-sm dark:bg-transparent hover:text-white text-slate-100 bg-blue-500'>Create Parcel</button>
+
+
+                 </div>
+                }
+
+
+                <div className='sm:flex items-center justify-between hidden'>
                     {appMode === 'light' ? <button className='m-5' onClick={(event) => changeMode(event, 'dark')}>
                         <LightModeOutlinedIcon className='text-slate-900 dark:text-slate-300' /></button> :
                         <button className='m-5' onClick={(event) => changeMode(event, 'light')}><DarkModeOutlinedIcon
                             className='text-slate-300' /></button>
                     }
-                    
+
                     {
                         user ? <button onClick={logoutFunction}
                             className="mr-5 rounded-full bg-red-500 
@@ -96,7 +104,7 @@ import Login from './login';
                     }
                 </div>
 
-                <div className='sm: mr-5 items-center cursor-pointer md:hidden'>
+                <div className='flex mr-5 items-center cursor-pointer sm:hidden'>
                     {appMode === 'light' ? <button className='m-5' onClick={(event) => changeMode(event, 'dark')}>
                         <LightModeOutlinedIcon className='text-slate-900 dark:text-slate-300' /></button> :
                         <button className='m-5' onClick={(event) => changeMode(event, 'light')}><DarkModeOutlinedIcon

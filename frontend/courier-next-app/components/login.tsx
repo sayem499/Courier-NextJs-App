@@ -29,10 +29,10 @@ const Login: React.FC<{closeLogin: (event: React.MouseEvent<HTMLDivElement, Mous
   
   return (
     <div id="login-container" className="flex flex-col items-center justify-center h-[100%] w-[100%] fixed top-0 left-0 bg-black/[0.4] z-10" onClick={e => {if((e.target as Element ).id === 'login-container') {closeLogin()}}}>
-      <div className="flex flex-col rounded-lg justify-center items-center h-[80%] w-[40%] dark:bg-slate-600 bg-gray-100">
+      <div className="flex flex-col rounded-lg justify-center items-center h-[80%] w-[35%] dark:bg-slate-600 bg-gray-100">
 
         <form className=" flex flex-col justify-center items-center w-[90%] h-[90%]">
-          <div onClick = {closeLogin}><CloseIcon className="absolute top-[13%] right-[32%] cursor-pointer"/></div>
+          <div onClick = {closeLogin}><CloseIcon className="absolute top-[13%] right-[34%] cursor-pointer"/></div>
           <span className='sm:mt-2 sm: mb-3 text-2xl text-black dark:text-white'>Login</span>
           <input value={user_email} onChange={e => { setEmail(e.target.value) }}
             className='text-black text-sm m-2 p-2 w-4/5 rounded border-black border'
