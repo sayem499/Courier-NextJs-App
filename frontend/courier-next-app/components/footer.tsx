@@ -3,12 +3,12 @@ import { SocialIcon } from 'react-social-icons';
 
 const Footer = () => {
   return (
-    <div className="flex h-screen sm:h-[100%] w-[100%] 
+    <div className="flex h-screen sm:h-[30%] w-[100%] 
     items-center dark:bg-slate-900 bg-white flex-col">
-      <div className="flex h-[100%] sm:h-[70%] w-[100%] bg-white dark:bg-slate-900">
+      {/* <div className="flex h-[100%] sm:h-[70%] w-[100%] bg-white dark:bg-slate-900">
 
-      </div>
-      <div className="flex h-[100%] pt-5 pl-20 sm:h-[30%] w-[100%]  bg-gray-300 dark:bg-slate-300 items-center justify-between">
+      </div> */}
+      <div className="flex h-[100%] pt-5 pl-20 sm:h-[100%] w-[100%]  bg-gray-300 dark:bg-slate-300 items-center justify-between">
         <div className="flex h-[100%] w-[20%] flex-col pl-5 m-2">
           <span className="text-black italic text-2xl font-semibold">NextCourier-&gt;</span>
           <span className="text-black mt-5">For better user experience use our app.</span>

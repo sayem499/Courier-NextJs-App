@@ -62,8 +62,12 @@ const Header: React.FC = () => {
     }
 
     const closeLogin = (event: React.MouseEvent<HTMLDivElement, MouseEvent> | void) => {
-        console.log('function')
         setShowLogin(false);
+    }
+
+    const routeNewParcel = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        router.push('/new_parcel');
     }
 
     return (
@@ -79,7 +83,8 @@ const Header: React.FC = () => {
 
                 {user && <div className='sm:flex items-center justify-center hidden w-[10%] h-[60%]'>
 
-                    <button className='h-[100%] w-[100%] border rounded-lg text-sm dark:bg-transparent hover:text-white text-slate-100 bg-blue-500'>Create Parcel</button>
+                    <button className='h-[100%] w-[100%] border rounded-lg text-sm dark:bg-transparent
+                     hover:text-white text-slate-100 bg-blue-500' onClick={routeNewParcel}>Create Parcel</button>
 
 
                  </div>
