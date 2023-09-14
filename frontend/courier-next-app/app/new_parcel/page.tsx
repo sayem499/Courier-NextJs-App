@@ -147,9 +147,34 @@ const Newparcel = () => {
     console.log(senderAddress + ' '+ senderDivision+ ' '+ senderDistrict+ ' '+ senderUpazila+ ' '+ senderPostcode) 
     console.log(parcelWeight+ ' ' + parcelType)
 
+
+
   }
 
+  /* Function to handle reset */
 
+  const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setRecieverName('');
+    setRecieverPhonenumber('');
+    setAddress('');
+    setDivision('');
+    setDistrict('');
+    setUpazila('');
+    setPostcode('');
+
+    setSenderName('');
+    setSenderPhonenumber('');
+    setSenderAddress('');
+    setSenderDivision('');
+    setSenderDistrict('');
+    setSenderUpazila('');
+    setSenderPostcode('');
+
+    setParcelWeight(500);
+    setParcelType('others');
+
+  }
 
 
   return (
@@ -163,7 +188,7 @@ const Newparcel = () => {
       <div className='w-[100%] h-[85%]  sm:pl-10 sm:pr-10'>
         <span className=' text-4xl md-10'>Create new parcel</span>
 
-        <form className='h-[70%] w-[100%] mt-10' onSubmit={handleSubmit} >
+        <form className='h-[70%] w-[100%] mt-10' onSubmit={handleSubmit} onReset={handleReset}>
           <div className='flex-col'>
             <span className='text-2xl'>Reciever Infofmation</span>
 
@@ -418,8 +443,8 @@ const Newparcel = () => {
           {/* Submit button div */}
 
           <div className='flex justify-around items-center h-20 w-[50%]'>
-            <button className=' h-[60%] w-[30%] rounded-md bg-red-500'>Cancel</button>
-            <button type='submit' className=' h-[60%] w-[30%] rounded-md bg-blue-500'>Submit</button>
+            <button className=' h-[60%] w-[30%] rounded-md bg-red-500 text-white' type='reset'>Reset</button>
+            <button type='submit' className='h-[60%] w-[30%] rounded-md bg-blue-500 text-white'>Submit</button>
           </div>
 
         </form>
