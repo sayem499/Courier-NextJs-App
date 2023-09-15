@@ -6,18 +6,26 @@ import Upazilas from '@/JSON/bd-upazilas.json';
 import Postcodes from '@/JSON/bd-postcodes.json';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { useSetparcelMutation } from '@/redux/parcel/parcelApiSlice';
+import { toast } from 'react-toastify';
+import { useAppSelector, useAppDispatch } from '../hooks';
+import { v4 as uuidv4 } from 'uuid';
+import { resetParcel } from '@/redux/parcel/parcelSlice';
 
 const Newparcel = () => {
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector(state => state.userState);
+  const [setparcel, {isLoading}] = useSetparcelMutation();
 
   /* Name states for sender  & receiver */
 
   const [senderName, setSenderName] = useState('');
-  const [recieverName, setRecieverName] = useState('');
+  const [receiverName, setReceiverName] = useState('');
 
   /*  Phonenumber states for sender & reciever */
 
   const [senderPhonenumber, setSenderPhonenumber] = useState('');
-  const [recieverPhonenumber, setRecieverPhonenumber] = useState(''); 
+  const [receiverPhonenumber, setReceiverPhonenumber] = useState(''); 
 
 
   /* Receiver address state */
@@ -139,24 +147,46 @@ const Newparcel = () => {
 
   /* Function to handle submit */
   
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(recieverName +' '+ recieverPhonenumber+ ' ')
+    console.log(receiverName +' '+ receiverPhonenumber+ ' ')
     console.log(address + ' '+ division+ ' '+ district+ ' '+ upazila+ ' '+ postcode) 
     console.log(senderName +' '+ senderPhonenumber+ ' ')
     console.log(senderAddress + ' '+ senderDivision+ ' '+ senderDistrict+ ' '+ senderUpazila+ ' '+ senderPostcode) 
     console.log(parcelWeight+ ' ' + parcelType)
 
+    if(receiverName === '' || receiverPhonenumber === '' || address === '' 
+    || senderName === '' || senderPhonenumber === '' || senderAddress === ''){
 
+      toast.error('Please! fill out the required fields.')
+    } else {
+      const sender_id = user?._id;
+      const _id = uuidv4();
+      try{
+        const res = await setparcel({_id, sender_id, receiverName, receiverPhonenumber,
+                                      address, division, district, upazila, postcode,
+                                      senderName, senderPhonenumber, senderAddress, senderDivision, senderDistrict,
+                                      senderUpazila, senderPostcode, parcelWeight, parcelType}).unwrap();
+        if(res){
+          toast.success('Parcel created successfully!');
+          handleReset();
+          dispatch(resetParcel());
+          
+        }                              
+  
+      } catch(err: any ) {
+        toast.error(err?.data?.message || err.error);
+      }
+    }
 
   }
 
   /* Function to handle reset */
 
-  const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setRecieverName('');
-    setRecieverPhonenumber('');
+  const handleReset = (e: React.FormEvent<HTMLFormElement> | void) => {
+    e && e.preventDefault();
+    setReceiverName('');
+    setReceiverPhonenumber('');
     setAddress('');
     setDivision('');
     setDistrict('');
@@ -195,13 +225,13 @@ const Newparcel = () => {
             <div className='h-[20%] width-[100%] flex mt-2 text-sm'>
               <div className='flex flex-col m-2'>
                 <label htmlFor='recieverName' className=''>Reciever Name</label>
-                <input id='recieverName' value={recieverName} onChange={(e) => { setRecieverName(e.target.value)} } 
+                <input id='recieverName' value={receiverName} onChange={(e) => { setReceiverName(e.target.value)} } 
                   className='h-10 p-1 rounded text-black' type='text' placeholder='Type Name'></input>
               </div>
 
               <div className='flex flex-col m-2'>
                 <label htmlFor='recieverPhone' className=''>Reciever Phonenumber</label>
-                <input id='recieverPhone' value={recieverPhonenumber} onChange={(e) => setRecieverPhonenumber(e.target.value)} 
+                <input id='recieverPhone' value={receiverPhonenumber} onChange={(e) => setReceiverPhonenumber(e.target.value)} 
                   className='h-10 p-1 rounded text-black' type='tel' placeholder='Type Phonenumber'></input>
               </div>
 
