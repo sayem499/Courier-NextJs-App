@@ -22,7 +22,7 @@ const parcelSchema = mongoose.Schema({
 
 
 }, {
-    timestamp: true,
+    timestamps: true,
 });
 
 const Parcel = mongoose.model('Parcel', parcelSchema);

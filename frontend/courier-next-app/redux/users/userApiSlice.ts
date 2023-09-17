@@ -26,8 +26,15 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
             })
         }),
+
+        checkToken: builder.mutation<VoidFunction, void>({
+            query: () => ({
+                url: `${USERS_URL}/token_check`,
+                method: 'GET',
+            })
+        }),
     })
 
 })
 
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation } = userApiSlice;
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation, useCheckTokenMutation} = userApiSlice;

@@ -4,6 +4,20 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 
+//@desc Token check
+//@route GET /api/users/token_check
+//@access Private
+const tokenCheck = asyncHandler ( async (req,res) => {
+    const body = req.body;
+    if(body){
+        res.status(201);
+    }
+})
+
+
+
+
+
 //@desc     Auth user/set token 
 //@route    POST /api/users/auth
 //@access   Public
@@ -145,5 +159,5 @@ const generateToken = (res, _id) => {
    });
 }
 
-export { authUser, registerUser, logoutUser, getUserProfile, updateUserProfile };
+export { tokenCheck, authUser, registerUser, logoutUser, getUserProfile, updateUserProfile };
 

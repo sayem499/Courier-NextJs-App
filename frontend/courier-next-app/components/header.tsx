@@ -5,12 +5,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import React, { useState, useEffect } from 'react';
 import Dropdownmenu from './dropdownmenu';
 import { useLogoutMutation } from '@/redux/users/userApiSlice';
+import { useCheckTokenMutation } from '@/redux/users/userApiSlice';
 import { logout } from '@/redux/users/userSlice';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useRouter } from 'next/navigation';
 import Login from './login';
 import Nav from './nav_options';
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
+import { toast } from 'react-toastify';
 
 
 const Header: React.FC = () => {
@@ -21,10 +23,13 @@ const Header: React.FC = () => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const [logoutApi] = useLogoutMutation();
+    const [ checkToken ] = useCheckTokenMutation();
     const { user } = useAppSelector(state => state.userState);
 
     useEffect(() => {
+        
         if (user) {
+            tokenCheck();
             router.push('/home');
         }
 
@@ -38,6 +43,22 @@ const Header: React.FC = () => {
         }
 
     }, [appMode, user, router])
+
+    const tokenCheck = async () => {
+        try{
+            await checkToken().unwrap();
+            return;
+        }catch(err: any){
+            if(err?.data?.message === 'Not authorized, no token!'){
+                await logoutApi().unwrap();
+                dispatch(logout());
+                router.push('/');
+                toast.error(err?.data?.message || err.error );
+                toast.error('Please login again!');
+            }
+            
+        }
+    }
 
     const logoutFunction = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
