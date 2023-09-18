@@ -3,6 +3,7 @@ dotenv.config();
 import  express  from "express";
 import userRoutes from './routes/userRoutes.js';
 import parcelRoutes from './routes/parcelRoutes.js';
+import parcelStatusRoutes from './routes/parcelStatusRoutes.js';
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import { connectMongoDB } from './config/db.js';
 import cookieParser from 'cookie-parser';
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/api/users', userRoutes);
 app.use('/api/parcel', parcelRoutes);
+app.use('/api/parcelStatus',parcelStatusRoutes);
 
 
 app.use(notFound);
