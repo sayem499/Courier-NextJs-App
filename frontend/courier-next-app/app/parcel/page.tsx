@@ -72,7 +72,7 @@ const columns = [
     const res = await getparcels({sender_id}).unwrap();
     res && dispatch(getParcels(res));
   }catch(err: any) {
-    toast.error(err.data.message || err.error);
+    toast.error(err?.data?.message || err.error);
   }
   
  }

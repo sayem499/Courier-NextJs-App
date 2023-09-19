@@ -13,12 +13,14 @@ import Login from './login';
 import Nav from './nav_options';
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 import { toast } from 'react-toastify';
+import Track from './track_parcel';
 
 
 const Header: React.FC = () => {
     const [appMode, setAppMode] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
+    const [showTrack, setShowTrack] = useState(false);
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -86,6 +88,15 @@ const Header: React.FC = () => {
         setShowLogin(false);
     }
 
+    const openTrack = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        setShowTrack(true);
+    }
+
+    const closeTrack = (event: React.MouseEvent<HTMLDivElement, MouseEvent> | void) => {
+        setShowTrack(false);
+    }
+
     const routeNewParcel = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         router.push('/new_parcel');
@@ -97,7 +108,8 @@ const Header: React.FC = () => {
 
                 <span className="text-sm text-slate-900 dark:text-slate-300 md:text-xl xl:text-3xl ml-5 italic ">NextCourier-&gt;</span>
 
-                { user && <button className=' sm:flex items-center justify-center hidden h-[60%] w-[10%]  dark:border  rounded-lg text-sm shadow-md'><GpsFixedIcon className='text-sm mr-1' />Track Parcel</button> }
+                { user && <button className=' sm:flex items-center justify-center hidden h-[60%] w-[10%]  
+                    dark:border  rounded-lg text-sm shadow-md' onClick={openTrack}><GpsFixedIcon className='text-sm mr-1' />Track Parcel</button> }
 
                 <Nav user={user} />
 
@@ -139,11 +151,11 @@ const Header: React.FC = () => {
                     <MenuIcon className='dark:text-slate-300 text-black' onClick={(event: React.MouseEvent<SVGSVGElement>) => menuOpen(event)} />
 
                     {isMenuOpen && <Dropdownmenu />}
-                </div>
-                {showLogin && <Login closeLogin={closeLogin} />}
+                </div>     
 
             </header>
-
+            {showLogin && <Login closeLogin={closeLogin} />}
+            {showTrack && <Track closeTrack={closeTrack}/>}
         </>
     )
 }
