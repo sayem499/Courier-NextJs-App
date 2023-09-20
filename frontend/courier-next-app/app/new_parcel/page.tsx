@@ -11,11 +11,13 @@ import { toast } from 'react-toastify';
 import { useAppSelector, useAppDispatch } from '../hooks';
 import { v4 as uuidv4 } from 'uuid';
 import { resetParcel } from '@/redux/parcel/parcelSlice';
+import { useSetParcelStatusMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 
 const Newparcel = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.userState);
-  const [setparcel, {isLoading}] = useSetparcelMutation();
+  const [setparcel, { isLoading }] = useSetparcelMutation();
+  const [setParcelStatus] = useSetParcelStatusMutation();
 
   /* Name states for sender  & receiver */
 
@@ -25,7 +27,7 @@ const Newparcel = () => {
   /*  Phonenumber states for sender & reciever */
 
   const [senderPhonenumber, setSenderPhonenumber] = useState('');
-  const [receiverPhonenumber, setReceiverPhonenumber] = useState(''); 
+  const [receiverPhonenumber, setReceiverPhonenumber] = useState('');
 
 
   /* Receiver address state */
@@ -60,10 +62,10 @@ const Newparcel = () => {
     const element = e.target.children[index];
     const divId = element.getAttribute('id');
     divId && setDivisionId(divId);
-    setDivision(e.target.value); 
+    setDivision(e.target.value);
   }
 
-    /* Function to get district id from element and set district value for receiver*/
+  /* Function to get district id from element and set district value for receiver*/
   const handleDisChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const index = e.target.selectedIndex;
     const element = e.target.children[index];
@@ -87,7 +89,7 @@ const Newparcel = () => {
 
   }
 
-    
+
   /* Function for parcel weight increase and decrease for receiver*/
 
 
@@ -99,7 +101,7 @@ const Newparcel = () => {
   }
 
 
-  
+
   /* Function for parcel type selection.  */
 
   const selectParcelType = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,7 +117,7 @@ const Newparcel = () => {
     const element = e.target.children[index];
     const divId = element.getAttribute('id');
     divId && setSenderDivisionId(divId);
-    setSenderDivision(e.target.value); 
+    setSenderDivision(e.target.value);
   }
 
 
@@ -146,35 +148,48 @@ const Newparcel = () => {
 
 
   /* Function to handle submit */
-  
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(receiverName +' '+ receiverPhonenumber+ ' ')
-    console.log(address + ' '+ division+ ' '+ district+ ' '+ upazila+ ' '+ postcode) 
-    console.log(senderName +' '+ senderPhonenumber+ ' ')
-    console.log(senderAddress + ' '+ senderDivision+ ' '+ senderDistrict+ ' '+ senderUpazila+ ' '+ senderPostcode) 
-    console.log(parcelWeight+ ' ' + parcelType)
 
-    if(receiverName === '' || receiverPhonenumber === '' || address === '' 
-    || senderName === '' || senderPhonenumber === '' || senderAddress === ''){
+    if (receiverName === '' || receiverPhonenumber === '' || address === ''
+      || senderName === '' || senderPhonenumber === '' || senderAddress === '') {
 
       toast.error('Please! fill out the required fields.')
     } else {
       const sender_id = user?._id;
-      const _id = uuidv4();
-      try{
-        const res = await setparcel({_id, sender_id, receiverName, receiverPhonenumber,
-                                      address, division, district, upazila, postcode,
-                                      senderName, senderPhonenumber, senderAddress, senderDivision, senderDistrict,
-                                      senderUpazila, senderPostcode, parcelWeight, parcelType}).unwrap();
-        if(res){
+      let _id = uuidv4();
+      let tracker_id = generateRandomNumericID();
+
+      try {
+        const res = await setparcel({
+          _id, sender_id, receiverName, receiverPhonenumber,
+          address, division, district, upazila, postcode,
+          senderName, senderPhonenumber, senderAddress, senderDivision, senderDistrict,
+          senderUpazila, senderPostcode, parcelWeight, parcelType, tracker_id
+        }).unwrap();
+
+        
+
+        if (res) {
           toast.success('Parcel created successfully!');
           handleReset();
           dispatch(resetParcel());
-          
-        }                              
-  
-      } catch(err: any ) {
+
+        }
+
+      } catch (err: any) {
+        toast.error(err?.data?.message || err.error);
+      }
+
+      let parcel_id = _id;
+      _id = tracker_id;
+      let datetime = new Date();
+      let parcelStatus: [string] = [`${datetime.toLocaleString()}: Request pending for approval.`];
+      let stepAction = 0;
+      try{
+        await setParcelStatus({_id, parcelStatus, parcel_id, stepAction}).unwrap();
+      }catch(err:any){
         toast.error(err?.data?.message || err.error);
       }
     }
@@ -206,6 +221,16 @@ const Newparcel = () => {
 
   }
 
+  const generateRandomNumericID = () => {
+    const min = 10000; // Smallest 5-digit number (10000)
+    const max = 99999; // Largest 5-digit number (99999)
+    const now = new Date();
+    const formattedDate = now.getDate();
+    const formattedMonth = now.getMonth()+1;
+    const formattedTime = now.getHours();
+    const formattedMinute = now.getMinutes();
+    return `${Math.floor(Math.random() * (max - min + 1)) + min}${formattedDate}${formattedMonth}${formattedTime}${formattedMinute}`;
+  };
 
   return (
     <div className='flex flex-col items-center  h-[300%] w-[100%] overflow-auto'>
@@ -225,13 +250,13 @@ const Newparcel = () => {
             <div className='h-[20%] width-[100%] flex mt-2 text-sm'>
               <div className='flex flex-col m-2'>
                 <label htmlFor='recieverName' className=''>Reciever Name</label>
-                <input id='recieverName' value={receiverName} onChange={(e) => { setReceiverName(e.target.value)} } 
+                <input id='recieverName' value={receiverName} onChange={(e) => { setReceiverName(e.target.value) }}
                   className='h-10 p-1 rounded text-black' type='text' placeholder='Type Name'></input>
               </div>
 
               <div className='flex flex-col m-2'>
                 <label htmlFor='recieverPhone' className=''>Reciever Phonenumber</label>
-                <input id='recieverPhone' value={receiverPhonenumber} onChange={(e) => setReceiverPhonenumber(e.target.value)} 
+                <input id='recieverPhone' value={receiverPhonenumber} onChange={(e) => setReceiverPhonenumber(e.target.value)}
                   className='h-10 p-1 rounded text-black' type='tel' placeholder='Type Phonenumber'></input>
               </div>
 
@@ -329,13 +354,13 @@ const Newparcel = () => {
             <div className='h-[20%] width-[100%] flex mt-2 text-sm'>
               <div className='flex flex-col m-2'>
                 <label htmlFor='senderName' className=''>Sender Name</label>
-                <input id='senderName' value={senderName} onChange={(e) => { setSenderName(e.target.value)} } 
+                <input id='senderName' value={senderName} onChange={(e) => { setSenderName(e.target.value) }}
                   className='h-10 p-1 rounded text-black' type='text' placeholder='Type Name'></input>
               </div>
 
               <div className='flex flex-col m-2'>
                 <label htmlFor='senderPhone' className=''>Sender Phonenumber</label>
-                <input id='senderPhone' value={senderPhonenumber} onChange={(e) => setSenderPhonenumber(e.target.value)} 
+                <input id='senderPhone' value={senderPhonenumber} onChange={(e) => setSenderPhonenumber(e.target.value)}
                   className='h-10 p-1 rounded text-black' type='tel' placeholder='Type Phonenumber'></input>
               </div>
 

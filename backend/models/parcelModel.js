@@ -19,8 +19,7 @@ const parcelSchema = mongoose.Schema({
     senderPostcode: {type: String, },
     parcelWeight: {type: Number, required: true},
     parcelType: {type: String, required: true},
-
-
+    tracker_id: {type: String, required: true},
 }, {
     timestamps: true,
 });

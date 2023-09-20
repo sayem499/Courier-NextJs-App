@@ -27,6 +27,7 @@ const setUserParcel = asyncHandler ( async (req, res) => {
         senderPostcode: body.senderPostcode,
         parcelWeight: body.parcelWeight,
         parcelType: body.parcelType,
+        tracker_id: body.tracker_id,
     }); 
 
     if(userParcel){

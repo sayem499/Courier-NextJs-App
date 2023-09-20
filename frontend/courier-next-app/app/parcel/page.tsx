@@ -4,6 +4,7 @@ import Table from '@/components/table';
 import { toast } from 'react-toastify';
 import { useAppSelector, useAppDispatch } from '../hooks';
 import { useGetparcelsMutation } from '@/redux/parcel/parcelApiSlice';
+import { useGetParcelStatusWithParcelIdMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { getParcels } from '@/redux/parcel/parcelSlice';
 
 interface Parcel {
@@ -60,12 +61,17 @@ const columns = [
     {
       header: 'Parcel Type',
       accessorKey: 'parcelType',
+    },
+    {
+      header: 'Tracker ID',
+      accessorKey: 'tracker_id',
     }   
 ]
- const [getparcels , {isLoading}] = useGetparcelsMutation();   
+ const [getparcels , {isLoading}] = useGetparcelsMutation();  
  const {user} = useAppSelector(state => state.userState);
  const {parcels} = useAppSelector(state => state.parcelState);
  const dispatch = useAppDispatch();
+
 
  const getparcelData = async (sender_id: string) => {
   try{
@@ -81,7 +87,7 @@ const columns = [
     <div className="h-[100%] w-[100%] flex flex-col">
       
       <div className='h-[100%] w-[100%] flex items-center justify-center'>
-        <div className='h-[100%] w-[60%] flex items-center justify-center'>
+        <div className='h-[100%] w-[70%] flex items-center justify-center overflow-auto'>
           <Table data={parcels} columns={columns}/>
           </div>
         
