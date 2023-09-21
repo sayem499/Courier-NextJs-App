@@ -75,10 +75,10 @@ const Track: React.FC<{ closeTrack: (event: React.MouseEvent<HTMLDivElement> | v
 
                 </div>
 
-                {parcelStatus && <div className='h-[50%] w-[70%] bg-white rounded-md pt-2'>
+                {parcelStatus && <div className='h-[50%] w-[70%] bg-white rounded-md pt-2 flex flex-col overflow-scroll'>
                     {
                         parcelStatus?.parcelStatus.map((item) => (
-                            <span className='m-20 text-black text-sm'>{item}</span>
+                            <span className='m-2 text-black text-sm'>{item}</span>
                         ))
 
 

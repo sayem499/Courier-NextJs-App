@@ -5,7 +5,7 @@ import { ParcelStatus } from '../models/parcelStatusModel.js';
 
 
 //@desc Set parcel status
-//@desc POST /api/parcelStatus/set
+//@route POST /api/parcelStatus/set
 //@access Private
 const setParcelStatus = expressAsyncHandler( async (req, res) => {
     const body = req.body;
@@ -27,7 +27,7 @@ const setParcelStatus = expressAsyncHandler( async (req, res) => {
 }) 
 
 //@desc Get parcel status with tracker id
-//@desc POST /api/parcelStatus/get_with_id
+//@route POST /api/parcelStatus/get_with_id
 //@access Public
 
 const getParcelStatusWithId = expressAsyncHandler( async (req, res) => {
@@ -43,7 +43,7 @@ const getParcelStatusWithId = expressAsyncHandler( async (req, res) => {
 
 
 //@desc Get parcel status with tracker parcel id
-//@desc POST /api/parcelStatus/get_with_parcel_id
+//@route POST /api/parcelStatus/get_with_parcel_id
 //@access Private
 
 const getParcelStatusWithParcelId = expressAsyncHandler( async (req, res) => {
@@ -58,7 +58,36 @@ const getParcelStatusWithParcelId = expressAsyncHandler( async (req, res) => {
 })
 
 
+//@desc Update parcel status with tracker id
+//@route PUT /api/parcelStatus/update
+//@access Private
+
+const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
+   const  body = req.body;
+   const parcelStatus = await ParcelStatus.findById(body._id);
+   if(parcelStatus){
+        (body.parcelStatus && parcelStatus.parcelStatus.push(body.parcelStatus)); 
+        parcelStatus.parcel_id = body.parcel_id || parcelStatus.parcel_id;
+        parcelStatus.stepAction = body.stepAction || parcelStatus.stepAction;
+
+        
+        const updatedParcelStatus = await parcelStatus.save();
+        if(updatedParcelStatus){
+            res.status(200).json({
+               parcelStatus: updatedParcelStatus.parcelStatus,
+               parcel_id: updatedParcelStatus.parcel_id,
+               stepAction: updatedParcelStatus.stepAction,
+            });
+        }else {
+            res.status(500);
+            throw new Error('Internal server error.')
+        }
+    } else {
+        res.status(400)
+        throw new Error('Invalid parcel status data.')
+    }
+})
 
 
 
-export { setParcelStatus, getParcelStatusWithId, getParcelStatusWithParcelId }
+export { setParcelStatus, getParcelStatusWithId, getParcelStatusWithParcelId, updateParcelStatusWithId }

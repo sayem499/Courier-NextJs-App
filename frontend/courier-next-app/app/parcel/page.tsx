@@ -4,7 +4,6 @@ import Table from '@/components/table';
 import { toast } from 'react-toastify';
 import { useAppSelector, useAppDispatch } from '../hooks';
 import { useGetparcelsMutation } from '@/redux/parcel/parcelApiSlice';
-import { useGetParcelStatusWithParcelIdMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { getParcels } from '@/redux/parcel/parcelSlice';
 
 interface Parcel {
