@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import  express  from "express";
 import userRoutes from './routes/userRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 import parcelRoutes from './routes/parcelRoutes.js';
 import parcelStatusRoutes from './routes/parcelStatusRoutes.js';
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/api/users', userRoutes);
+app.use('/api/admins', adminRoutes);
 app.use('/api/parcel', parcelRoutes);
 app.use('/api/parcelStatus', parcelStatusRoutes);
 
