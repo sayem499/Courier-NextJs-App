@@ -93,7 +93,7 @@ const logoutAdmin = expressAsyncHandler ( (req, res) => {
 
 
 //@desc     Update admin profile
-//@route    PUT /api/admins/profile
+//@route    PUT /api/admins/update
 //@access   Private
 const updateAdminData = expressAsyncHandler ( async (req, res) => {
     const admin = await Admins.findById(req.body._id);
