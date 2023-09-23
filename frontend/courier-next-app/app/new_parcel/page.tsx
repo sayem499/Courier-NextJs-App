@@ -6,6 +6,7 @@ import Upazilas from '@/JSON/bd-upazilas.json';
 import Postcodes from '@/JSON/bd-postcodes.json';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { useRouter } from 'next/navigation';
 import { useSetparcelMutation } from '@/redux/parcel/parcelApiSlice';
 import { toast } from 'react-toastify';
 import { useAppSelector, useAppDispatch } from '../hooks';
@@ -18,6 +19,13 @@ const Newparcel = () => {
   const { user } = useAppSelector(state => state.userState);
   const [setparcel, { isLoading }] = useSetparcelMutation();
   const [setParcelStatus] = useSetParcelStatusMutation();
+  const router = useRouter();
+
+  useEffect(() => {
+    if(!user){
+      router.push('/');
+    }
+  })
 
   /* Name states for sender  & receiver */
 

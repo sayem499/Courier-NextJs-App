@@ -1,5 +1,6 @@
 "use client"
 import React, {useEffect} from 'react'
+import { useRouter }  from 'next/navigation';
 import Table from '@/components/table';
 import { toast } from 'react-toastify';
 import { useAppSelector, useAppDispatch } from '../hooks';
@@ -20,12 +21,16 @@ interface Parcel {
 
 const Parcel = () => {
 
-
+const router = useRouter();
 
   useEffect(() =>{
-    if(user)
+    if(user){
       getparcelData(user._id);
+    }else{
+      router.push('/');
+    }
   },[])
+  
 const columns = [
     {
       header: 'Reciever Name',
