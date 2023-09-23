@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer from '@/redux/users/userSlice';
 import parcelReducer from '@/redux/parcel/parcelSlice';
 import parcelStatusReducer from '@/redux/parcelStatus/parcelStatuSlice';
+import adminReducer from '@/redux/admin/adminSlice';
 import { apiSlice } from "@/redux/api/apiSlice";
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
         userState: userReducer,
         parcelState: parcelReducer,
         parcelStatusState: parcelStatusReducer,
+        adminState: adminReducer,
         [apiSlice.reducerPath]: apiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => 
