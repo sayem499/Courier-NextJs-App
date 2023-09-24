@@ -88,10 +88,10 @@ const columns = [
  }
 
   return (
-    <div className="h-[100%] w-[100%] flex flex-col">
+    <div className="h-[100%] w-[100%] flex flex-col overflow-auto">
       
       <div className='h-[100%] w-[100%] flex items-center justify-center'>
-        <div className='h-[100%] w-[70%] flex items-center justify-center overflow-auto'>
+        <div className='h-[100%] w-[70%] flex items-center justify-center '>
           <Table data={parcels} columns={columns}/>
           </div>
         

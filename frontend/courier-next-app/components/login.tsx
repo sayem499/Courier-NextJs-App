@@ -46,7 +46,7 @@ const Login: React.FC<{closeLogin: (event: React.MouseEvent<HTMLDivElement, Mous
 
           <button onClick={(e) => loginHndler(e)} className="bg-green-700 mt-2 ml-2 mr-2 mb-5 w-4/5 
                 hover:bg-green-500 text-white  py-2 px-4 rounded">
-            Sign up
+           Login
           </button>
           <span>Forgot password? <a href='' className="text-blue-700 dark:text-blue-400 hover:text-blue-500 ">Click Here</a></span>
         </form>

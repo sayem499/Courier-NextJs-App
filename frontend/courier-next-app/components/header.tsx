@@ -6,9 +6,12 @@ import React, { useState, useEffect } from 'react';
 import Dropdownmenu from './dropdownmenu';
 import { useLogoutMutation } from '@/redux/users/userApiSlice';
 import { useCheckTokenMutation } from '@/redux/users/userApiSlice';
+import { useCheckTokenAdminMutation } from '@/redux/admin/adminApiSlice';
+import { useLogoutAdminMutation } from '@/redux/admin/adminApiSlice';
+import { logoutAdmin } from '@/redux/admin/adminSlice';
 import { logout } from '@/redux/users/userSlice';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Login from './login';
 import Nav from './nav_options';
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
@@ -24,15 +27,24 @@ const Header: React.FC = () => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
+    const path = usePathname();
     const [logoutApi] = useLogoutMutation();
     const [ checkToken ] = useCheckTokenMutation();
+    const [logoutAdminApi] = useLogoutAdminMutation();
+    const [ checkAdminToken ] = useCheckTokenAdminMutation();
     const { user } = useAppSelector(state => state.userState);
+    const { admin } = useAppSelector( state => state.adminState);
 
     useEffect(() => {
         
         if (user) {
             tokenCheck();
             router.push('/home');
+        }
+
+        if(admin){
+            adminTokenCheck();
+            router.push('/admin');
         }
 
         const themePreference = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -59,6 +71,21 @@ const Header: React.FC = () => {
                 toast.error('Please login again!');
             }
             
+        }
+    }
+
+    const adminTokenCheck = async () => {
+        try{
+            await checkAdminToken().unwrap();
+            return;
+        }catch(err: any){
+            if(err?.data?.message === 'Not authorizied, no token!'){
+                await logoutAdminApi().unwrap();
+                dispatch(logoutAdmin());
+                router.push('/admin');
+                toast.error(err?.data?.message || err.error );
+                toast.error('Please login again!');
+            }
         }
     }
 
@@ -108,19 +135,19 @@ const Header: React.FC = () => {
 
                 <span className="text-sm text-slate-900 dark:text-slate-300 md:text-xl xl:text-3xl ml-5 italic ">NextCourier-&gt;</span>
 
-                { user && <button className=' sm:flex items-center justify-center hidden h-[60%] w-[10%]  
-                    dark:border  rounded-lg text-sm shadow-md' onClick={openTrack}><GpsFixedIcon className='text-sm mr-1' />Track Parcel</button> }
+                { user ? <button className=' sm:flex items-center justify-center hidden h-[60%] w-[10%]  
+                    dark:border  rounded-lg text-sm shadow-md' onClick={openTrack}><GpsFixedIcon className='text-sm mr-1' />Track Parcel</button> : '' }
 
                 <Nav user={user} />
 
 
-                {user && <div className='sm:flex items-center justify-center hidden w-[10%] h-[60%]'>
+                { user ? <div className='sm:flex items-center justify-center hidden w-[10%] h-[60%]'>
 
                     <button className='h-[100%] w-[100%] border rounded-lg text-sm dark:bg-transparent
                      hover:text-white text-slate-100 bg-blue-500' onClick={routeNewParcel}>Create Parcel</button>
 
 
-                 </div>
+                 </div> : ''
                 }
 
 
@@ -136,7 +163,7 @@ const Header: React.FC = () => {
                             className="mr-5 rounded-full bg-red-500 
                         px-4 py-2 text-gray-50 hover:text-white">Logout</button>
 
-                            : <button onClick={(event) => openLogin(event)}
+                            : path === '/admin' ? '' : <button onClick={(event) => openLogin(event)}
                                 className="mr-5 rounded-full bg-green-500 
                         px-4 py-2 text-gray-50 hover:text-white">Login</button>
                     }

@@ -16,7 +16,7 @@ function Home() {
   
   return (
     <div className="h-[100%] w-[100%] flex flex-col">
-      <div className="h-[30%] w-[100%] flex ml-20">
+      <div className="h-[30%] w-[100%] flex ">
 
       </div>
       <div className="h-[20%] w-[80%] flex justify-start ml-20">
