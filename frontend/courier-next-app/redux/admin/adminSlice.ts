@@ -30,7 +30,8 @@ export const adminSlice = createSlice({
             localStorage.setItem('admin', JSON.stringify(action.payload))
         },
 
-        logoutAdmin: () => {
+        logoutAdmin: (state) => {
+            state.admin = null;
             localStorage.removeItem('admin')
         },
     },

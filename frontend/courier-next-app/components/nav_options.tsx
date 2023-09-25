@@ -9,9 +9,15 @@ interface User {
     user_phonenumber: string;
 };
 
+interface Admin {
+  _id: string,
+  admin_email: string,
+  admin_password: string,
+}
 
 
-const Nav: React.FC<{user: User | null}> = ({user}) => {
+
+const Nav: React.FC<{user: User | null, admin: Admin | null}> = ({user, admin}) => {
 
   const path = usePathname();
   const router = useRouter();
@@ -35,8 +41,8 @@ const Nav: React.FC<{user: User | null}> = ({user}) => {
   return (
     <div className="hidden h-[100%] sm:flex justify-center items-center">
                     <ul className="sm:hidden md:flex justify-between items-center h-[100%]">
-                        {!user && <li className='mr-5 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg dark:hover:text-white cursor-pointer '>Enterprise</li>}
-                        {!user && <li className='ml-5 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg dark:hover:text-white cursor-pointer '>Courier</li>}
+                        {!user && !admin && <li className='mr-5 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg dark:hover:text-white cursor-pointer '>Enterprise</li>}
+                        {!user && !admin && <li className='ml-5 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg dark:hover:text-white cursor-pointer '>Courier</li>}
                         {user && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
                          dark:hover:text-white cursor-pointer flex justify-center items-center h-[100%] 
                           ${ path === '/home' ?  'border-b-4  border-b-blue-500  dark:border-b-indigo-500': ''}`} onClick={routeHome}>Dashboard</li>}

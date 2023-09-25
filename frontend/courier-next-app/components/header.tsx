@@ -29,22 +29,22 @@ const Header: React.FC = () => {
     const router = useRouter();
     const path = usePathname();
     const [logoutApi] = useLogoutMutation();
-    const [ checkToken ] = useCheckTokenMutation();
+    const [checkToken] = useCheckTokenMutation();
     const [logoutAdminApi] = useLogoutAdminMutation();
-    const [ checkAdminToken ] = useCheckTokenAdminMutation();
+    const [checkAdminToken] = useCheckTokenAdminMutation();
     const { user } = useAppSelector(state => state.userState);
-    const { admin } = useAppSelector( state => state.adminState);
+    const { admin } = useAppSelector(state => state.adminState);
 
     useEffect(() => {
-        
+
         if (user) {
             tokenCheck();
             router.push('/home');
         }
 
-        if(admin){
+        if (admin) {
             adminTokenCheck();
-            router.push('/admin');
+            router.push('/admin/dashboard');
         }
 
         const themePreference = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -59,31 +59,31 @@ const Header: React.FC = () => {
     }, [appMode, user, router])
 
     const tokenCheck = async () => {
-        try{
+        try {
             await checkToken().unwrap();
             return;
-        }catch(err: any){
-            if(err?.data?.message === 'Not authorized, no token!'){
+        } catch (err: any) {
+            if (err?.data?.message === 'Not authorized, no token!') {
                 await logoutApi().unwrap();
                 dispatch(logout());
                 router.push('/');
-                toast.error(err?.data?.message || err.error );
+                toast.error(err?.data?.message || err.error);
                 toast.error('Please login again!');
             }
-            
+
         }
     }
 
     const adminTokenCheck = async () => {
-        try{
+        try {
             await checkAdminToken().unwrap();
             return;
-        }catch(err: any){
-            if(err?.data?.message === 'Not authorizied, no token!'){
+        } catch (err: any) {
+            if (err?.data?.message === 'Not authorizied, no token!') {
                 await logoutAdminApi().unwrap();
                 dispatch(logoutAdmin());
                 router.push('/admin');
-                toast.error(err?.data?.message || err.error );
+                toast.error(err?.data?.message || err.error);
                 toast.error('Please login again!');
             }
         }
@@ -94,6 +94,13 @@ const Header: React.FC = () => {
         await logoutApi().unwrap();
         dispatch(logout());
         router.push('/');
+    }
+
+    const logoutAdminFunction = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        await logoutAdminApi().unwrap();
+        dispatch(logoutAdmin());
+        router.push('/admin');
     }
 
     const changeMode = (event: React.MouseEvent<HTMLButtonElement>, data: string) => {
@@ -135,19 +142,19 @@ const Header: React.FC = () => {
 
                 <span className="text-sm text-slate-900 dark:text-slate-300 md:text-xl xl:text-3xl ml-5 italic ">NextCourier-&gt;</span>
 
-                { user ? <button className=' sm:flex items-center justify-center hidden h-[60%] w-[10%]  
-                    dark:border  rounded-lg text-sm shadow-md' onClick={openTrack}><GpsFixedIcon className='text-sm mr-1' />Track Parcel</button> : '' }
+                {user ? <button className=' sm:flex items-center justify-center hidden h-[60%] w-[10%]  
+                    dark:border  rounded-lg text-sm shadow-md' onClick={openTrack}><GpsFixedIcon className='text-sm mr-1' />Track Parcel</button> : ''}
 
-                <Nav user={user} />
+                <Nav user={user} admin={admin} />
 
 
-                { user ? <div className='sm:flex items-center justify-center hidden w-[10%] h-[60%]'>
+                {user ? <div className='sm:flex items-center justify-center hidden w-[10%] h-[60%]'>
 
                     <button className='h-[100%] w-[100%] border rounded-lg text-sm dark:bg-transparent
                      hover:text-white text-slate-100 bg-blue-500' onClick={routeNewParcel}>Create Parcel</button>
 
 
-                 </div> : ''
+                </div> : ''
                 }
 
 
@@ -163,10 +170,19 @@ const Header: React.FC = () => {
                             className="mr-5 rounded-full bg-red-500 
                         px-4 py-2 text-gray-50 hover:text-white">Logout</button>
 
-                            : path === '/admin' ? '' : <button onClick={(event) => openLogin(event)}
+                            : path === '/admin' ? '' : !admin && <button onClick={(event) => openLogin(event)}
                                 className="mr-5 rounded-full bg-green-500 
                         px-4 py-2 text-gray-50 hover:text-white">Login</button>
                     }
+
+                    {
+                         admin ? <button onClick={logoutAdminFunction}
+                            className="mr-5 rounded-full bg-red-500 
+                        px-4 py-2 text-gray-50 hover:text-white">Logout</button>
+
+                            : ''
+                    }
+
                 </div>
 
                 <div className='flex mr-5 items-center cursor-pointer sm:hidden'>
@@ -178,11 +194,11 @@ const Header: React.FC = () => {
                     <MenuIcon className='dark:text-slate-300 text-black' onClick={(event: React.MouseEvent<SVGSVGElement>) => menuOpen(event)} />
 
                     {isMenuOpen && <Dropdownmenu />}
-                </div>     
+                </div>
 
             </header>
             {showLogin && <Login closeLogin={closeLogin} />}
-            {showTrack && <Track closeTrack={closeTrack}/>}
+            {showTrack && <Track closeTrack={closeTrack} />}
         </>
     )
 }

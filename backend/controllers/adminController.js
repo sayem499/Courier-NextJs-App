@@ -20,8 +20,8 @@ const adminTokenCheck = expressAsyncHandler ( async (req, res) => {
 //@access Public
 const authAdmin = expressAsyncHandler( async (req, res) => {
     const body = req.body;
-    const admin = await Admins.findOne({admin_eamil: body.admin_eamil});
-    if( admin && (bcrypt.compare(body.admin_password, admin.admin_password))){
+    const admin = await Admins.findOne({admin_email: body.admin_email});
+    if( admin && (await bcrypt.compare(body.admin_password, admin.admin_password))){
         generateToken(res, body._id);
         res.status(201).json({
             _id: admin._id,
@@ -39,7 +39,7 @@ const authAdmin = expressAsyncHandler( async (req, res) => {
 //@access Private
 const registerAdmin = expressAsyncHandler( async (req, res) => {
     const body = req.body;
-    if(!body._id && !body.admin_eamil && !body.admin_password){
+    if(!body._id && !body.admin_email && !body.admin_password){
         res.status(400);
         throw new Error('Admin data field error.');
     }
@@ -55,13 +55,18 @@ const registerAdmin = expressAsyncHandler( async (req, res) => {
 
     const admin = await Admins.create({
         _id: body._id,
-        admin_eamil: body.admin_eamil,
-        admin_password: body.password,
+        admin_email: body.admin_email,
+        admin_password: body.admin_password,
     });
 
     if(!admin){
         res.status(400);
         throw new Error('Invalid admin data.');
+    }else{
+        res.status(201).json({
+            _id: admin._id,
+            admin_email: admin.admin_email
+        });
     }
 })
 

@@ -8,12 +8,17 @@ import { toast } from 'react-toastify';
 
 
 const Admin = () => {
+  const {admin} = useAppSelector((state) => state.adminState);
   const [admin_email, setEmail] = useState('');
   const [admin_password, setPassword] = useState('');
   const [loginAdmin, {isSuccess}] = useLoginAdminMutation();
   const dispatch = useAppDispatch();
   const router = useRouter();
-
+  useEffect(() => {
+    if(admin){
+      router.push('admin/dashboard');
+    }
+  })
   const loginHndler = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
