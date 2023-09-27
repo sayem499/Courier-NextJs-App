@@ -9,10 +9,12 @@ interface ParcelStatus {
 
 type ParcelStatusState = {
     parcelStatus: ParcelStatus | null ;
+    parcelStatuses: ParcelStatus[] | [] ;
 }
 
 const initialState: ParcelStatusState = {
-    parcelStatus: null
+    parcelStatus: null,
+    parcelStatuses: []
 }
 
 const parcelStatusSlice = createSlice({
@@ -23,12 +25,16 @@ const parcelStatusSlice = createSlice({
 
         getParcelStatus: (state, action: PayloadAction<ParcelStatus>) => {
             state.parcelStatus = action.payload
-        }
+        },
+
+        getParcelStatuses: (state, action: PayloadAction<ParcelStatus[]>) => {
+            state.parcelStatuses = action.payload
+        },
 
         
     },
 
 }) 
 
-export const { getParcelStatus, resetParcelStatus } = parcelStatusSlice.actions;
+export const { getParcelStatus, resetParcelStatus, getParcelStatuses } = parcelStatusSlice.actions;
 export default parcelStatusSlice.reducer;

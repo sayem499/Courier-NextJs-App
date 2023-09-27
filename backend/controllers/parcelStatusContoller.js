@@ -26,6 +26,21 @@ const setParcelStatus = expressAsyncHandler( async (req, res) => {
     }
 }) 
 
+//@desc Get parcel status with step action
+//@route POST /api/parcelStatus/get_with_step_action
+//@access Private
+
+const getParcelStatusWithStepAction = expressAsyncHandler( async (req, res) => {
+    const body = req.body;
+    const parcelStatus = await ParcelStatus.find({ stepAction: body.stepAction });
+    if(parcelStatus) {
+        res.status(201).json(parcelStatus);    
+    } else {
+        res.status(400)
+        throw new Error('Invalid parcel status data.');
+    }
+})
+
 //@desc Get parcel status with tracker id
 //@route POST /api/parcelStatus/get_with_id
 //@access Public
@@ -42,7 +57,7 @@ const getParcelStatusWithId = expressAsyncHandler( async (req, res) => {
 })
 
 
-//@desc Get parcel status with tracker parcel id
+//@desc Get parcel status with parcel id
 //@route POST /api/parcelStatus/get_with_parcel_id
 //@access Private
 
@@ -90,4 +105,4 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
 
 
 
-export { setParcelStatus, getParcelStatusWithId, getParcelStatusWithParcelId, updateParcelStatusWithId }
+export { setParcelStatus, getParcelStatusWithStepAction, getParcelStatusWithId, getParcelStatusWithParcelId, updateParcelStatusWithId }

@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken';
 const adminTokenCheck = expressAsyncHandler ( async (req, res) => {
     const body = req.body;
     if(body){
-        res.status(201);
+        res.status(201).json({message: 'Valid Token'});
     }
 })
 

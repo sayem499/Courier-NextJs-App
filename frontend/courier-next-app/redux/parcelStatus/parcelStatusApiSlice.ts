@@ -4,6 +4,15 @@ const PARCEL_STATUS_URL = '/api/parcelStatus';
 
 export const parcelStatusApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
+
+        getParcelStatusWithStepAction: builder.mutation({
+            query: (data) => ({
+                url: `${PARCEL_STATUS_URL}/get_with_step_action`,
+                method: 'POST',
+                body: data
+            })
+        }),
+
         setParcelStatus: builder.mutation({
             query: (data) => ({
                 url: `${PARCEL_STATUS_URL}/set`,
@@ -32,4 +41,4 @@ export const parcelStatusApiSlice = apiSlice.injectEndpoints({
 });
 
 
-export const { useSetParcelStatusMutation, useGetParcelStatusWithIdMutation, useGetParcelStatusWithParcelIdMutation } = parcelStatusApiSlice;
+export const { useSetParcelStatusMutation, useGetParcelStatusWithIdMutation, useGetParcelStatusWithParcelIdMutation, useGetParcelStatusWithStepActionMutation } = parcelStatusApiSlice;
