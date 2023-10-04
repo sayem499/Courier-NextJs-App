@@ -14,14 +14,14 @@ const Table: React.FC<{data:unknown[], columns:any}> = ({data , columns}) => {
     });
 
     return (
-        <div className='h-[100%] w-[100%] flex items-start justify-center text-center text-black dark:text-white mt-10'>
-            <table> 
+        <div className='h-[100%] w-[100%] flex items-start justify-center text-center text-black dark:text-white mt-10 '>
+            <table className=''> 
                        {/* Table Head */}
                 <thead className=''>       
                 {table.getHeaderGroups().map(headerGroup =>( 
 
-                    <tr key={headerGroup.id} className='bg-blue-500 text-slate-200 shadow'>
-                        {headerGroup.headers.map( header => (<th key={header.id} className='text-sm p-2'>
+                    <tr key={headerGroup.id} className='bg-blue-500 text-slate-200 shadow '>
+                        {headerGroup.headers.map( (header, index) => (<th key={header.id} className={`text-sm p-2 ${index===0 ? 'rounded-tl-md':''  } ${index === columns.length - 1 ? 'rounded-tr-md':''  }`}>
                             {flexRender( header.column.columnDef.header,header.getContext() )}
                             </th>))}
                         
