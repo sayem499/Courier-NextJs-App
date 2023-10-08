@@ -89,7 +89,7 @@ const getAdmin = expressAsyncHandler( async (req, res) => {
 //@route    POST /api/admins/logout
 //@access   Public
 const logoutAdmin = expressAsyncHandler ( (req, res) => {
-    res.cookie('jwt','',{
+    res.cookie('jwtadmin','',{
         httpOnly:true,
         expires:new Date(0),
     })
@@ -130,7 +130,7 @@ const generateToken = (res, _id) => {
          expiresIn: '6h',
      }); 
  
-    res.cookie('jwt', token, {
+    res.cookie('jwtadmin', token, {
      httpOnly: true,
      secure: process.env.NODE_ENV !== 'development',
      sameSite: 'strict',

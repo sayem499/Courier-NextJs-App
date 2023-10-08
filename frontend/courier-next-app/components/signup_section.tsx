@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useRegisterMutation } from '@/redux/users/userApiSlice';
 import { setUserData } from '@/redux/users/userSlice';
 import { toast } from 'react-toastify';
+import Track from './track_parcel';
 
 const Signup: React.FC = () => {
   const _id = uuidv4();
@@ -15,7 +16,8 @@ const Signup: React.FC = () => {
   const [user_password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [user_phonenumber, setPhonenumber] = useState('');
-   
+  const [showTrack, setShowTrack] = useState(false);
+  const [trackerId, setTrackerId] = useState('');
   const dispatch = useAppDispatch();
   const router = useRouter();
   
@@ -27,7 +29,7 @@ const Signup: React.FC = () => {
     if(user){
       router.push('/home');
     }
-  },[user, router]);
+  },[user, router, showTrack]);
 
   const submitHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -43,6 +45,10 @@ const Signup: React.FC = () => {
       }
     }
   };
+
+  const closeTrack = (event: React.MouseEvent<HTMLDivElement, MouseEvent> | void) => {
+    setShowTrack(false);
+  }
 
   return (
     <div className='flex w-full h-1/2 sm:mr-3 sm:h-full justify-center 
@@ -101,11 +107,11 @@ const Signup: React.FC = () => {
               <span className='sm:mt-3 text-lg'>Track your package.</span>
               <div className='flex items-center w-4/5 '>
 
-                <input className='text-sm mt-2 mb-2 p-2 w-4/5 rounded-l sm:text-xs'
+                <input value={trackerId} onChange={(e) => setTrackerId(e.target.value)} className='text-sm mt-2 mb-2 p-2 w-4/5 rounded-l sm:text-xs'
                   placeholder='Track courier'
                   type='text' name='track_id'></input>
 
-                <button className="bg-blue-500 w-1/5 h-auto sm:w-2/5
+                <button onClick={() => setShowTrack(true)} className="bg-blue-500 w-1/5 h-auto sm:w-2/5
                    hover:bg-blue-700 text-white sm:text-xs text-sm p-2 
                     item-center  rounded-r mt-2 mb-2">
                   Track
@@ -113,6 +119,7 @@ const Signup: React.FC = () => {
               </div>
 
             </div>
+            { showTrack && <Track closeTrack={closeTrack} trackerID={trackerId}/>}
           </div>
   )
 }

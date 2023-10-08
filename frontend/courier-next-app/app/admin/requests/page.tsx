@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useAppSelector, useAppDispatch } from '@/app/hooks';
 import { useGetParcelStatusWithStepActionMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { getParcelStatuses } from '@/redux/parcelStatus/parcelStatuSlice';
-import { useUpdateParcelStatusWithParcelIdMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
+import { useUpdateParcelStatusWithTrackerIdMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
@@ -14,7 +14,7 @@ const Requests = () => {
   const router = useRouter();
   const { admin } = useAppSelector(state => state.adminState);
   const [getParcelStatusWithActionStatus] = useGetParcelStatusWithStepActionMutation();
-  const [updateParcelStatusWithParcelId] = useUpdateParcelStatusWithParcelIdMutation();
+  const [updateParcelStatusWithTrackerId] = useUpdateParcelStatusWithTrackerIdMutation();
   const { parcelStatuses } = useAppSelector(state => state.parcelStatusState);
   const [stepZero, setStepZero] = useState(true);
   const [stepOne, setStepOne] = useState(false);
@@ -41,13 +41,32 @@ const Requests = () => {
       accessorFn: (row: any) => row,
       cell: (cell: any) => {
         const row = cell.getValue();
-        return ( row.stepAction === 3 ?  <button className='rounded-full bg-red-500 
+        return ( row.stepAction === 3 ? <button className='rounded-full bg-red-500 
         px-4 py-2 text-gray-50 hover:text-white' >Delete</button>
-          : <button className='rounded-full bg-green-500 
-        px-4 py-2 text-gray-50 hover:text-white' onClick={() => acceptClickButton(row._id)}>Accept</button>)
+          : row.stepAction === 2 ?  <><button className='rounded-full bg-green-500 
+          px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => handleOutForDeliveryClick(row._id)}>Clear</button>
+           <button className='rounded-full bg-green-500 
+        px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id)}>Accept</button></>: <button className='rounded-full bg-green-500 
+        px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id)}>Accept</button>)
       }
     },
   ]
+
+  const handleOutForDeliveryClick = async (id: string) => {
+    try{
+      let _id = id;
+      let datetime = new Date();
+      let parcelStatus: string = `${datetime.toLocaleString()}: Parcel out for delivery.`;
+      const res = await updateParcelStatusWithTrackerId({ _id, parcelStatus }).unwrap();
+      if(res){
+        getParcelStatus();
+      }
+    } catch(err: any) {
+      toast(err?.data?.message || err.error);
+    }
+    
+
+  }
 
   const getParcelStatus = async () => {
 
@@ -87,7 +106,7 @@ const Requests = () => {
       stepTwo ? parcelStatus = `${datetime.toLocaleString()}: Parcel delivered successfully.`: 0;
 
 
-      const res = await updateParcelStatusWithParcelId({ _id, parcelStatus, stepAction }).unwrap();
+      const res = await updateParcelStatusWithTrackerId({ _id, parcelStatus, stepAction }).unwrap();
       if (res) {
         getParcelStatus();
       }

@@ -37,7 +37,7 @@ export const parcelStatusApiSlice = apiSlice.injectEndpoints({
             })
         }),
 
-        updateParcelStatusWithParcelId: builder.mutation({
+        updateParcelStatusWithTrackerId: builder.mutation({
             query: (data) => ({
                 url: `${PARCEL_STATUS_URL}/update`,
                 method: 'PUT',
@@ -49,4 +49,4 @@ export const parcelStatusApiSlice = apiSlice.injectEndpoints({
 });
 
 
-export const { useSetParcelStatusMutation, useGetParcelStatusWithIdMutation, useGetParcelStatusWithParcelIdMutation, useGetParcelStatusWithStepActionMutation, useUpdateParcelStatusWithParcelIdMutation } = parcelStatusApiSlice;
+export const { useSetParcelStatusMutation, useGetParcelStatusWithIdMutation, useGetParcelStatusWithParcelIdMutation, useGetParcelStatusWithStepActionMutation, useUpdateParcelStatusWithTrackerIdMutation } = parcelStatusApiSlice;

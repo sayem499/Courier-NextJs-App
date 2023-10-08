@@ -198,7 +198,7 @@ const Header: React.FC = () => {
 
             </header>
             {showLogin && <Login closeLogin={closeLogin} />}
-            {showTrack && <Track closeTrack={closeTrack} />}
+            {showTrack && <Track closeTrack={closeTrack} trackerID={null} />}
         </>
     )
 }
