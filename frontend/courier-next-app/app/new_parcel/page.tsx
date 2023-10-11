@@ -19,6 +19,9 @@ const Newparcel = () => {
   const { user } = useAppSelector(state => state.userState);
   const [setparcel, { isLoading }] = useSetparcelMutation();
   const [setParcelStatus] = useSetParcelStatusMutation();
+  const [parcelPrice, setParcelPrice] = useState<number | string>(0);
+  const [courierType, setCourierType] = useState('normal');
+  const [cashCollectionAmount, setCashCollectionAmount] = useState<number | string>(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -174,7 +177,7 @@ const Newparcel = () => {
           _id, sender_id, receiverName, receiverPhonenumber,
           address, division, district, upazila, postcode,
           senderName, senderPhonenumber, senderAddress, senderDivision, senderDistrict,
-          senderUpazila, senderPostcode, parcelWeight, parcelType, tracker_id
+          senderUpazila, senderPostcode, parcelWeight, parcelType, tracker_id, parcelPrice, courierType, cashCollectionAmount,
         }).unwrap();
 
         
@@ -237,7 +240,7 @@ const Newparcel = () => {
     const formattedMonth = now.getMonth()+1;
     const formattedTime = now.getHours();
     const formattedMinute = now.getMinutes();
-    return `${Math.floor(Math.random() * (max - min + 1)) + min}${formattedDate}${formattedMonth}${formattedTime}${formattedMinute}`;
+    return `${formattedDate}${formattedMonth}${formattedTime}${formattedMinute}${Math.floor(Math.random() * (max - min + 1)) + min}`;
   };
 
   return (
@@ -248,24 +251,35 @@ const Newparcel = () => {
       </div>
 
       {/*  Form Div  */}
-      <div className='w-[100%] h-[85%]  sm:pl-10 sm:pr-10'>
+      <div className='w-[100%] h-[85%]  sm:pl-10 sm:pr-10 '>
         <span className=' text-4xl md-10'>Create new parcel</span>
 
         <form className='h-[70%] w-[100%] mt-10' onSubmit={handleSubmit} onReset={handleReset}>
-          <div className='flex-col'>
+          <div className='flex flex-col'>
+            <span className='text-2xl'>Courier Type</span>
+            <div className='h-[20%] width-[100%] flex mt-2 text-sm'>
+              <div className='flex h-15 w-15 m-2 items-center'>
+                <label htmlFor='normal' className='text-lg'>Normal</label>
+                <input id='normal' name='courierTypeRadio' className='m-1' type='radio' value='normal' defaultChecked onClick={() => setCourierType('normal')} ></input>
+              </div>
+              <div className='flex h-15 w-15 m-2 items-center'>
+                <label htmlFor='shop' className='text-lg'>Shop</label>
+                <input id='shop' name='courierTypeRadio' className='m-1' type='radio' value='shop' onClick={() => setCourierType('shop')}></input>
+              </div>
+            </div>
             <span className='text-2xl'>Reciever Infofmation</span>
 
             <div className='h-[20%] width-[100%] flex mt-2 text-sm'>
               <div className='flex flex-col m-2'>
                 <label htmlFor='recieverName' className=''>Reciever Name</label>
                 <input id='recieverName' value={receiverName} onChange={(e) => { setReceiverName(e.target.value) }}
-                  className='h-10 p-1 rounded text-black' type='text' placeholder='Type Name'></input>
+                  className='h-10 p-1 rounded text-black border border-black' type='text' placeholder='Type Name'></input>
               </div>
 
               <div className='flex flex-col m-2'>
                 <label htmlFor='recieverPhone' className=''>Reciever Phonenumber</label>
                 <input id='recieverPhone' value={receiverPhonenumber} onChange={(e) => setReceiverPhonenumber(e.target.value)}
-                  className='h-10 p-1 rounded text-black' type='tel' placeholder='Type Phonenumber'></input>
+                  className='h-10 p-1 rounded text-black border border-black' type='tel' placeholder='Type Phonenumber'></input>
               </div>
 
             </div>
@@ -274,12 +288,12 @@ const Newparcel = () => {
               <div className='h-[100%] w-[30%] flex flex-col m-2'>
                 <label htmlFor='recieverAddress' className=''>Reciever Address</label>
                 <input id='recieverAddress' value={address} onChange={e => setAddress(e.target.value)}
-                  className='h-10 w-[100%] p-1 rounded text-black' type='tel' placeholder='Type Address'></input>
+                  className='h-10 w-[100%] p-1 rounded text-black border border-black' type='tel' placeholder='Type Address'></input>
               </div>
 
               <div className='h-[100%] w-[30%] flex flex-col m-2'>
                 <label htmlFor='recieverDivision' className=''>Reciever Division</label>
-                <select id='recieverDivision' value={division} className='h-10 w-[100%] flex rounded items-center text-black'
+                <select id='recieverDivision' value={division} className='h-10 w-[100%] flex rounded items-center text-black border border-black'
                   onChange={handleDivChange}>
                   <option value={''}>Choose Division</option>
                   {
@@ -297,7 +311,7 @@ const Newparcel = () => {
             <div className='h-[30%] width-[100%] flex text-sm '>
               <div className='h-[100%] w-[30%] flex flex-col m-2'>
                 <label htmlFor='recieverDistrict' className=''>Reciever District</label>
-                <select id='recieverDistrict' value={district} className='h-10 w-[100%] flex rounded items-center text-black'
+                <select id='recieverDistrict' value={district} className='h-10 w-[100%] flex rounded items-center text-black border border-black'
                   onChange={handleDisChange}>
                   <option value={''}>Choose District</option>
                   {
@@ -314,7 +328,7 @@ const Newparcel = () => {
 
               <div className='h-[100%] w-[30%] flex flex-col m-2'>
                 <label htmlFor='recieverUpazila' className=''>Reciever Upazila</label>
-                <select id='recieverUpazila' value={upazila} className='h-10 w-[100%] flex rounded items-center text-black'
+                <select id='recieverUpazila' value={upazila} className='h-10 w-[100%] flex rounded items-center text-black border border-black'
                   onChange={handleUpaChange}>
                   <option value={''}>Choose Upazila</option>
                   {
@@ -333,7 +347,7 @@ const Newparcel = () => {
             <div className='h-[30%] width-[100%] flex text-sm sm:mb-20'>
               <div className='h-[100%] w-[30%] flex flex-col m-2'>
                 <label htmlFor='recieverPostcode' className=''>Reciever Postcode</label>
-                <select id='recieverPostcode' value={postcode} className='h-10 w-[100%] flex rounded items-center text-black'
+                <select id='recieverPostcode' value={postcode} className='h-10 w-[100%] flex rounded items-center text-black border border-black'
                   onChange={handlePostChange}>
                   <option value={''}>Choose Postcode</option>
                   {
@@ -363,27 +377,27 @@ const Newparcel = () => {
               <div className='flex flex-col m-2'>
                 <label htmlFor='senderName' className=''>Sender Name</label>
                 <input id='senderName' value={senderName} onChange={(e) => { setSenderName(e.target.value) }}
-                  className='h-10 p-1 rounded text-black' type='text' placeholder='Type Name'></input>
+                  className='h-10 p-1 rounded text-black border border-black' type='text' placeholder='Type Name'></input>
               </div>
 
               <div className='flex flex-col m-2'>
                 <label htmlFor='senderPhone' className=''>Sender Phonenumber</label>
                 <input id='senderPhone' value={senderPhonenumber} onChange={(e) => setSenderPhonenumber(e.target.value)}
-                  className='h-10 p-1 rounded text-black' type='tel' placeholder='Type Phonenumber'></input>
+                  className='h-10 p-1 rounded text-black border border-black' type='tel' placeholder='Type Phonenumber'></input>
               </div>
 
             </div>
 
             <div className='h-[30%] width-[100%] flex text-sm '>
               <div className='h-[100%] w-[30%] flex flex-col m-2'>
-                <label htmlFor='senderAddress' className=''>Sender Address</label>
+                <label htmlFor='senderAddress' className=''>Sender/Pick-up Address</label>
                 <input id='senderAddress' value={senderAddress} onChange={e => setSenderAddress(e.target.value)}
-                  className='h-10 w-[100%] p-1 rounded text-black' type='tel' placeholder='Type Address'></input>
+                  className='h-10 w-[100%] p-1 rounded text-black border border-black' type='tel' placeholder='Type Address'></input>
               </div>
 
               <div className='h-[100%] w-[30%] flex flex-col m-2'>
-                <label htmlFor='senderDivision' className=''>Sender Division</label>
-                <select id='senderDivision' value={senderDivision} className='h-10 w-[100%] flex rounded items-center text-black'
+                <label htmlFor='senderDivision' className=''>Sender/Pick-up Division</label>
+                <select id='senderDivision' value={senderDivision} className='h-10 w-[100%] flex rounded items-center text-black border border-black'
                   onChange={handleSenderDivChange}>
                   <option value={''}>Choose Division</option>
                   {
@@ -400,8 +414,8 @@ const Newparcel = () => {
 
             <div className='h-[30%] width-[100%] flex text-sm '>
               <div className='h-[100%] w-[30%] flex flex-col m-2'>
-                <label htmlFor='senderDistrict' className=''>Sender District</label>
-                <select id='senderDistrict' value={senderDistrict} className='h-10 w-[100%] flex rounded items-center text-black'
+                <label htmlFor='senderDistrict' className=''>Sender/Pick-up District</label>
+                <select id='senderDistrict' value={senderDistrict} className='h-10 w-[100%] flex rounded items-center text-black border border-black'
                   onChange={handleSenderDisChange}>
                   <option value={''}>Choose District</option>
                   {
@@ -417,8 +431,8 @@ const Newparcel = () => {
               </div>
 
               <div className='h-[100%] w-[30%] flex flex-col m-2'>
-                <label htmlFor='senderUpazila' className=''>Sender Upazila</label>
-                <select id='senderUpazila' value={senderUpazila} className='h-10 w-[100%] flex rounded items-center text-black'
+                <label htmlFor='senderUpazila' className=''>Sender/Pick-up Upazila</label>
+                <select id='senderUpazila' value={senderUpazila} className='h-10 w-[100%] flex rounded items-center text-black border border-black'
                   onChange={handleSenderUpaChange}>
                   <option value={''}>Choose Upazila</option>
                   {
@@ -436,8 +450,8 @@ const Newparcel = () => {
 
             <div className='h-[30%] width-[100%] flex text-sm sm:mb-20'>
               <div className='h-[100%] w-[30%] flex flex-col m-2'>
-                <label htmlFor='senderPostcode' className=''>Sender Postcode</label>
-                <select id='senderPostcode' value={senderPostcode} className='h-10 w-[100%] flex rounded items-center text-black'
+                <label htmlFor='senderPostcode' className=''>Sender/Pick-up Postcode</label>
+                <select id='senderPostcode' value={senderPostcode} className='h-10 w-[100%] flex rounded items-center text-black border border-black'
                   onChange={handleSenderPostChange}>
                   <option value={''}>Choose Postcode</option>
                   {
@@ -460,15 +474,29 @@ const Newparcel = () => {
 
           {/* Parcel Information  */}
           <span className='text-2xl'>Parcel Infofmation</span>
+          
+          {courierType === 'shop' ? <div className='h-[10%] width-[100%] flex text-sm sm:mb-5'>
+
+            <div className='h-[100%] w-[30%] flex flex-col m-2'>
+              <label htmlFor='parcelPrice'>Product Price (for shops)</label>
+              <input className='h-10 w-[100%] p-1 rounded text-black border border-black' id='parcelPrice' type='number' value={parcelPrice} onChange={(e)=>setParcelPrice(e.target.value)}></input>
+            </div>
+
+            <div className='h-[100%] w-[30%] flex flex-col m-2'>
+              <label htmlFor='cashCollectionAmount'>Cash Collection Amount (for shops)</label>
+              <input className='h-10 w-[100%] p-1 rounded text-black border border-black' id='cashCollectionAmount' type='number' value={cashCollectionAmount} onChange={(e)=>setCashCollectionAmount(e.target.value)}></input>
+            </div>
+          </div> : ''}
+
           <div className='h-[10%] width-[100%] flex text-sm sm:mb-5'>
 
             <div className='h-[100%] w-[30%] flex flex-col m-2'>
               <label htmlFor='parcelWeight' className=''>Parcel Weight</label>
-              <div className='flex items-center'>
+              <div className='flex items-center mt-1'>
                 <input value={parcelWeight + "gm"} id='parcelWeight'
-                  className='h-10 w-[100%] p-1 rounded text-black text-center' type='text' placeholder='Type Weight'></input>
-                <div className='flex-col text-xs'>
-                  <ArrowDropUpIcon onClick={weightUp} /><ArrowDropDownIcon onClick={weightDown} />
+                  className='h-10 w-[100%] p-1 rounded-l border-black border-y border-l text-black text-center ' type='text' placeholder='Type Weight'></input>
+                <div className='h-10 flex-col text-xs rounded-r border-black border-y border-r'>
+                  <ArrowDropUpIcon className='h-5 w-5' onClick={weightUp} /><ArrowDropDownIcon className='h-5 w-5' onClick={weightDown} />
                 </div>
               </div>
             </div>
@@ -476,7 +504,7 @@ const Newparcel = () => {
             <div className='h-[100%] w-[30%] flex flex-col m-2'>
 
               <label htmlFor='parcelType' className=''>Select an option</label>
-              <div className='flex h-10 w-[100%] p-1 mt-1 rounded text-black items-center justify-around bg-white border'>
+              <div className='flex h-10 w-[100%] p-1 mt-1 rounded text-black items-center justify-around bg-white border border-black'>
 
                 <section className='flex items-center justify-center'>
                   <input type='radio' id='fragile' name='parcelType'

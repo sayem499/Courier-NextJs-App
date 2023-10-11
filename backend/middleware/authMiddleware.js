@@ -25,7 +25,7 @@ const protect = expressAsyncHandler( async (req, res, next) => {
 });
 
 const protectAdmin = expressAsyncHandler( async (req, res, next) => {
-    let token = req.cookies.jwt;
+    let token = req.cookies.jwtadmin;
 
     if(token){
 

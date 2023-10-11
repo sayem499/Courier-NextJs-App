@@ -20,6 +20,9 @@ const parcelSchema = mongoose.Schema({
     parcelWeight: {type: Number, required: true},
     parcelType: {type: String, required: true},
     tracker_id: {type: String, required: true},
+    parcelPrice: {type: Number, required: true},
+    courierType: {type: Number, required: true},
+    cashCollectionAmount: {type: Number, required: true},
 }, {
     timestamps: true,
 });

@@ -37,12 +37,10 @@ const Header: React.FC = () => {
 
     useEffect(() => {
 
-        if (user) {
+        if (user && !admin) {
             tokenCheck();
             router.push('/home');
-        }
-
-        if (admin) {
+        } else if (admin && !user) {
             adminTokenCheck();
             router.push('/admin/dashboard');
         }
