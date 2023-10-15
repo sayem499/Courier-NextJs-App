@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useAppSelector, useAppDispatch } from '@/app/hooks';
 import { useGetParcelStatusWithStepActionMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { getParcelStatuses } from '@/redux/parcelStatus/parcelStatuSlice';
-import { useUpdateParcelStatusWithTrackerIdMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
+import { useUpdateParcelStatusWithTrackerIdAdminMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
@@ -14,12 +14,13 @@ const Requests = () => {
   const router = useRouter();
   const { admin } = useAppSelector(state => state.adminState);
   const [getParcelStatusWithActionStatus] = useGetParcelStatusWithStepActionMutation();
-  const [updateParcelStatusWithTrackerId] = useUpdateParcelStatusWithTrackerIdMutation();
+  const [updateParcelStatusWithTrackerIdAdmin] = useUpdateParcelStatusWithTrackerIdAdminMutation();
   const { parcelStatuses } = useAppSelector(state => state.parcelStatusState);
   const [stepZero, setStepZero] = useState(true);
   const [stepOne, setStepOne] = useState(false);
   const [stepTwo, setStepTwo] = useState(false);
   const [stepThree, setStepThree] = useState(false);
+  const [stepFour, setStepFour] = useState(false);
 
   useEffect(() => {
     if (admin) {
@@ -27,7 +28,7 @@ const Requests = () => {
     } else {
       router.push('/admin');
     }
-  }, [stepOne, stepTwo, stepThree, stepZero])
+  }, [stepOne, stepTwo, stepThree, stepZero, stepFour])
 
 
   const columns = [
@@ -41,13 +42,15 @@ const Requests = () => {
       accessorFn: (row: any) => row,
       cell: (cell: any) => {
         const row = cell.getValue();
-        return ( row.stepAction === 3 ? <button className='rounded-full bg-red-500 
-        px-4 py-2 text-gray-50 hover:text-white' >Delete</button>
+        return ( row.stepAction === 3 || row.stepAction === 4 ? <button className='rounded-full bg-red-500 
+        px-4 py-2 text-gray-50 hover:text-white'>Delete</button>
           : row.stepAction === 2 ?  <><button className='rounded-full bg-green-500 
           px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => handleOutForDeliveryClick(row._id)}>Clear</button>
            <button className='rounded-full bg-green-500 
-        px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id)}>Accept</button></>: <button className='rounded-full bg-green-500 
-        px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id)}>Accept</button>)
+        px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id)}>Accept</button></>: <><button className='rounded-full bg-green-500 
+        px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id)}>Accept</button>
+            <button className='rounded-full bg-green-500 
+        px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>)
       }
     },
   ]
@@ -57,7 +60,7 @@ const Requests = () => {
       let _id = id;
       let datetime = new Date();
       let parcelStatus: string = `${datetime.toLocaleString()}: Parcel out for delivery.`;
-      const res = await updateParcelStatusWithTrackerId({ _id, parcelStatus }).unwrap();
+      const res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus }).unwrap();
       if(res){
         getParcelStatus();
       }
@@ -77,6 +80,7 @@ const Requests = () => {
       stepOne ? stepAction = 1 : 0;
       stepTwo ? stepAction = 2 : 0;
       stepThree ? stepAction = 3 : 0;
+      stepFour ? stepAction = 4 : 0;
 
       const res = await getParcelStatusWithActionStatus({ stepAction }).unwrap();
       dispatch(getParcelStatuses(res));
@@ -84,6 +88,18 @@ const Requests = () => {
       toast.error(err?.data?.message || err?.error);
     }
 
+  }
+
+  const cancelClickButton = async (id: any) => {
+    try{
+      let _id = id;
+      let datetime = new Date();
+      let parcelStatus = `${datetime.toLocaleString()} : Parcel canceled.`;
+      let stepAction = 4;
+      await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction }).unwrap();
+    }catch(err: any) {
+      toast.error(err?.data?.message || err?.error);
+    }
   }
 
   const acceptClickButton = async (id: any) => {
@@ -106,13 +122,13 @@ const Requests = () => {
       stepTwo ? parcelStatus = `${datetime.toLocaleString()}: Parcel delivered successfully.`: 0;
 
 
-      const res = await updateParcelStatusWithTrackerId({ _id, parcelStatus, stepAction }).unwrap();
+      const res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction }).unwrap();
       if (res) {
         getParcelStatus();
       }
 
     } catch (err: any) {
-      toast(err?.data?.message || err.error);
+      toast.error(err?.data?.message || err.error);
     }
 
 
@@ -123,6 +139,7 @@ const Requests = () => {
     setStepOne(false);
     setStepTwo(false);
     setStepThree(false);
+    setStepFour(false);
   }
 
   const stepOneSelected = () => {
@@ -130,6 +147,7 @@ const Requests = () => {
     setStepOne(true);
     setStepTwo(false);
     setStepThree(false);
+    setStepFour(false);
   }
 
   const stepTwoSelected = () => {
@@ -137,6 +155,7 @@ const Requests = () => {
     setStepOne(false);
     setStepTwo(true);
     setStepThree(false);
+    setStepFour(false);
   }
 
   const stepThreeSelected = () => {
@@ -144,7 +163,16 @@ const Requests = () => {
     setStepOne(false);
     setStepTwo(false);
     setStepThree(true);
+    setStepFour(false);
   } 
+
+  const stepFourSelected = () => {
+    setStepZero(false);
+    setStepOne(false);
+    setStepTwo(false);
+    setStepThree(false);
+    setStepFour(true);
+  }
 
   return (
     <div className='h-[100%] w-[100%] flex flex-col items-center'>
@@ -153,6 +181,7 @@ const Requests = () => {
         <button onClick={stepOneSelected} className={`m-2 h-fit w-fit ${ stepOne ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : '' }`}>Pick-up</button>
         <button onClick={stepTwoSelected} className={`m-2 h-fit w-fit ${ stepTwo ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : '' }`}>Shipped</button>
         <button onClick={stepThreeSelected} className={`m-2 h-fit w-fit ${ stepThree ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : '' }`}>Delivered</button>
+        <button onClick={stepFourSelected} className={`m-2 h-fit w-fit ${ stepFour ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : '' }`}>Canceled</button>
       </div>
       <div className='h-[100%] w-[100%] flex justify-center'>
         <div className='h-[100%] w-[70%] flex justify-center '>

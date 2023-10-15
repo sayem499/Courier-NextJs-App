@@ -83,7 +83,7 @@ const Track: React.FC<{ closeTrack: (event: React.MouseEvent<HTMLDivElement> | v
                                         }
                                         
                                     </section>
-                                    <span>{item}</span>
+                                    <span>{parcelStatus.stepAction === 4 && index === 3? 'Canceled' : item} </span>
                                 </li >
                                
                             

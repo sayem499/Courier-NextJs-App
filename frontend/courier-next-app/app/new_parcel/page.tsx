@@ -25,7 +25,7 @@ const Newparcel = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if(!user){
+    if (!user) {
       router.push('/');
     }
   })
@@ -180,29 +180,30 @@ const Newparcel = () => {
           senderUpazila, senderPostcode, parcelWeight, parcelType, tracker_id, parcelPrice, courierType, cashCollectionAmount,
         }).unwrap();
 
-        
+
 
         if (res) {
-          toast.success('Parcel created successfully!');
-          handleReset();
-          dispatch(resetParcel());
-
+          let parcel_id = _id;
+          _id = tracker_id;
+          let datetime = new Date();
+          let parcelStatus: [string] = [`${datetime.toLocaleString()}: Request pending for approval.`];
+          let stepAction = 0;
+          try {
+            const statusRes = await setParcelStatus({ _id, parcelStatus, parcel_id, stepAction }).unwrap();
+            if(statusRes){
+              toast.success('Parcel created successfully!');
+              handleReset();
+              dispatch(resetParcel());
+            } 
+          } catch (err: any) {
+            toast.error(err?.data?.message || err.error);
+          }  
         }
 
       } catch (err: any) {
         toast.error(err?.data?.message || err.error);
       }
 
-      let parcel_id = _id;
-      _id = tracker_id;
-      let datetime = new Date();
-      let parcelStatus: [string] = [`${datetime.toLocaleString()}: Request pending for approval.`];
-      let stepAction = 0;
-      try{
-        await setParcelStatus({_id, parcelStatus, parcel_id, stepAction}).unwrap();
-      }catch(err:any){
-        toast.error(err?.data?.message || err.error);
-      }
     }
 
   }
@@ -237,7 +238,7 @@ const Newparcel = () => {
     const max = 99999; // Largest 5-digit number (99999)
     const now = new Date();
     const formattedDate = now.getDate();
-    const formattedMonth = now.getMonth()+1;
+    const formattedMonth = now.getMonth() + 1;
     const formattedTime = now.getHours();
     const formattedMinute = now.getMinutes();
     return `${formattedDate}${formattedMonth}${formattedTime}${formattedMinute}${Math.floor(Math.random() * (max - min + 1)) + min}`;
@@ -474,17 +475,17 @@ const Newparcel = () => {
 
           {/* Parcel Information  */}
           <span className='text-2xl'>Parcel Infofmation</span>
-          
+
           {courierType === 'shop' ? <div className='h-[10%] width-[100%] flex text-sm sm:mb-5'>
 
             <div className='h-[100%] w-[30%] flex flex-col m-2'>
               <label htmlFor='parcelPrice'>Product Price (for shops)</label>
-              <input className='h-10 w-[100%] p-1 rounded text-black border border-black' id='parcelPrice' type='number' value={parcelPrice} onChange={(e)=>setParcelPrice(e.target.value)}></input>
+              <input className='h-10 w-[100%] p-1 rounded text-black border border-black' id='parcelPrice' type='number' value={parcelPrice} onChange={(e) => setParcelPrice(e.target.value)}></input>
             </div>
 
             <div className='h-[100%] w-[30%] flex flex-col m-2'>
               <label htmlFor='cashCollectionAmount'>Cash Collection Amount (for shops)</label>
-              <input className='h-10 w-[100%] p-1 rounded text-black border border-black' id='cashCollectionAmount' type='number' value={cashCollectionAmount} onChange={(e)=>setCashCollectionAmount(e.target.value)}></input>
+              <input className='h-10 w-[100%] p-1 rounded text-black border border-black' id='cashCollectionAmount' type='number' value={cashCollectionAmount} onChange={(e) => setCashCollectionAmount(e.target.value)}></input>
             </div>
           </div> : ''}
 
