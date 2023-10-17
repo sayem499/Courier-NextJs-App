@@ -21,6 +21,8 @@ const Requests = () => {
   const [stepTwo, setStepTwo] = useState(false);
   const [stepThree, setStepThree] = useState(false);
   const [stepFour, setStepFour] = useState(false);
+  const [parcelStatusMessage, setParcelStatusMessage] = useState('');
+  let data: string;
 
   useEffect(() => {
     if (admin) {
@@ -53,7 +55,28 @@ const Requests = () => {
         px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>)
       }
     },
+    {
+      header: 'Message',
+      accessorFn: (row: any) => row,
+      cell: (cell: any) => {
+        const row = cell.getValue();
+        return (<><input className='p-1 border rounded-l text-black ' type='text' value={data} onChange={(e)=>{data = e.target.value}}></input><button className='p-1 rounded-r bg-blue-500' onClick={() => handleMessageSubmit(row._id)}>Send</button></> )
+      }
+    },
   ]
+
+  
+  const handleMessageSubmit = async (_id: string) => {
+    try{
+      let datetime = new Date();
+      let parcelStatus: string = `${datetime.toLocaleString()}: ${data}`;
+      const res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus }).unwrap();
+    }catch(err: any){
+      toast.error(err?.data?.message || err.error);
+    }
+
+    
+  }
 
   const handleOutForDeliveryClick = async (id: string) => {
     try{
@@ -65,7 +88,7 @@ const Requests = () => {
         getParcelStatus();
       }
     } catch(err: any) {
-      toast(err?.data?.message || err.error);
+      toast.error(err?.data?.message || err.error);
     }
     
 
