@@ -19,6 +19,12 @@ interface Parcel {
     senderPostcode: string;
     parcelWeight: string;
     parcelType: string;
+    tracker_id: string;
+    parcelPrice: number;
+    courierType: string;
+    cashCollectionAmount: number;
+    deliveryCost:number;
+    
 }
 
 type ParcelState = {

@@ -19,8 +19,25 @@ export const parcelApiSlice = apiSlice.injectEndpoints({
                 body: data
             })
         }),
+
+        getParcelWithId: builder.mutation({
+            query: (data) => ({
+                url: `${PARCEL_URL}/get_with_id`,
+                method: 'POST',
+                body: data
+            })
+        }),
+
+        updateParcelWithId: builder.mutation({
+            query: (data) => ({
+                url: `${PARCEL_URL}/update`,
+                method: 'PUT',
+                body: data
+            })
+        }),
+
     })
 
 })
 
-export const { useSetparcelMutation, useGetparcelsMutation } = parcelApiSlice;
+export const { useSetparcelMutation, useGetparcelsMutation, useUpdateParcelWithIdMutation, useGetParcelWithIdMutation } = parcelApiSlice;

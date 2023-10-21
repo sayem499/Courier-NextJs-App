@@ -78,7 +78,7 @@ const Track: React.FC<{ closeTrack: (event: React.MouseEvent<HTMLDivElement> | v
                                         after:content-[" "] after:h-1 after:w-[100%] ${index === 3 ? 'after:bg-transparent' : ''}
                                         ${index < 3 && parcelStatus && parcelStatus.stepAction <= index   ? 'dark:after:bg-gray-400  after:bg-gray-200': ' after:bg-green-500'}
                                 `}>
-                                       {  parcelStatus && parcelStatus.stepAction > index || parcelStatus.stepAction === 3 ?  <DoneIcon className='text-sm rounded-full bg-green-500'/> : <span className={`rounded-full ${parcelStatus && parcelStatus.stepAction >= index ? 'bg-green-500' : 'bg-gray-500'}  w-3 h-3 `}></span>
+                                       {  parcelStatus && parcelStatus.stepAction > index || parcelStatus.stepAction === 3 ?  <DoneIcon className='text-sm rounded-full bg-green-500 text-white'/> : <span className={`rounded-full ${parcelStatus && parcelStatus.stepAction >= index ? 'bg-green-500' : 'bg-gray-500'}  w-3 h-3 `}></span>
                                            
                                         }
                                         

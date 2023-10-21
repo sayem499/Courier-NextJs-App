@@ -7,16 +7,7 @@ import { useAppSelector, useAppDispatch } from '../hooks';
 import { useGetparcelsMutation } from '@/redux/parcel/parcelApiSlice';
 import { getParcels } from '@/redux/parcel/parcelSlice';
 
-interface Parcel {
-  receiverName: string;
-  receiverPhonenumber: string;
-  address: string;
-  senderName: string;
-  senderPhonenumber: string;
-  senderAddress: string;
-  parcelWeight: string;
-  parcelType: string;
-}
+
 
 
 const Parcel = () => {
@@ -69,7 +60,11 @@ const columns = [
     {
       header: 'Tracker ID',
       accessorKey: 'tracker_id',
-    }   
+    },
+    {
+      header: 'Delivery Cost (Tk.)',
+      accessorKey: 'deliveryCost',
+    },   
 ]
  const [getparcels , {isLoading}] = useGetparcelsMutation();  
  const {user} = useAppSelector(state => state.userState);
@@ -84,17 +79,14 @@ const columns = [
   }catch(err: any) {
     toast.error(err?.data?.message || err.error);
   }
-  
  }
 
   return (
     <div className="h-[100%] w-[100%] flex flex-col overflow-auto">
-      
       <div className='h-[100%] w-[100%] flex items-center justify-center'>
         <div className='h-[100%] w-[70%] flex items-center justify-center '>
           <Table data={parcels} columns={columns}/>
-          </div>
-        
+        </div>
       </div>
     </div>
   )

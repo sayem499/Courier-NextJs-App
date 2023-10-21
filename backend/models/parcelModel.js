@@ -23,9 +23,9 @@ const parcelSchema = mongoose.Schema({
     parcelPrice: {type: Number, required: true},
     courierType: {type: String, required: true},
     cashCollectionAmount: {type: Number, required: true},
+    deliveryCost: {type: Number, require: true},
 }, {
     timestamps: true,
 });
 
-const Parcel = mongoose.model('Parcel', parcelSchema);
-export default Parcel;
+export const Parcel = mongoose.model('Parcel', parcelSchema);
