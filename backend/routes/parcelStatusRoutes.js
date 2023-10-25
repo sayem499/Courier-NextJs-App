@@ -1,5 +1,5 @@
 import express from 'express';
-import { setParcelStatus, getParcelStatusWithId, getParcelStatusWithParcelId, updateParcelStatusWithId, getParcelStatusWithStepAction } from '../controllers/parcelStatusContoller.js';
+import { setParcelStatus, getParcelStatusWithId, getParcelStatusWithParcelId, updateParcelStatusWithId, getParcelStatusWithStepAction, getParcelStatusWithSenderId } from '../controllers/parcelStatusContoller.js';
 import { protect, protectAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -10,5 +10,6 @@ router.route('/get_with_id').post(getParcelStatusWithId);
 router.route('/get_with_parcel_id').post(protect, getParcelStatusWithParcelId);
 router.route('/update').put(protect, updateParcelStatusWithId);
 router.route('/update_admin').put(protectAdmin, updateParcelStatusWithId);
+router.route('/get_with_sender_id').post(protect, getParcelStatusWithSenderId);
 
 export default router;

@@ -61,11 +61,10 @@ const Requests = () => {
         px-4 py-2 text-gray-50 hover:text-white'>Delete</button>
           : row.stepAction === 0 ? <><input className='p-1 border rounded text-black ' type='number' placeholder='Enter parcel cost' value={deliveryCost} onChange={(e) => { deliveryCost = e.target.valueAsNumber }}></input><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
             <button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>
-            : row.stepAction === 2 ? <><button className='rounded-full bg-green-500 
-          px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => handleOutForDeliveryClick(row._id)}>Clear</button>
+            : row.stepAction === 2 ? <><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => handleOutForDeliveryClick(row._id)}>Clear</button>
               <button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button></>
               : <><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
-                <button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>)
+                <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>)
       }
     },
     {
@@ -176,8 +175,9 @@ const Requests = () => {
       if (stepZero)
         result = await updateParcelWithIdMutation({ _id, deliveryCost }).unwrap();
       _id = id;
-      if (result)
-        res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction }).unwrap();
+      let isPaid; 
+      stepOne ? isPaid = true : 0;
+      res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction, isPaid}).unwrap();
       if (res) {
         getParcelStatus();
       }
@@ -229,6 +229,8 @@ const Requests = () => {
     setStepFour(true);
   }
 
+  let hiddenCols = {};
+
   return (
     <div className='h-[100%] w-[100%] flex flex-col items-center z-0'>
       <div className='h-[20%] w-[70] flex items-center'>
@@ -240,7 +242,7 @@ const Requests = () => {
       </div>
       <div className='h-[100%] w-[100%] flex justify-center'>
         <div className='h-[100%] w-[70%] flex justify-center '>
-          {<Table data={parcelStatuses} columns={columns} />}
+          {<Table data={parcelStatuses} columns={columns} hiddenCols={hiddenCols} />}
           {
             showParceltable && <Parceltable closeParceltable={closeParceltable}/>
           }

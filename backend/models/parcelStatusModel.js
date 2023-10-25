@@ -6,6 +6,7 @@ const parcelStatusSchema = mongoose.Schema({
     parcel_id: {type: String, required: true},
     stepAction: {type: Number, required: true},
     isPaid: {type: Boolean, required: true, default: false},
+    sender_id: {type: String, required: true},
 },{
     timestamps: true,
 })

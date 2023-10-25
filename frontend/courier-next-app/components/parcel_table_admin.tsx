@@ -49,16 +49,31 @@ const Parceltable: React.FC<{ closeParceltable: (event: React.MouseEvent | void)
             accessorKey: 'parcelType',
         },
         {
+            header: 'Courier Type',
+            accessorKey: 'courierType',
+        },
+        {
+            header: 'Parcel Price',
+            accessorKey: 'parcelPrice',
+        },
+        {
+            header: 'Cash Collection Amount',
+            accessorKey: 'cashCollectionAmount',
+        },
+        {
             header: 'Delivery Cost (Tk.)',
             accessorKey: 'deliveryCost',
         },
 
     ]
+
+    let hiddenCols = {};
+    
     return (
         <div className='flex w-[100%] h-[100%] justify-center items-center fixed top-0 left-0 bg-black/[0.4] z-10'>
             <div className='flex flex-col justify-center items-center h-[85%] w-[95%] dark:bg-slate-600 bg-gray-100'>
-                <CloseIcon className='fixed top-14 right-10' onClick={closeParceltable} />
-                 <Table data={parcels} columns={columns} />
+                <CloseIcon className='cursor-pointer fixed top-14 right-10' onClick={closeParceltable} />
+                <Table data={parcels} columns={columns} hiddenCols={hiddenCols}/>
             </div>
         </div>
     )

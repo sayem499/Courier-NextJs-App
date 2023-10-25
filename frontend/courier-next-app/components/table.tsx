@@ -5,11 +5,14 @@ import { getCoreRowModel, useReactTable, flexRender, RowModel} from '@tanstack/r
 
 
 
-const Table: React.FC<{data:unknown[], columns:any}> = ({data , columns}) => {
+const Table: React.FC<{data:unknown[], columns:any, hiddenCols: {}}> = ({data , columns, hiddenCols}) => {
     
     const table = useReactTable({
         data, columns,
-        getCoreRowModel: getCoreRowModel()
+        getCoreRowModel: getCoreRowModel(),
+        state: {
+            columnVisibility: hiddenCols,
+        }
         
     });
 

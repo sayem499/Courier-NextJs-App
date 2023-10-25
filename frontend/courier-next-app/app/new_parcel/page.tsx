@@ -189,7 +189,7 @@ const Newparcel = () => {
           let parcelStatus: [string] = [`${datetime.toLocaleString()}: Request pending for approval.`];
           let stepAction = 0;
           try {
-            const statusRes = await setParcelStatus({ _id, parcelStatus, parcel_id, stepAction }).unwrap();
+            const statusRes = await setParcelStatus({ _id, parcelStatus, parcel_id, stepAction, sender_id}).unwrap();
             if(statusRes){
               toast.success('Parcel created successfully!');
               handleReset();

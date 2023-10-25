@@ -5,6 +5,8 @@ interface ParcelStatus {
     parcelStatus: [string];
     parcel_id: string;
     stepAction: number;
+    isPaid: boolean;
+    sender_id: string;
 }
 
 type ParcelStatusState = {

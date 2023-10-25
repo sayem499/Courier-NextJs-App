@@ -15,6 +15,7 @@ const setParcelStatus = expressAsyncHandler( async (req, res) => {
         parcel_id: body.parcel_id,
         stepAction: body.stepAction,
         isPaid: body.isPaid,
+        sender_id: body.sender_id,
     });
 
     if(parcelStatus) {
@@ -74,6 +75,22 @@ const getParcelStatusWithParcelId = expressAsyncHandler( async (req, res) => {
 })
 
 
+//@desc Get parcel status with sender id
+//@route POST /api/parcelStatus/get_with_sender_id
+//@access Private
+
+const getParcelStatusWithSenderId = expressAsyncHandler( async (req, res) => {
+    const body = req.body;
+    const parcelStatus = await ParcelStatus.find({sender_id: body.sender_id});
+    if(parcelStatus) {
+        res.status(201).json(parcelStatus);    
+    } else {
+        res.status(400)
+        throw new Error('Invalid parcel status data.');
+    }
+})
+
+
 //@desc Update parcel status with tracker id
 //@route PUT /api/parcelStatus/update
 //@access Private
@@ -86,6 +103,7 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
         parcelStatus.parcel_id = body.parcel_id || parcelStatus.parcel_id;
         parcelStatus.stepAction = body.stepAction || parcelStatus.stepAction;
         parcelStatus.isPaid = body.isPaid || parcelStatus.isPaid;
+        parcelStatus.sender_id = body.sender_id || parcelStatus.sender_id;
 
         
         const updatedParcelStatus = await parcelStatus.save();
@@ -95,6 +113,7 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
                parcel_id: updatedParcelStatus.parcel_id,
                stepAction: updatedParcelStatus.stepAction,
                isPaid: updatedParcelStatus.isPaid,
+               sender_id: updatedParcelStatus.sender_id,
             });
         }else {
             res.status(500);
@@ -108,4 +127,4 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
 
 
 
-export { setParcelStatus, getParcelStatusWithStepAction, getParcelStatusWithId, getParcelStatusWithParcelId, updateParcelStatusWithId }
+export { setParcelStatus, getParcelStatusWithStepAction, getParcelStatusWithId, getParcelStatusWithParcelId, getParcelStatusWithSenderId, updateParcelStatusWithId }
