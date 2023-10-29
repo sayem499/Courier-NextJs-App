@@ -8,6 +8,7 @@ interface ParcelStatus {
     isPaid: boolean;
     sender_id: string;
     deliveryCost: number;
+    isReturned: boolean;
 }
 
 type ParcelStatusState = {

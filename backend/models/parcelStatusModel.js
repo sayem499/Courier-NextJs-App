@@ -8,6 +8,7 @@ const parcelStatusSchema = mongoose.Schema({
     isPaid: {type: Boolean, required: true, default: false},
     sender_id: {type: String, required: true},
     deliveryCost: {type: Number, required: true},
+    isReturned: {type: Boolean, required: true},
 },{
     timestamps: true,
 })

@@ -17,6 +17,7 @@ const setParcelStatus = expressAsyncHandler( async (req, res) => {
         isPaid: body.isPaid,
         sender_id: body.sender_id,
         deliveryCost: body.deliveryCost,
+        isReturned: body.isReturned,
     });
 
     if(parcelStatus) {
@@ -106,6 +107,7 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
         parcelStatus.isPaid = body.isPaid || parcelStatus.isPaid;
         parcelStatus.sender_id = body.sender_id || parcelStatus.sender_id;
         parcelStatus.deliveryCost = body.deliiveryCost || parcelStatus.deliveryCost;
+        parcelStatus.isReturned = body.isReturned || parcelStatus.isReturned;
 
         
         const updatedParcelStatus = await parcelStatus.save();
@@ -117,6 +119,7 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
                isPaid: updatedParcelStatus.isPaid,
                sender_id: updatedParcelStatus.sender_id,
                deliveryCost: updatedParcelStatus.deliiveryCost,
+               isReturned: updatedParcelStatus.isReturned,
             });
         }else {
             res.status(500);

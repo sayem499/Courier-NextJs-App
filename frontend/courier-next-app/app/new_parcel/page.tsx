@@ -172,6 +172,7 @@ const Newparcel = () => {
       let _id = uuidv4();
       let tracker_id = generateRandomNumericID();
       let deliveryCost = 0;
+      let isReturned = false;
 
       try {
         const res = await setparcel({
@@ -191,7 +192,7 @@ const Newparcel = () => {
           let parcelStatus: [string] = [`${datetime.toLocaleString()}: Request pending for approval.`];
           let stepAction = 0;
           try {
-            const statusRes = await setParcelStatus({ _id, parcelStatus, parcel_id, stepAction, sender_id, isPaid, deliveryCost}).unwrap();
+            const statusRes = await setParcelStatus({ _id, parcelStatus, parcel_id, stepAction, sender_id, isPaid, deliveryCost, isReturned}).unwrap();
             if(statusRes){
               toast.success('Parcel created successfully!');
               handleReset();

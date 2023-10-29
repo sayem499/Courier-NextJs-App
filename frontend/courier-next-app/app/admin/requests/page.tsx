@@ -2,7 +2,7 @@
 import Table from '@/components/table';
 import React, { useEffect, useState } from 'react'
 import { useAppSelector, useAppDispatch } from '@/app/hooks';
-import { useGetParcelStatusWithStepActionMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
+import { useGetParcelStatusWithStepActionAdminMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { getParcelStatuses } from '@/redux/parcelStatus/parcelStatuSlice';
 import { useUpdateParcelStatusWithTrackerIdAdminMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { useUpdateParcelWithIdMutation } from '@/redux/parcel/parcelApiSlice';
@@ -20,7 +20,7 @@ const Requests = () => {
   const router = useRouter();
   const { admin } = useAppSelector(state => state.adminState);
   const [updateParcelWithIdMutation] = useUpdateParcelWithIdMutation();
-  const [getParcelStatusWithActionStatus] = useGetParcelStatusWithStepActionMutation();
+  const [getParcelStatusWithActionStatus] = useGetParcelStatusWithStepActionAdminMutation();
   const [updateParcelStatusWithTrackerIdAdmin] = useUpdateParcelStatusWithTrackerIdAdminMutation();
   const { parcelStatuses } = useAppSelector(state => state.parcelStatusState);
   const [stepZero, setStepZero] = useState(true);
@@ -57,10 +57,10 @@ const Requests = () => {
       accessorFn: (row: any) => row,
       cell: (cell: any) => {
         const row = cell.getValue();
-        return (row.stepAction === 3 || row.stepAction === 4 ? <button className='rounded-full bg-red-500 
-        px-4 py-2 text-gray-50 hover:text-white'>Delete</button>
+        return (row.stepAction === 3 || row.stepAction === 4 ? row.isReturned ? <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white'>Delete</button> 
+        : <button className='rounded-full bg-blue-500 px-4 py-2 text-gray-50 hover:text-white' onClick={() => handleReturnedClick(row._id)}>Returned</button> 
           : row.stepAction === 0 ? <><input className='p-1 border rounded text-black ' type='number' placeholder='Enter parcel cost' value={deliveryCost} onChange={(e) => { deliveryCost = e.target.valueAsNumber }}></input><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
-            <button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>
+            <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>
             : row.stepAction === 2 ? <><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => handleOutForDeliveryClick(row._id)}>Clear</button>
               <button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button></>
               : <><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
@@ -76,6 +76,14 @@ const Requests = () => {
       }
     },
   ]
+
+  const handleReturnedClick = async (_id: any) => {
+    let datetime = new Date();
+    let isReturned = true;
+    const parcelStatus = `${datetime.toLocaleString()}: Parcel ${_id} returned successfully.`
+    const res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, isReturned }).unwrap();
+    getParcelStatus();
+  }
 
   const openParceltable = async (parcel_id: string) => {
     let res;
