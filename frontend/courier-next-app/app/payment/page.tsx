@@ -34,6 +34,14 @@ const Payment = () => {
         return( row.isPaid ? <span className='text-green-500'>Paid</span> : <span className='text-red-500'>Pending</span>)
       }
     },
+    {
+      header: 'Delivery Cost',
+      accessorFn: (row: any) => row,
+      cell:(cell: any) => {
+        const row = cell.getValue();
+        return(<span>{row.deliveryCost + ' ৳'}</span>)
+      }
+    },
   ]
 
   const getTableData = async () => {

@@ -7,6 +7,7 @@ interface ParcelStatus {
     stepAction: number;
     isPaid: boolean;
     sender_id: string;
+    deliveryCost: number;
 }
 
 type ParcelStatusState = {

@@ -171,6 +171,7 @@ const Newparcel = () => {
       const sender_id = user?._id;
       let _id = uuidv4();
       let tracker_id = generateRandomNumericID();
+      let deliveryCost = 0;
 
       try {
         const res = await setparcel({
@@ -178,18 +179,19 @@ const Newparcel = () => {
           address, division, district, upazila, postcode,
           senderName, senderPhonenumber, senderAddress, senderDivision, senderDistrict,
           senderUpazila, senderPostcode, parcelWeight, parcelType, tracker_id, parcelPrice, courierType, cashCollectionAmount,
-        }).unwrap();
+          deliveryCost}).unwrap();
 
 
 
         if (res) {
           let parcel_id = _id;
+          let isPaid = false;
           _id = tracker_id;
           let datetime = new Date();
           let parcelStatus: [string] = [`${datetime.toLocaleString()}: Request pending for approval.`];
           let stepAction = 0;
           try {
-            const statusRes = await setParcelStatus({ _id, parcelStatus, parcel_id, stepAction, sender_id}).unwrap();
+            const statusRes = await setParcelStatus({ _id, parcelStatus, parcel_id, stepAction, sender_id, isPaid, deliveryCost}).unwrap();
             if(statusRes){
               toast.success('Parcel created successfully!');
               handleReset();
@@ -239,7 +241,7 @@ const Newparcel = () => {
     const now = new Date();
     const formattedDate = now.getDate();
     const formattedMonth = now.getMonth() + 1;
-    const formattedTime = now.getHours();
+    const formattedTime = now.getHours() % 12 || 12;
     const formattedMinute = now.getMinutes();
     return `${formattedDate}${formattedMonth}${formattedTime}${formattedMinute}${Math.floor(Math.random() * (max - min + 1)) + min}`;
   };

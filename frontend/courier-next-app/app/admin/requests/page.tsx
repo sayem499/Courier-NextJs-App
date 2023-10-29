@@ -177,7 +177,7 @@ const Requests = () => {
       _id = id;
       let isPaid; 
       stepOne ? isPaid = true : 0;
-      res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction, isPaid}).unwrap();
+      res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction, isPaid, deliveryCost}).unwrap();
       if (res) {
         getParcelStatus();
       }
