@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "courier-next-app",
+    "slug": "courier-next-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/fast-delivery-truck.png",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/fast-delivery-truck.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
