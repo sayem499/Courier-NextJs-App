@@ -1,13 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { store } from './store';
+import { Provider } from 'react-redux';
+import { StyleSheet } from 'react-native';
 import SplashScreen from './views/splashScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import LoginScreen from './views/loginScreen';
+import HomeScreen from './views/homeScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <SplashScreen/>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='SplashScreen' screenOptions={{headerShown: false}}> 
+        <Stack.Screen name='SplashScreen' component={SplashScreen}/>
+        <Stack.Screen name='LoginScreen' component={LoginScreen}/>
+        <Stack.Screen name='HomeScreen' component={HomeScreen}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+    </Provider>
+    
   );
 }
 
