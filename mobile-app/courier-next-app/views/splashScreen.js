@@ -1,12 +1,15 @@
 import { View, Text, StyleSheet, Image, Animated } from "react-native";
 import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setDeliveryMan } from "../redux/deliveryMan/deliveryManSlice";
+
 const logoImg = require('../assets/fast-delivery-truck.png');
 
 
 
 function SplashScreen({ navigation }) {
-  const {deliveryMan} = useSelector(state => state.deliveryManState);
+  const dispatch = useDispatch();
   const slideInAnim = useRef(new Animated.Value(0)).current;
   const startAnimation = () => {
     Animated.spring(slideInAnim, {
@@ -17,17 +20,36 @@ function SplashScreen({ navigation }) {
   }
   useEffect(() => {
     startAnimation();
-    console.log(deliveryMan);
-    if (deliveryMan) {
-      setTimeout(() => {
-        navigation.replace('HomeScreen');
-      }, 2000)
-    } else {
-      setTimeout(() => {
-        navigation.replace('LoginScreen');
-      }, 2000)
+
+    const getStorageData = async () => {
+      try {
+        let res = await AsyncStorage.getItem('deliveryman');
+        if (res) {
+          dispatch(setDeliveryMan(res));
+          navigation.replace('HomeScreen');
+        } else {
+          setTimeout(() => {
+            navigation.replace('LoginScreen');
+          }, 2000)
+        }
+      } catch (err) {
+        console.error(err);
+      }
+
     }
+    getStorageData()
+
+    
+
   }, [])
+  const removeItem = async () => {
+    try {
+      await AsyncStorage.removeItem('deliveryman');
+    } catch (err) {
+      console.error(err);
+    }
+
+  }
 
   
 

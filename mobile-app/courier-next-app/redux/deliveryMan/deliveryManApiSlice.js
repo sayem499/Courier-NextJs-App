@@ -11,8 +11,16 @@ export const deliveryManApiSlice = apiSlice.injectEndpoints({
                 body: data
             })
         }),
+
+        logoutDeliveryMan: builder.mutation({
+            query: () => ({
+                url: `${DELIVERYMAN_URL}/logout_deliveryman`,
+                method: 'POST',
+            })
+        }),
     }),
 });
 
-export const { useLoginDeliveryManMutation, 
+export const { useLoginDeliveryManMutation,
+                useLogoutDeliveryManMutation, 
                 } = deliveryManApiSlice
