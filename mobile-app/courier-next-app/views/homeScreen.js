@@ -6,6 +6,7 @@ import { logoutDeliveryMan } from '../redux/deliveryMan/deliveryManSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
+
 const HomeScreen = ({navigation}) => {
   const { deliveryMan } = useSelector(state => state.deliveryManState);
   const [logoutDeliveryManMutation] = useLogoutDeliveryManMutation();
@@ -36,7 +37,7 @@ const HomeScreen = ({navigation}) => {
 
 
 const styles = StyleSheet.create({
-    homescreen_container: { flex: 1, justifyContent: 'center', alignItems: 'center',}
+    homescreen_container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#e1e3e3',}
 })
 
 export default HomeScreen

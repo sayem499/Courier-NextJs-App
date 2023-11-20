@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
 
   formBackground: {
     backgroundColor: 'white', padding: 15, elevation: 16, alignItems: 'center', shadowColor: '#171717',
+    borderRadius: 8,
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,
     shadowRadius: 3,
