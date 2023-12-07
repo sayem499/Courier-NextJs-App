@@ -15,7 +15,7 @@ const Tabs = () => {
             tabBarStyle: {
                 height: 60,
                 position: 'absolute',
-                bottom: 25,
+                bottom: 20,
                 left: 20,
                 right: 20,
                 elevation: 0,
@@ -27,7 +27,7 @@ const Tabs = () => {
             <Tab.Screen name='Home' component={HomeScreen} options={{
                 tabBarLabel: 'Home',
                 tabBarLabelStyle: {
-                    color: 'black', fontSize: 13,
+                    color: 'black', fontSize: 13, paddingBottom: 5,
                 },
                 tabBarIcon: ({ color }) => (
                     <Ionicons name="home-outline" size={22} color={color} />
@@ -37,7 +37,7 @@ const Tabs = () => {
             <Tab.Screen name='DeliveriesScreen' component={DeliveriesScreen} options={{
                 tabBarLabel: 'Deliveries',
                 tabBarLabelStyle: {
-                    color: 'black', fontSize: 13,
+                    color: 'black', fontSize: 13, paddingBottom: 5,
                 },
                 tabBarIcon: ({ color }) => (
                     <MaterialCommunityIcons name="truck-fast-outline" size={26} color={color} />
@@ -47,7 +47,7 @@ const Tabs = () => {
             <Tab.Screen name='PickupScreen' component={PickupsScreen} options={{
                 tabBarLabel: 'Pick-ups',
                 tabBarLabelStyle: {
-                    color: 'black', fontSize: 13,
+                    color: 'black', fontSize: 13, paddingBottom: 5,
                 },
                 tabBarIcon: ({ color }) => (
                     <MaterialCommunityIcons name="truck-plus-outline" size={26} color={color} />
@@ -57,7 +57,7 @@ const Tabs = () => {
             <Tab.Screen name='SettingsScreen' component={SettingsScreen} options={{
                 tabBarLabel: 'Settings',
                 tabBarLabelStyle: {
-                    color: 'black', fontSize: 13,
+                    color: 'black', fontSize: 13, paddingBottom: 5,
                 },
                 tabBarIcon: ({ color }) => (
                     <Ionicons name="settings-outline" size={22} color={color} />

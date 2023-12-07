@@ -16,10 +16,11 @@ const LoginScreen = ({ navigation }) => {
   const loginDeliveryMan = async () => {
     try {
       const res = await loginDeliveryManMutation({ deliveryMan_phonenumber, deliveryMan_password }).unwrap();
-      await setStorageData(res);
-      dispatch(setDeliveryMan(res));
-      navigation.replace('HomeScreen');
-
+      if(res){
+        await setStorageData(res);
+        dispatch(setDeliveryMan(res));
+        navigation.replace('HomeScreen');
+      }
     } catch (err) {
       console.error(err);
     }
