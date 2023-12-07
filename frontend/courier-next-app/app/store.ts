@@ -3,6 +3,7 @@ import userReducer from '@/redux/users/userSlice';
 import parcelReducer from '@/redux/parcel/parcelSlice';
 import parcelStatusReducer from '@/redux/parcelStatus/parcelStatuSlice';
 import adminReducer from '@/redux/admin/adminSlice';
+import deliveryManReducer from '@/redux/deliveryMan/deliveryManAdminSlice';
 import { apiSlice } from "@/redux/api/apiSlice";
 
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
         parcelState: parcelReducer,
         parcelStatusState: parcelStatusReducer,
         adminState: adminReducer,
+        deliveryManState: deliveryManReducer,
         [apiSlice.reducerPath]: apiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => 

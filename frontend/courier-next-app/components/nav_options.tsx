@@ -2,22 +2,23 @@
 import { useRouter, usePathname } from "next/navigation";
 
 interface User {
-    _id: string;
-    user_firstname: string;
-    user_lastname: string;
-    user_email: string;
-    user_phonenumber: string;
+  _id: string;
+  user_firstname: string;
+  user_lastname: string;
+  user_email: string;
+  user_phonenumber: string;
 };
 
 interface Admin {
   _id: string,
   admin_email: string,
   admin_password: string,
+  admin_location: string,
 }
 
 
 
-const Nav: React.FC<{user: User | null, admin: Admin | null}> = ({user, admin}) => {
+const Nav: React.FC<{ user: User | null, admin: Admin | null }> = ({ user, admin }) => {
 
   const path = usePathname();
   const router = useRouter();
@@ -46,34 +47,50 @@ const Nav: React.FC<{user: User | null, admin: Admin | null}> = ({user, admin}) 
     router.push('/admin/dashboard');
   }
 
+  const routeCreateDeliveryman = () => {
+    router.push('/admin/create_deliveryman');
+  }
+
+  const routeCreateAdmin = () => {
+    router.push('/admin/create_admin');
+  }
+
 
   return (
     <div className="hidden h-[100%] sm:flex justify-center items-center">
-                    <ul className="sm:hidden md:flex justify-between items-center h-[100%]">
-                        {!user && !admin && <li className='mr-5 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg dark:hover:text-white cursor-pointer '>Enterprise</li>}
-                        {!user && !admin && <li className='ml-5 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg dark:hover:text-white cursor-pointer '>Courier</li>}
-                        {user && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
+      <ul className="sm:hidden md:flex justify-between items-center h-[100%]">
+        {!user && !admin && <li className='mr-5 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg dark:hover:text-white cursor-pointer '>Enterprise</li>}
+        {!user && !admin && <li className='ml-5 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg dark:hover:text-white cursor-pointer '>Courier</li>}
+        {user && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
                          dark:hover:text-white cursor-pointer flex justify-center items-center h-[100%] 
-                          ${ path === '/home' ?  'border-b-4  border-b-blue-500  dark:border-b-indigo-500': ''}`} onClick={routeHome}>Dashboard</li>}
-                        {user && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
+                          ${path === '/home' ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`} onClick={routeHome}>Dashboard</li>}
+        {user && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
                          dark:hover:text-white cursor-pointer flex justify-center items-center h-[100%] 
-                          ${ path === '/parcel' ?  'border-b-4  border-b-blue-500  dark:border-b-indigo-500': ''}`} onClick={routeParcel}>Parcel</li>}
-                        {user && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
+                          ${path === '/parcel' ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`} onClick={routeParcel}>Parcel</li>}
+        {user && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
                          dark:hover:text-white cursor-pointer flex justify-center items-center h-[100%] 
-                          ${ path === '/return' ?  'border-b-4  border-b-blue-500  dark:border-b-indigo-500': ''}`} onClick={routeReturn}>Return</li>}
-                        {user && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
+                          ${path === '/return' ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`} onClick={routeReturn}>Return</li>}
+        {user && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
                          dark:hover:text-white cursor-pointer flex justify-center items-center h-[100%] 
-                          ${ path === '/payment' ?  'border-b-4  border-b-blue-500  dark:border-b-indigo-500': ''}`} onClick={routePayment}>Payment</li>}
+                          ${path === '/payment' ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`} onClick={routePayment}>Payment</li>}
 
-                        {admin && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
+        {admin && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
                          dark:hover:text-white cursor-pointer flex justify-center items-center h-[100%] 
-                          ${ path === '/admin/dashboard' ?  'border-b-4  border-b-blue-500  dark:border-b-indigo-500': ''}`} onClick={routeDashboard}>Dashboard</li>}
+                          ${path === '/admin/dashboard' ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`} onClick={routeDashboard}>Dashboard</li>}
 
-                        {admin && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
+        {admin && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
                          dark:hover:text-white cursor-pointer flex justify-center items-center h-[100%] 
-                          ${ path === '/admin/requests' ?  'border-b-4  border-b-blue-500  dark:border-b-indigo-500': ''}`} onClick={routeRequest}>Requests</li>}  
-                    </ul>
-                </div>
+                          ${path === '/admin/requests' ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`} onClick={routeRequest}>Requests</li>}
+
+        {admin && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
+                         dark:hover:text-white cursor-pointer flex justify-center items-center h-[100%] 
+                          ${path === '/admin/create_deliveryman' ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`} onClick={routeCreateDeliveryman}>Register Deliveryman</li>}
+
+        {admin && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
+                         dark:hover:text-white cursor-pointer flex justify-center items-center h-[100%] 
+                          ${path === '/admin/create_admin' ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`} onClick={routeCreateAdmin}>Register Admin</li>}
+      </ul>
+    </div>
   )
 }
 

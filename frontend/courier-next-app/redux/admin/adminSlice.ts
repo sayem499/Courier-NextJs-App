@@ -5,6 +5,7 @@ interface Admin {
     _id: string,
     admin_email: string,
     admin_password: string,
+    admin_location: string,
 }
 
 type AdminState = {
