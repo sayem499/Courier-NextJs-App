@@ -26,6 +26,7 @@ const authAdmin = expressAsyncHandler( async (req, res) => {
         res.status(201).json({
             _id: admin._id,
             admin_email: admin.admin_email,
+            admin_location: admin.admin_location,
         })
     }else {
         res.status(400);
@@ -57,6 +58,7 @@ const registerAdmin = expressAsyncHandler( async (req, res) => {
         _id: body._id,
         admin_email: body.admin_email,
         admin_password: body.admin_password,
+        admin_location: body.admin_location,
     });
 
     if(!admin){
@@ -65,7 +67,8 @@ const registerAdmin = expressAsyncHandler( async (req, res) => {
     }else{
         res.status(201).json({
             _id: admin._id,
-            admin_email: admin.admin_email
+            admin_email: admin.admin_email,
+            admin_location: admin_location,
         });
     }
 })
@@ -108,12 +111,14 @@ const updateAdminData = expressAsyncHandler ( async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(req.body.admin_password, salt);
             admin.admin_password = hashedPassword;
+            admin.admin_location = req.body.admin_location
         }
 
         const updatedAdmin = await admin.save();
         res.status(200).json({
             _id: updatedAdmin._id,
             admin_email: updatedAdmin.admin_email,
+            admin_location: updatedAdmin.admin_location,
         }); 
 
     } else {

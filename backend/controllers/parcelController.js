@@ -46,6 +46,39 @@ const setUserParcel = asyncHandler ( async (req, res) => {
 })
 
 
+//@dec Get user parcel with admin location for pickup
+//@route POST /api/parcel/get_with_location_pickup
+//@access Private
+
+const getUserParcelWithAdminLocationForPickup = asyncHandler(async (req, res) => {
+    const body = req.body;
+    const userParcel = await Parcel.find({senderDivision: body.admin_location});
+    if(userParcel){
+        res.status(201).json(userParcel);
+    } else {
+        res.status(400);
+        throw new Error('No parcel found for current user');
+    }
+
+})
+
+
+//@dec Get user parcel with admin location for delivery
+//@route POST /api/parcel/get_with_location_delivery
+//@access Private
+
+const getUserParcelWithAdminLocationForDelivery = asyncHandler(async (req, res) => {
+    const body = req.body;
+    const userParcel = await Parcel.find({division: body.admin_location});
+    if(userParcel){
+        res.status(201).json(userParcel);
+    } else {
+        res.status(400);
+        throw new Error('No parcel found for current user');
+    }
+
+})
+
 
 //@dec Get user parcel
 //@route POST /api/parcel/get_all
@@ -128,4 +161,4 @@ const updateParcelWithId = asyncHandler (async (req, res) => {
 
 
 
-export {setUserParcel, getUserParcels, updateParcelWithId, getUserParcelWithId};
+export {setUserParcel, getUserParcels, updateParcelWithId, getUserParcelWithId, getUserParcelWithAdminLocationForPickup, getUserParcelWithAdminLocationForDelivery};

@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { getParcels } from '@/redux/parcel/parcelSlice';
 import { useGetParcelWithIdMutation } from '@/redux/parcel/parcelApiSlice';
+import { useGetParcelWithAdminLocationPickupMutation, useGetParcelWithAdminLocationDeliveryMutation } from '@/redux/parcel/parcelApiSlice'; 
 import Parceltable from '@/components/parcel_table_admin';
 
 
@@ -29,6 +30,7 @@ const Requests = () => {
   const [stepThree, setStepThree] = useState(false);
   const [stepFour, setStepFour] = useState(false);
   const [showParceltable, setShowParcelTable] = useState(false);
+  const [getParcelWithAdminLocationPickup] = useGetParcelWithAdminLocationPickupMutation();
   let parcelStatusMessage: string, deliveryCost: number;
   const [getParcelWithId] = useGetParcelWithIdMutation();
 
@@ -140,8 +142,24 @@ const Requests = () => {
       stepThree ? stepAction = 3 : 0;
       stepFour ? stepAction = 4 : 0;
 
-      const res = await getParcelStatusWithActionStatus({ stepAction }).unwrap();
-      dispatch(getParcelStatuses(res));
+      if(admin?.admin_location){
+        let admin_location = admin?.admin_location;
+        const result = await getParcelWithAdminLocationPickup({admin_location}).unwrap();
+        const filteredParcelTrackers: [] = result.map((parcel: any) => parcel.tracker_id);
+        if(filteredParcelTrackers){
+          const res = await getParcelStatusWithActionStatus({ stepAction }).unwrap();
+          let filteredParcelStatuses: any[] = [];
+          filteredParcelTrackers.forEach((tracker) => {
+            filteredParcelStatuses = filteredParcelStatuses.concat(res.filter((parcel: any) => parcel._id === tracker))
+          })
+          filteredParcelStatuses && dispatch(getParcelStatuses(filteredParcelStatuses));
+        }
+        
+      }else{
+        const res = await getParcelStatusWithActionStatus({ stepAction }).unwrap();
+        res && dispatch(getParcelStatuses(res));
+      }
+      
     } catch (err: any) {
       toast.error(err?.data?.message || err?.error);
     }
@@ -250,7 +268,7 @@ const Requests = () => {
       </div>
       <div className='h-[100%] w-[100%] flex justify-center'>
         <div className='h-[100%] w-[70%] flex justify-center '>
-          {<Table data={parcelStatuses} columns={columns} hiddenCols={hiddenCols} />}
+          {<Table data={parcelStatuses && parcelStatuses} columns={columns} hiddenCols={hiddenCols} />}
           {
             showParceltable && <Parceltable closeParceltable={closeParceltable}/>
           }
