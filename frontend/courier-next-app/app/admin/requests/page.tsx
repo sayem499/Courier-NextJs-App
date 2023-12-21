@@ -10,13 +10,13 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { getParcels } from '@/redux/parcel/parcelSlice';
 import { useGetParcelWithIdMutation } from '@/redux/parcel/parcelApiSlice';
-import { useGetParcelWithAdminLocationPickupMutation, useGetParcelWithAdminLocationDeliveryMutation } from '@/redux/parcel/parcelApiSlice'; 
+import { useGetParcelWithAdminLocationPickupMutation, useGetParcelWithAdminLocationDeliveryMutation } from '@/redux/parcel/parcelApiSlice';
 import Parceltable from '@/components/parcel_table_admin';
 
 
 
 const Requests = () => {
- 
+
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { admin } = useAppSelector(state => state.adminState);
@@ -33,6 +33,7 @@ const Requests = () => {
   const [getParcelWithAdminLocationPickup] = useGetParcelWithAdminLocationPickupMutation();
   let parcelStatusMessage: string, deliveryCost: number;
   const [getParcelWithId] = useGetParcelWithIdMutation();
+  const [searchText, setSearchText] = useState('')
 
   useEffect(() => {
     if (admin) {
@@ -49,7 +50,7 @@ const Requests = () => {
       cell: (cell: any) => {
         const row = cell.getValue();
         return (
-          <span className='cursor-pointer hover:text-shadow-md hover:shadow-white' onClick={()=>openParceltable(row.parcel_id)}>{row._id}</span>
+          <span className='cursor-pointer hover:text-shadow-md hover:shadow-white' onClick={() => openParceltable(row.parcel_id)}>{row._id}</span>
         )
       }
 
@@ -59,8 +60,8 @@ const Requests = () => {
       accessorFn: (row: any) => row,
       cell: (cell: any) => {
         const row = cell.getValue();
-        return (row.stepAction === 3 || row.stepAction === 4 ? row.isReturned ? <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white'>Delete</button> 
-        : <button className='rounded-full bg-blue-500 px-4 py-2 text-gray-50 hover:text-white' onClick={() => handleReturnedClick(row._id)}>Returned</button> 
+        return (row.stepAction === 3 || row.stepAction === 4 ? row.isReturned ? <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white'>Delete</button>
+          : <button className='rounded-full bg-blue-500 px-4 py-2 text-gray-50 hover:text-white' onClick={() => handleReturnedClick(row._id)}>Returned</button>
           : row.stepAction === 0 ? <><input className='p-1 border rounded text-black ' type='number' placeholder='Enter parcel cost' value={deliveryCost} onChange={(e) => { deliveryCost = e.target.valueAsNumber }}></input><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
             <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>
             : row.stepAction === 2 ? <><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => handleOutForDeliveryClick(row._id)}>Clear</button>
@@ -93,10 +94,10 @@ const Requests = () => {
       let _id = parcel_id;
       res = await getParcelWithId({ _id }).unwrap();
       res && dispatch(getParcels(res));
-  } catch (err: any) {
+    } catch (err: any) {
       toast.error(err?.data?.message || err.error);
-  }   
-     setShowParcelTable(true);
+    }
+    setShowParcelTable(true);
   }
 
   const closeParceltable = () => {
@@ -142,11 +143,11 @@ const Requests = () => {
       stepThree ? stepAction = 3 : 0;
       stepFour ? stepAction = 4 : 0;
 
-      if(admin?.admin_location){
+      if (admin?.admin_location) {
         let admin_location = admin?.admin_location;
-        const result = await getParcelWithAdminLocationPickup({admin_location}).unwrap();
+        const result = await getParcelWithAdminLocationPickup({ admin_location }).unwrap();
         const filteredParcelTrackers: [] = result.map((parcel: any) => parcel.tracker_id);
-        if(filteredParcelTrackers){
+        if (filteredParcelTrackers) {
           const res = await getParcelStatusWithActionStatus({ stepAction }).unwrap();
           let filteredParcelStatuses: any[] = [];
           filteredParcelTrackers.forEach((tracker) => {
@@ -154,12 +155,12 @@ const Requests = () => {
           })
           filteredParcelStatuses && dispatch(getParcelStatuses(filteredParcelStatuses));
         }
-        
-      }else{
+
+      } else {
         const res = await getParcelStatusWithActionStatus({ stepAction }).unwrap();
         res && dispatch(getParcelStatuses(res));
       }
-      
+
     } catch (err: any) {
       toast.error(err?.data?.message || err?.error);
     }
@@ -201,9 +202,9 @@ const Requests = () => {
       if (stepZero)
         result = await updateParcelWithIdMutation({ _id, deliveryCost }).unwrap();
       _id = id;
-      let isPaid; 
+      let isPaid;
       stepOne ? isPaid = true : 0;
-      res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction, isPaid, deliveryCost}).unwrap();
+      res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction, isPaid, deliveryCost }).unwrap();
       if (res) {
         getParcelStatus();
       }
@@ -267,11 +268,18 @@ const Requests = () => {
         <button onClick={stepFourSelected} className={`m-2 h-fit w-fit ${stepFour ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`}>Canceled</button>
       </div>
       <div className='h-[100%] w-[100%] flex justify-center'>
-        <div className='h-[100%] w-[70%] flex justify-center '>
-          {<Table data={parcelStatuses && parcelStatuses} columns={columns} hiddenCols={hiddenCols} />}
-          {
-            showParceltable && <Parceltable closeParceltable={closeParceltable}/>
-          }
+        <div className='flex flex-col h-[100%] w-[100%] justify-center items-center'>
+          <div className='flex h-[5%] w-[80%] justify-center'>
+            <div className='flex h-[100%] w-[100%] items-center justify-start'>
+              <input className='p-1 text-black rounded focus:placeholder-transparent' placeholder='Search...' type='text' value={searchText} onChange={e => setSearchText(e.target.value)} />
+            </div>
+          </div>
+          <div className='h-[100%] w-[100%] flex justify-center '>
+            {<Table data={parcelStatuses && parcelStatuses} columns={columns} hiddenCols={hiddenCols} />}
+            {
+              showParceltable && <Parceltable closeParceltable={closeParceltable} />
+            }
+          </div>
         </div>
       </div>
     </div>
