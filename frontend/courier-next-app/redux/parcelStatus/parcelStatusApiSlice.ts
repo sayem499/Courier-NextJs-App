@@ -37,6 +37,14 @@ export const parcelStatusApiSlice = apiSlice.injectEndpoints({
             })
         }),
 
+        getParcelStatusesWithIds: builder.mutation({
+            query: (data) => ({
+                url: `${PARCEL_STATUS_URL}/get_with_ids`,
+                method: 'POST',
+                body: data
+            })
+        }),
+
         getParcelStatusWithParcelId: builder.mutation({
             query: (data) => ({
                 url: `${PARCEL_STATUS_URL}/get_with_parcel_id`,
@@ -74,6 +82,7 @@ export const parcelStatusApiSlice = apiSlice.injectEndpoints({
 
 export const { useSetParcelStatusMutation, 
             useGetParcelStatusWithIdMutation, 
+            useGetParcelStatusesWithIdsMutation,
             useGetParcelStatusWithParcelIdMutation,
             useGetParcelStatusWithSenderIdMutation, 
             useGetParcelStatusWithStepActionMutation, 

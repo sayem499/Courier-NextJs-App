@@ -28,6 +28,14 @@ export const parcelApiSlice = apiSlice.injectEndpoints({
             })
         }),
 
+        getParcelsWithIds: builder.mutation({
+            query:(data) => ({
+                url: `${PARCEL_URL}/get_with_ids`,
+                method: 'POST',
+                body: data
+            })
+        }),
+
         getParcelWithAdminLocationPickup: builder.mutation({
             query: (data) => ({
                 url:`${PARCEL_URL}/get_with_location_pickup`,
@@ -56,4 +64,4 @@ export const parcelApiSlice = apiSlice.injectEndpoints({
 
 })
 
-export const { useSetparcelMutation, useGetparcelsMutation, useUpdateParcelWithIdMutation, useGetParcelWithIdMutation, useGetParcelWithAdminLocationPickupMutation, useGetParcelWithAdminLocationDeliveryMutation } = parcelApiSlice;
+export const { useSetparcelMutation, useGetparcelsMutation, useUpdateParcelWithIdMutation, useGetParcelsWithIdsMutation, useGetParcelWithIdMutation, useGetParcelWithAdminLocationPickupMutation, useGetParcelWithAdminLocationDeliveryMutation } = parcelApiSlice;

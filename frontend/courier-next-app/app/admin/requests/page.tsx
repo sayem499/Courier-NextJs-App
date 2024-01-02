@@ -6,12 +6,17 @@ import { useGetParcelStatusWithStepActionAdminMutation } from '@/redux/parcelSta
 import { getParcelStatuses } from '@/redux/parcelStatus/parcelStatuSlice';
 import { useUpdateParcelStatusWithTrackerIdAdminMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { useUpdateParcelWithIdMutation } from '@/redux/parcel/parcelApiSlice';
+import { useGetParcelsWithIdsMutation } from '@/redux/parcel/parcelApiSlice'; 
+import { useGetParcelStatusesWithIdsMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { getParcels } from '@/redux/parcel/parcelSlice';
 import { useGetParcelWithIdMutation } from '@/redux/parcel/parcelApiSlice';
 import { useGetParcelWithAdminLocationPickupMutation, useGetParcelWithAdminLocationDeliveryMutation } from '@/redux/parcel/parcelApiSlice';
 import Parceltable from '@/components/parcel_table_admin';
+import SearchIcon from '@mui/icons-material/Search';
+import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 
@@ -24,6 +29,7 @@ const Requests = () => {
   const [getParcelStatusWithActionStatus] = useGetParcelStatusWithStepActionAdminMutation();
   const [updateParcelStatusWithTrackerIdAdmin] = useUpdateParcelStatusWithTrackerIdAdminMutation();
   const { parcelStatuses } = useAppSelector(state => state.parcelStatusState);
+  const { parcels } = useAppSelector(state => state.parcelState);
   const [stepZero, setStepZero] = useState(true);
   const [stepOne, setStepOne] = useState(false);
   const [stepTwo, setStepTwo] = useState(false);
@@ -33,7 +39,12 @@ const Requests = () => {
   const [getParcelWithAdminLocationPickup] = useGetParcelWithAdminLocationPickupMutation();
   let parcelStatusMessage: string, deliveryCost: number;
   const [getParcelWithId] = useGetParcelWithIdMutation();
+  const [getParcelsWithIds] = useGetParcelsWithIdsMutation();
+  const [getParcelStatusesWithIds] = useGetParcelStatusesWithIdsMutation();
   const [searchText, setSearchText] = useState('')
+  const [filterShow, setFilterShow] = useState(false);
+  const [filterOptions, setFilterOptions] = useState('tracker_id');
+  let deliveryMan_phonenumber: string;
 
   useEffect(() => {
     if (admin) {
@@ -41,7 +52,7 @@ const Requests = () => {
     } else {
       router.push('/admin');
     }
-  }, [stepZero, stepOne, stepTwo, stepThree, stepFour])
+  }, [stepZero, stepOne, stepTwo, stepThree, stepFour, filterOptions])
 
   const columns = [
     {
@@ -64,9 +75,9 @@ const Requests = () => {
           : <button className='rounded-full bg-blue-500 px-4 py-2 text-gray-50 hover:text-white' onClick={() => handleReturnedClick(row._id)}>Returned</button>
           : row.stepAction === 0 ? <><input className='p-1 border rounded text-black ' type='number' placeholder='Enter parcel cost' value={deliveryCost} onChange={(e) => { deliveryCost = e.target.valueAsNumber }}></input><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
             <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>
-            : row.stepAction === 2 ? <><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => handleOutForDeliveryClick(row._id)}>Clear</button>
+            : row.stepAction === 2 ? <><input className='' type='text' placeholder='Enter phonenumber' /><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => handleOutForDeliveryClick(row._id)}>Clear</button>
               <button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button></>
-              : <><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
+              : <><input className='rounded p-1 text-black' type='text' placeholder='Enter phonenumber' value={deliveryMan_phonenumber} onChange={(e) => { deliveryMan_phonenumber = e.target.value }}></input><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
                 <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>)
       }
     },
@@ -93,6 +104,7 @@ const Requests = () => {
     try {
       let _id = parcel_id;
       res = await getParcelWithId({ _id }).unwrap();
+      console.log(res)
       res && dispatch(getParcels(res));
     } catch (err: any) {
       toast.error(err?.data?.message || err.error);
@@ -193,18 +205,18 @@ const Requests = () => {
 
 
       let datetime = new Date();
-      let parcelStatus: string = '';
+      let parcelStatus: string = '', isReturned = false;
       stepZero ? parcelStatus = `${datetime.toLocaleString()}: Parcel request approved, pickup pending.` : 0;
       stepOne ? parcelStatus = `${datetime.toLocaleString()}: Parcel shipped to warehouse.` : 0;
       stepTwo ? parcelStatus = `${datetime.toLocaleString()}: Parcel delivered successfully.` : 0;
       let result: any, res: any;
       _id = parcel_id;
       if (stepZero)
-        result = await updateParcelWithIdMutation({ _id, deliveryCost }).unwrap();
+        result = await updateParcelWithIdMutation({ _id, deliveryCost, isReturned }).unwrap();
       _id = id;
       let isPaid;
       stepOne ? isPaid = true : 0;
-      res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction, isPaid, deliveryCost }).unwrap();
+      res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction, isPaid, deliveryCost, isReturned }).unwrap();
       if (res) {
         getParcelStatus();
       }
@@ -215,6 +227,86 @@ const Requests = () => {
 
 
   }
+
+  // Function to handle search result
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (searchText) {
+      switch (filterOptions) {
+
+        case 'tracker_id':
+          try {
+
+            let stepAction;
+
+            stepZero ? stepAction = 0 : 0;
+            stepOne ? stepAction = 1 : 0;
+            stepTwo ? stepAction = 2 : 0;
+            stepThree ? stepAction = 3 : 0;
+            stepFour ? stepAction = 4 : 0;
+
+            const res = await getParcelStatusWithActionStatus({ stepAction }).unwrap();
+
+            const result = res.filter((item: any) => item._id.toLowerCase() === searchText.toLowerCase())
+
+            dispatch(getParcelStatuses(result))
+
+
+          } catch (err: any) {
+            toast.error(err.data.message || err.error);
+          }
+          break;
+
+        case 'district':
+          try {
+
+            let stepAction: any, ids: any[] = [], r, filteredParcels, filteredTrackerId: any[] = [];
+
+            stepZero ? stepAction = 0 : 0;
+            stepOne ? stepAction = 1 : 0;
+            stepTwo ? stepAction = 2 : 0;
+            stepThree ? stepAction = 3 : 0;
+            stepFour ? stepAction = 4 : 0;
+
+            const res = await getParcelStatusWithActionStatus({ stepAction }).unwrap();
+            res.map((parcelStatus: any) => {
+              ids.push(parcelStatus.parcel_id);
+            })
+
+            r = await getParcelsWithIds({ ids }).unwrap();  
+            filteredParcels = r.filter((item: any) => stepAction === 1 ? item.senderDistrict.toLowerCase() === searchText.toLowerCase() : stepAction === 2 ? item.district.toLowerCase() === searchText.toLowerCase() : null );
+            filteredParcels.filter((item: any) => { 
+              filteredTrackerId.push(item.tracker_id);
+            })
+
+            ids = filteredTrackerId;
+            const filteredRes = await getParcelStatusesWithIds({ids}).unwrap();
+
+            dispatch(getParcelStatuses(filteredRes));
+            
+
+
+          } catch (err: any) {
+            toast.error(err.data.message || err.error);
+          }
+          break;
+
+      }
+    } else {
+      getParcelStatus();
+    }
+
+
+  }
+
+  //Function to handle option selection for search
+
+  const handleOptionSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterOptions(e.target.value);
+  }
+
 
   const stepZeroSelected = () => {
     setStepZero(true);
@@ -269,9 +361,33 @@ const Requests = () => {
       </div>
       <div className='h-[100%] w-[100%] flex justify-center'>
         <div className='flex flex-col h-[100%] w-[100%] justify-center items-center'>
-          <div className='flex h-[5%] w-[80%] justify-center'>
+          <div className='flex h-[10%] w-[80%] justify-center'>
             <div className='flex h-[100%] w-[100%] items-center justify-start'>
-              <input className='p-1 text-black rounded focus:placeholder-transparent' placeholder='Search...' type='text' value={searchText} onChange={e => setSearchText(e.target.value)} />
+              <form className='w-[30%] h-[100%] flex items-center' onSubmit={handleSearch}>
+                <input className=' pl-3 p-2 w-[100%] h-[100%] text-black rounded-l focus:placeholder-transparent' placeholder='Search...' type='text' value={searchText} onChange={(e) => { setSearchText(e.target.value) }} />
+                <SearchIcon className='bg-white h-[100%] rounded-r text-gray pr-2 w-[10%] cursor-pointer' onClick={handleSearch} />
+              </form>
+              {!filterShow ? <TuneOutlinedIcon className='h-[50%] w-[5%] cursor-pointer' onClick={() => { setFilterShow(true) }} />
+                :
+                (
+                  <div className='flex h-[100%] w-[70%]'>
+                    <div className='w-[100%] h-[100%] flex justify-start items-center'>
+                      <input id='id' name='search_filter' className='m-3 h-[50%] w-4 bg-gray' type='radio' value='tracker_id' onChange={(e) => handleOptionSelect(e)} />
+                      <label htmlFor='id'>ID</label>
+                    </div>
+
+                    <div className='w-[100%] h-[100%] flex justify-start items-center'>
+                      <input id='district' name='search_filter' className='m-3 h-[50%] w-4 bg-gray' type='radio' value='district' onChange={(e) => handleOptionSelect(e)} />
+                      <label htmlFor='district'>District</label>
+                    </div>
+
+                    <div className='w-[100%] h-[100%] flex justify-start items-center ml-5'>
+                      <CloseIcon className='' onClick={() => { setFilterShow(false) }} />
+                    </div>
+
+                  </div>
+                )}
+
             </div>
           </div>
           <div className='h-[100%] w-[100%] flex justify-center '>

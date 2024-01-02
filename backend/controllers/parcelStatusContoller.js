@@ -60,6 +60,21 @@ const getParcelStatusWithId = expressAsyncHandler( async (req, res) => {
     }
 })
 
+//@desc Get parcel statuses with tracker ids
+//@route POST /api/parcelStatus/get_with_ids
+//@access Private
+
+const getParcelStatusesWithIds = expressAsyncHandler( async (req, res) => {
+    const ids = req.body.ids;
+    const parcelStatus = await ParcelStatus.find({_id: ids});
+    if(parcelStatus) {
+        res.status(201).json(parcelStatus);    
+    } else {
+        res.status(400)
+        throw new Error('Invalid parcel status data.');
+    }
+})
+
 
 //@desc Get parcel status with parcel id
 //@route POST /api/parcelStatus/get_with_parcel_id
@@ -111,6 +126,7 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
 
         
         const updatedParcelStatus = await parcelStatus.save();
+        console.log(updatedParcelStatus)
         if(updatedParcelStatus){
             res.status(200).json({
                parcelStatus: updatedParcelStatus.parcelStatus,
@@ -133,4 +149,4 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
 
 
 
-export { setParcelStatus, getParcelStatusWithStepAction, getParcelStatusWithId, getParcelStatusWithParcelId, getParcelStatusWithSenderId, updateParcelStatusWithId }
+export { setParcelStatus, getParcelStatusWithStepAction, getParcelStatusWithId, getParcelStatusesWithIds, getParcelStatusWithParcelId, getParcelStatusWithSenderId, updateParcelStatusWithId }

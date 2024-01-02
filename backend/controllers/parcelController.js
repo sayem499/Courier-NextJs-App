@@ -112,6 +112,21 @@ const getUserParcelWithId = asyncHandler (async (req, res) => {
     }
 }) 
 
+//@dec Get user parcels with parcel IDs.
+//@route POST /api/parcel/get_with_ids
+//@access Private
+ const getParcelsWithIds = asyncHandler (async (req, res) => {
+    const ids = req.body.ids;
+    const parcelRes = await Parcel.find({ _id: ids});    
+    
+    if(parcelRes){
+        res.status(201).json(parcelRes);
+    }else{
+        res.status(400);
+        throw new Error('Invalid parcel data.');
+    }
+ }) 
+
 
 //@dec Update user parcel
 //@route PUT /api/parcel/update
@@ -161,4 +176,4 @@ const updateParcelWithId = asyncHandler (async (req, res) => {
 
 
 
-export {setUserParcel, getUserParcels, updateParcelWithId, getUserParcelWithId, getUserParcelWithAdminLocationForPickup, getUserParcelWithAdminLocationForDelivery};
+export {setUserParcel, getUserParcels, updateParcelWithId, getUserParcelWithId, getParcelsWithIds, getUserParcelWithAdminLocationForPickup, getUserParcelWithAdminLocationForDelivery};
