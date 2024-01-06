@@ -21,7 +21,7 @@ const initialState: ParcelStatusState = {
     parcelStatuses: []
 }
 
-const parcelStatusSlice = createSlice({
+export const parcelStatusSlice = createSlice({
     name: 'parcelStatusState',
     initialState,
     reducers: {

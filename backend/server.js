@@ -6,6 +6,7 @@ import adminRoutes from './routes/adminRoutes.js';
 import parcelRoutes from './routes/parcelRoutes.js';
 import parcelStatusRoutes from './routes/parcelStatusRoutes.js';
 import deliveryManRouter from './routes/deliveryManRoutes.js';
+import deliveryRouter from './routes/deliveryRoute.js';
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import { connectMongoDB } from './config/db.js';
 import cookieParser from 'cookie-parser';
@@ -25,6 +26,7 @@ app.use('/api/admins', adminRoutes);
 app.use('/api/parcel', parcelRoutes);
 app.use('/api/parcelStatus', parcelStatusRoutes);
 app.use('/api/deliveryman', deliveryManRouter);
+app.use('/api/delivery', deliveryRouter);
 
 
 app.use(notFound);

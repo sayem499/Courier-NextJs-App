@@ -18,6 +18,7 @@ const setParcelStatus = expressAsyncHandler( async (req, res) => {
         sender_id: body.sender_id,
         deliveryCost: body.deliveryCost,
         isReturned: body.isReturned,
+        delieryMan_phonenumber: body.deliveryMan_phonenumber,
     });
 
     if(parcelStatus) {
@@ -123,10 +124,10 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
         parcelStatus.sender_id = body.sender_id || parcelStatus.sender_id;
         parcelStatus.deliveryCost = body.deliiveryCost || parcelStatus.deliveryCost;
         parcelStatus.isReturned = body.isReturned || parcelStatus.isReturned;
+        parcelStatus.deliveryMan_phonenumber = body.deliveryMan_phonenumber || parcelStatus.deliveryMan_phonenumber;
 
         
         const updatedParcelStatus = await parcelStatus.save();
-        console.log(updatedParcelStatus)
         if(updatedParcelStatus){
             res.status(200).json({
                parcelStatus: updatedParcelStatus.parcelStatus,
@@ -136,6 +137,7 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
                sender_id: updatedParcelStatus.sender_id,
                deliveryCost: updatedParcelStatus.deliiveryCost,
                isReturned: updatedParcelStatus.isReturned,
+               deliveryMan_phonenumber: updatedParcelStatus.delieryMan_phonenumber,
             });
         }else {
             res.status(500);

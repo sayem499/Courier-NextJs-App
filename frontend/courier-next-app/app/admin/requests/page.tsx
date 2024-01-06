@@ -75,7 +75,7 @@ const Requests = () => {
           : <button className='rounded-full bg-blue-500 px-4 py-2 text-gray-50 hover:text-white' onClick={() => handleReturnedClick(row._id)}>Returned</button>
           : row.stepAction === 0 ? <><input className='p-1 border rounded text-black ' type='number' placeholder='Enter parcel cost' value={deliveryCost} onChange={(e) => { deliveryCost = e.target.valueAsNumber }}></input><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
             <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>
-            : row.stepAction === 2 ? <><input className='' type='text' placeholder='Enter phonenumber' /><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => handleOutForDeliveryClick(row._id)}>Clear</button>
+            : row.stepAction === 2 ? <><input className='p-1 border rounded text-black' type='text' placeholder='Enter phonenumber' /><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => handleOutForDeliveryClick(row._id)}>Clear</button>
               <button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button></>
               : <><input className='rounded p-1 text-black' type='text' placeholder='Enter phonenumber' value={deliveryMan_phonenumber} onChange={(e) => { deliveryMan_phonenumber = e.target.value }}></input><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
                 <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>)
@@ -212,11 +212,11 @@ const Requests = () => {
       let result: any, res: any;
       _id = parcel_id;
       if (stepZero)
-        result = await updateParcelWithIdMutation({ _id, deliveryCost, isReturned }).unwrap();
+        result = await updateParcelWithIdMutation({ _id, deliveryCost }).unwrap();
       _id = id;
       let isPaid;
       stepOne ? isPaid = true : 0;
-      res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction, isPaid, deliveryCost, isReturned }).unwrap();
+      res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction, isPaid, deliveryCost, isReturned, deliveryMan_phonenumber }).unwrap();
       if (res) {
         getParcelStatus();
       }
