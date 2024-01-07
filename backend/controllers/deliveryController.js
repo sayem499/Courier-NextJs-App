@@ -1,5 +1,5 @@
 import AsyncHandler from 'express-async-handler';
-import Deliveries from '../models/deliveryModel';
+import Deliveries from '../models/deliveryModel.js';
 
 
 //@desc set delivery
@@ -23,7 +23,23 @@ const setDelivery = AsyncHandler( async(req, res) => {
         throw new Error('Invalid delivery data!');
     }
 
-}) 
+})
+
+//@desc get delivery with phonenumber
+//@route POST /api/delivery/get_with_phonenumber
+//@access Private
+const getdeliveryWithPhonenumber = AsyncHandler( async(req, res) => {
+    const body = req.body;
+    const delivery = await Deliveries.find({deliveryMan_phonenumber: body.deliveryMan_phonenumber});
+
+    if(delivery){
+        res.status(201).json(delivery);
+    }else{
+        res.status(400);
+        throw new Error('Invalid delivery data!');
+    }
+})
+
 
 //@desc update delivery
 //@route PUT /api/delivery/update_delivery
@@ -54,4 +70,4 @@ const updateDeliveryWithPhonenumber = AsyncHandler( async(req, res) => {
     }
 })
 
-export { setDelivery, updateDeliveryWithPhonenumber }
+export { setDelivery, updateDeliveryWithPhonenumber, getdeliveryWithPhonenumber }

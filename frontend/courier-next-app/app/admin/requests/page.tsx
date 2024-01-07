@@ -13,10 +13,12 @@ import { toast } from 'react-toastify';
 import { getParcels } from '@/redux/parcel/parcelSlice';
 import { useGetParcelWithIdMutation } from '@/redux/parcel/parcelApiSlice';
 import { useGetParcelWithAdminLocationPickupMutation, useGetParcelWithAdminLocationDeliveryMutation } from '@/redux/parcel/parcelApiSlice';
+import { useGetDeliveryWithPhonenumberMutation } from '@/redux/delivery/deliveryApiSlice';
 import Parceltable from '@/components/parcel_table_admin';
 import SearchIcon from '@mui/icons-material/Search';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
 import CloseIcon from '@mui/icons-material/Close';
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -28,6 +30,7 @@ const Requests = () => {
   const [updateParcelWithIdMutation] = useUpdateParcelWithIdMutation();
   const [getParcelStatusWithActionStatus] = useGetParcelStatusWithStepActionAdminMutation();
   const [updateParcelStatusWithTrackerIdAdmin] = useUpdateParcelStatusWithTrackerIdAdminMutation();
+  const [getDeliveryWithPhonenumber] = useGetDeliveryWithPhonenumberMutation();
   const { parcelStatuses } = useAppSelector(state => state.parcelStatusState);
   const { parcels } = useAppSelector(state => state.parcelState);
   const [stepZero, setStepZero] = useState(true);
@@ -44,6 +47,8 @@ const Requests = () => {
   const [searchText, setSearchText] = useState('')
   const [filterShow, setFilterShow] = useState(false);
   const [filterOptions, setFilterOptions] = useState('tracker_id');
+
+
   let deliveryMan_phonenumber: string;
 
   useEffect(() => {
@@ -209,17 +214,27 @@ const Requests = () => {
       stepZero ? parcelStatus = `${datetime.toLocaleString()}: Parcel request approved, pickup pending.` : 0;
       stepOne ? parcelStatus = `${datetime.toLocaleString()}: Parcel shipped to warehouse.` : 0;
       stepTwo ? parcelStatus = `${datetime.toLocaleString()}: Parcel delivered successfully.` : 0;
-      let result: any, res: any;
+          
+      const deliveryCheck = await getDeliveryWithPhonenumber({deliveryMan_phonenumber}).unwrap();
+
+      if(deliveryCheck && stepAction === 1){
+          console.log(deliveryCheck);
+        }else if(deliveryCheck && stepAction === 2){
+          console.log('not found');
+        }
+
+      /* let result: any, res: any;
       _id = parcel_id;
       if (stepZero)
         result = await updateParcelWithIdMutation({ _id, deliveryCost }).unwrap();
       _id = id;
       let isPaid;
       stepOne ? isPaid = true : 0;
+
       res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction, isPaid, deliveryCost, isReturned, deliveryMan_phonenumber }).unwrap();
       if (res) {
         getParcelStatus();
-      }
+      } */
 
     } catch (err: any) {
       toast.error(err?.data?.message || err.error);

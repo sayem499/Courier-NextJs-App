@@ -1,6 +1,6 @@
 import { apiSlice } from "../api/apiSlice";
 
-const DELIVERYMAN_URL = 'api/deliveryman';
+const DELIVERYMAN_URL = '/api/deliveryman';
 
 export const deliveryManApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
