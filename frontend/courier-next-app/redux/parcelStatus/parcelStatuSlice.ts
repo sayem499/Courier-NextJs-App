@@ -27,11 +27,11 @@ export const parcelStatusSlice = createSlice({
     reducers: {
         resetParcelStatus: () => initialState,
 
-        getParcelStatus: (state, action: PayloadAction<ParcelStatus>) => {
+        getParcelStatus: (state:any, action: PayloadAction<ParcelStatus>) => {
             state.parcelStatus = action.payload
         },
 
-        getParcelStatuses: (state, action: PayloadAction<ParcelStatus[]>) => {
+        getParcelStatuses: (state:any, action: PayloadAction<ParcelStatus[]>) => {
             state.parcelStatuses = action.payload
         },
 

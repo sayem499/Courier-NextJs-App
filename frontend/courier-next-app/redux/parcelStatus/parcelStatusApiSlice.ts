@@ -39,7 +39,7 @@ export const parcelStatusApiSlice = apiSlice.injectEndpoints({
 
         getParcelStatusesWithIds: builder.mutation({
             query: (data) => ({
-                url: `${PARCEL_STATUS_URL}/get_with_ids`,
+                url: `${PARCEL_STATUS_URL}/get_with_ids_admin`,
                 method: 'POST',
                 body: data
             })

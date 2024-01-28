@@ -112,6 +112,21 @@ const getUserParcelWithId = asyncHandler (async (req, res) => {
     }
 }) 
 
+//@dec Get user parcel with parcel tracker ID.
+//@route POST /api/parcel/get_with_tracker_id
+//@access Private
+const getUserParcelWithTrackerId = asyncHandler (async (req, res) => {
+    const body = req.body;
+    const userParcel = await Parcel.find({tracker_id: body.tracker_id});
+
+    if(userParcel){
+        res.status(201).json(userParcel);
+    }else{
+        res.status(400);
+        throw new Error('Invalid parcel data.');
+    }
+}) 
+
 //@dec Get user parcels with parcel IDs.
 //@route POST /api/parcel/get_with_ids
 //@access Private
@@ -176,4 +191,4 @@ const updateParcelWithId = asyncHandler (async (req, res) => {
 
 
 
-export {setUserParcel, getUserParcels, updateParcelWithId, getUserParcelWithId, getParcelsWithIds, getUserParcelWithAdminLocationForPickup, getUserParcelWithAdminLocationForDelivery};
+export {setUserParcel, getUserParcels, updateParcelWithId, getUserParcelWithId, getUserParcelWithTrackerId, getParcelsWithIds, getUserParcelWithAdminLocationForPickup, getUserParcelWithAdminLocationForDelivery};

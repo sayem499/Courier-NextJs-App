@@ -15,7 +15,7 @@ import { useGetParcelWithIdMutation } from '@/redux/parcel/parcelApiSlice';
 import { useGetParcelWithAdminLocationPickupMutation, useGetParcelWithAdminLocationDeliveryMutation } from '@/redux/parcel/parcelApiSlice';
 import { useGetDeliveryWithPhonenumberMutation } from '@/redux/delivery/deliveryApiSlice';
 import { useSetDeliveryMutation } from '@/redux/delivery/deliveryApiSlice';
-import { useUpdateDeliveryWithPhonenumberMutation } from '@/redux/delivery/deliveryApiSlice';
+import { useUpdateDeliveryWithPhonenumberAdminMutation } from '@/redux/delivery/deliveryApiSlice';
 import Parceltable from '@/components/parcel_table_admin';
 import SearchIcon from '@mui/icons-material/Search';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
@@ -34,7 +34,7 @@ const Requests = () => {
   const [updateParcelStatusWithTrackerIdAdmin] = useUpdateParcelStatusWithTrackerIdAdminMutation();
   const [getDeliveryWithPhonenumber] = useGetDeliveryWithPhonenumberMutation();
   const [setDeliveryMutation] = useSetDeliveryMutation();
-  const [updateDeliveryWithPhonenumber] = useUpdateDeliveryWithPhonenumberMutation();
+  const [updateDeliveryWithPhonenumberAdmin] = useUpdateDeliveryWithPhonenumberAdminMutation();
   const { parcelStatuses } = useAppSelector(state => state.parcelStatusState);
   const { parcels } = useAppSelector(state => state.parcelState);
   const [stepZero, setStepZero] = useState(true);
@@ -231,7 +231,7 @@ const Requests = () => {
         deliveries = [];
         if (deliveryCheck.length > 0) {
 
-          res = await updateDeliveryWithPhonenumber({ deliveryMan_phonenumber, pickups }).unwrap();
+          res = await updateDeliveryWithPhonenumberAdmin({ deliveryMan_phonenumber, pickups }).unwrap();
           if(res){
             _id = id;
             result = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, deliveryMan_phonenumber }).unwrap();
@@ -253,7 +253,7 @@ const Requests = () => {
       } else if (stepAction === 2) {
         pickups = [];
         if (deliveryCheck.length > 0) {
-          res = await updateDeliveryWithPhonenumber({ deliveryMan_phonenumber, deliveries }).unwrap();
+          res = await updateDeliveryWithPhonenumberAdmin({ deliveryMan_phonenumber, deliveries }).unwrap();
           if(res){
             _id = id;
             result = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, deliveryMan_phonenumber }).unwrap();

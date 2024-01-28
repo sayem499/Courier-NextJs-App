@@ -46,14 +46,15 @@ const getdeliveryWithPhonenumber = AsyncHandler( async(req, res) => {
 //@access Private
 const updateDeliveryWithPhonenumber = AsyncHandler( async(req, res) => {
     const body = req.body;
-    const delivery = await Deliveries.find({deliveryMan_phonenumber: body.deliveryMan_phonenumber});
+    let delivery = await Deliveries.find({deliveryMan_phonenumber: body.deliveryMan_phonenumber});
     if(delivery){
-        delivery.pickups = [...body.pickups];
-        delivery.deliveries = [...body.deliveries];
-        delivery._id = body._id || delivery._id;
-        delivery.deliveryMan_phonenumber = body.deliveryMan_phonenumber || delivery.deliveryMan_phonenumber;
-
-        const updatedDelivery = await delivery.save();
+        delivery?.map((item) => {
+            body.pickups?.length > 0 ? item.pickups?.push(body.pickups.toString()) : (body.pickups?.lenght > 0 ? item.pickups = [...body.pickups] : item.pickups = item.pickups);
+            body.deliveries?.length > 0 ? item.deliveries?.push(body.deliveries.toString()) : (body.deliveries?.lenght > 0 ? item.deliveries = [...body.deliveries] : item.deliveries = item.deliveries);
+            item._id = body._id || item._id;
+            item.deliveryMan_phonenumber = body.deliveryMan_phonenumber || item.deliveryMan_phonenumber;
+    })
+        const updatedDelivery = await delivery[0].save();
         if(updatedDelivery){
             res.status(201).json({
                 deliveryMan_phonenumber: updatedDelivery.deliveryMan_phonenumber,

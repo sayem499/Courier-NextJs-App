@@ -16,14 +16,22 @@ const deliveryApiSlice = apiSlice.injectEndpoints({
         updateDeliveryWithPhonenumber: builder.mutation({
             query: (data) => ({
                 url: `${DELIVERY_URL}/update_delivery`,
-                method: 'POST',
+                method: 'PUT',
+                body: data
+            }),
+        }),
+
+        updateDeliveryWithPhonenumberAdmin: builder.mutation({
+            query: (data) => ({
+                url: `${DELIVERY_URL}/update_delivery_admin`,
+                method: 'PUT',
                 body: data
             }),
         }),
 
         getDeliveryWithPhonenumber: builder.mutation({
             query: (data) => ({
-                url: `${DELIVERY_URL}/get_with_phonenumber`,
+                url: `${DELIVERY_URL}/get_with_phonenumber_admin`,
                 method: 'POST',
                 body: data
             }),
@@ -34,4 +42,4 @@ const deliveryApiSlice = apiSlice.injectEndpoints({
 });
 
 
-export const { useSetDeliveryMutation, useUpdateDeliveryWithPhonenumberMutation, useGetDeliveryWithPhonenumberMutation } = deliveryApiSlice
+export const { useSetDeliveryMutation, useUpdateDeliveryWithPhonenumberMutation, useUpdateDeliveryWithPhonenumberAdminMutation, useGetDeliveryWithPhonenumberMutation } = deliveryApiSlice
