@@ -6,6 +6,8 @@ import SplashScreen from './views/splashScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from './views/loginScreen';
+import PickupsScreen from './views/pickupsScreen';
+import DeliveryDetailsScreen from './views/deliveryDetailsScreen';
 import Tabs from './components/bottomTabs';
 
 const Stack = createNativeStackNavigator();
@@ -18,6 +20,8 @@ export default function App() {
         <Stack.Screen name='SplashScreen' component={SplashScreen}/>
         <Stack.Screen name='LoginScreen' component={LoginScreen}/>
         <Stack.Screen name='HomeScreen' component={Tabs}/>
+        <Stack.Screen name='PickupsScreen' component={PickupsScreen}/>
+        <Stack.Screen name='DeliveryDetailsScreen' component={DeliveryDetailsScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>
