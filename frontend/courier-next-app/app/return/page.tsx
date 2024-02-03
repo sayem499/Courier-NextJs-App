@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { useRouter } from 'next/navigation';
 import Table from '@/components/table';
-import { getParcelStatuses } from '@/redux/parcelStatus/parcelStatuSlice';
+import { getParcelStatuses } from '@/redux/parcelStatus/parcelStatusSlice';
 import { useGetParcelStatusWithStepActionMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { toast } from 'react-toastify';
 

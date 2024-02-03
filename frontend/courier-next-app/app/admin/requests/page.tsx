@@ -3,7 +3,7 @@ import Table from '@/components/table';
 import React, { useEffect, useState } from 'react'
 import { useAppSelector, useAppDispatch } from '@/app/hooks';
 import { useGetParcelStatusWithStepActionAdminMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
-import { getParcelStatuses } from '@/redux/parcelStatus/parcelStatuSlice';
+import { getParcelStatuses } from '@/redux/parcelStatus/parcelStatusSlice';
 import { useUpdateParcelStatusWithTrackerIdAdminMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { useUpdateParcelWithIdMutation } from '@/redux/parcel/parcelApiSlice';
 import { useGetParcelsWithIdsMutation } from '@/redux/parcel/parcelApiSlice';

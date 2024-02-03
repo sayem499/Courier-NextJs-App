@@ -57,7 +57,7 @@ const PickupsScreen = ({ navigation }) => {
 
       <ScrollView style={styles.pickupsCard_container}>
         { tempDeliveries.map((item) => 
-           showSearchResult ? item.pickups.filter((item) => ( item.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()))).map((item)=>{
+           showSearchResult ? item.pickups.filter((item) => ( item.toLowerCase().includes(searchText.toLowerCase()))).map((item)=>{
            return <Pressable key={item} onPress={() => navigation.push('DeliveryDetailsScreen', { item })}>
            <View style={[styles.pickupsCard, styles.boxShadow]}>
              <Text style={styles.cardInnerTextStyles} >Tracker ID : {item}</Text>

@@ -191,6 +191,7 @@ const Newparcel = () => {
           let datetime = new Date();
           let parcelStatus: [string] = [`${datetime.toLocaleString()}: Request pending for approval.`];
           let stepAction = 0;
+          let isPicked = false;
           try {
             const statusRes = await setParcelStatus({ _id, parcelStatus, parcel_id, stepAction, sender_id, isPaid, deliveryCost, isReturned}).unwrap();
             if(statusRes){

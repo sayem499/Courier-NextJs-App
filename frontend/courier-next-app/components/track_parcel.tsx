@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { useAppSelector, useAppDispatch } from '@/app/hooks';
-import { resetParcelStatus, getParcelStatus } from '../redux/parcelStatus/parcelStatuSlice';
+import { resetParcelStatus, getParcelStatus } from '../redux/parcelStatus/parcelStatusSlice';
 import { useGetParcelStatusWithIdMutation } from '../redux/parcelStatus/parcelStatusApiSlice';
 import { toast } from 'react-toastify';
 import DoneIcon from '@mui/icons-material/Done';

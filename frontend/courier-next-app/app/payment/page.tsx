@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Table from '@/components/table';
 import { toast } from 'react-toastify';
 import { useGetParcelStatusWithSenderIdMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
-import { getParcelStatuses } from '@/redux/parcelStatus/parcelStatuSlice';
+import { getParcelStatuses } from '@/redux/parcelStatus/parcelStatusSlice';
 
 const Payment = () => {
 
