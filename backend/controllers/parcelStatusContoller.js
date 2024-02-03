@@ -125,7 +125,7 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
         parcelStatus.deliveryCost = body.deliiveryCost || parcelStatus.deliveryCost;
         parcelStatus.isReturned = body.isReturned || parcelStatus.isReturned;
         parcelStatus.deliveryMan_phonenumber = body.deliveryMan_phonenumber || parcelStatus.deliveryMan_phonenumber;
-
+        parcelStatus.isPicked = body.isPicked || parcelStatus.isPicked;
         
         const updatedParcelStatus = await parcelStatus.save();
         if(updatedParcelStatus){
@@ -138,6 +138,7 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
                deliveryCost: updatedParcelStatus.deliiveryCost,
                isReturned: updatedParcelStatus.isReturned,
                deliveryMan_phonenumber: updatedParcelStatus.delieryMan_phonenumber,
+               iPicked: updatedParcelStatus.isPicked,
             });
         }else {
             res.status(500);

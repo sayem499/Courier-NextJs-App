@@ -10,6 +10,7 @@ const parcelStatusSchema = mongoose.Schema({
     deliveryCost: {type: Number, required: true},
     isReturned: {type: Boolean, required: true},
     deliveryMan_phonenumber: {type: String,},
+    isPicked: {type:Boolean, required: true},
 },{
     timestamps: true,
 })
