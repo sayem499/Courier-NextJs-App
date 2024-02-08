@@ -130,6 +130,7 @@ const updateParcelStatusWithId = expressAsyncHandler( async (req, res) => {
         const updatedParcelStatus = await parcelStatus.save();
         if(updatedParcelStatus){
             res.status(200).json({
+               _id: updatedParcelStatus._id,
                parcelStatus: updatedParcelStatus.parcelStatus,
                parcel_id: updatedParcelStatus.parcel_id,
                stepAction: updatedParcelStatus.stepAction,

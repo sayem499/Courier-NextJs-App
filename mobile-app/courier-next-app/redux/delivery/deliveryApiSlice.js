@@ -17,7 +17,7 @@ const deliveryApiSlice = apiSlice.injectEndpoints({
             query: (data) => ({
                 url: `${DELIVERY_URL}/update_delivery`,
                 method: 'PUT',
-                body: datat
+                body: data
             })
         }),
 
