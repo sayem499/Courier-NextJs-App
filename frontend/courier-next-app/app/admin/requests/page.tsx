@@ -84,13 +84,13 @@ const Requests = () => {
           : <button className='rounded-full bg-blue-500 px-4 py-2 text-gray-50 hover:text-white' onClick={() => handleReturnedClick(row._id)}>Returned</button>
           : row.stepAction === 0 ? <><input className='p-1 border rounded text-black ' type='number' placeholder='Enter parcel cost' value={deliveryCost} onChange={(e) => { deliveryCost = e.target.valueAsNumber }}></input><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
             <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>
-            : row.stepAction === 2 ? <><input className='p-1 border rounded text-black' type='text' placeholder='Enter phonenumber' />
+            : row.stepAction === 2 ? <><input className='p-1 border rounded text-black' type='text' placeholder='Enter phonenumber' value={deliveryMan_phonenumber} onChange={(e) => { deliveryMan_phonenumber = e.target.value }} />
               <button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => assignDeliveryMan(row._id)}>Assign</button>
               <button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => handleOutForDeliveryClick(row._id)}>Clear</button>
-              <button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button></>
+              <button className={'rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' } onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button></>
               : <><input className='rounded p-1 text-black' type='text' placeholder='Enter phonenumber' value={deliveryMan_phonenumber} onChange={(e) => { deliveryMan_phonenumber = e.target.value }}></input>
                 <button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => assignDeliveryMan(row._id)}>Assign</button>
-                <button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
+                <button className={ 'rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' + (row.isPicked ? ' opacity-100' : ' opacity-50') } onClick={() => acceptClickButton(row._id, row.parcel_id)} disabled={!row.isPicked}>Accept</button>
                 <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>)
       }
     },
@@ -217,11 +217,9 @@ const Requests = () => {
       stepOne ? stepAction = 1 : 0;
       stepTwo ? stepAction = 2 : 0;
 
-
       let datetime = new Date();
       let parcelStatus: string;
       let result: any, res: any;
-      parcelStatus = `${datetime.toLocaleString()}: Deliveryman assigned, pickup pending.`;
       deliveries.push(id);
       pickups.push(id);
 
@@ -229,6 +227,7 @@ const Requests = () => {
 
       if (stepAction === 1) {
         deliveries = [];
+        parcelStatus = `${datetime.toLocaleString()}: Deliveryman assigned, pickup pending.`;
         if (deliveryCheck.length > 0) {
 
           res = await updateDeliveryWithPhonenumberAdmin({ deliveryMan_phonenumber, pickups }).unwrap();
@@ -252,6 +251,7 @@ const Requests = () => {
 
       } else if (stepAction === 2) {
         pickups = [];
+        parcelStatus = `${datetime.toLocaleString()}: Deliveryman assigned, delivery pending.`;
         if (deliveryCheck.length > 0) {
           res = await updateDeliveryWithPhonenumberAdmin({ deliveryMan_phonenumber, deliveries }).unwrap();
           if(res){
