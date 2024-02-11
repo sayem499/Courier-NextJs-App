@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
 
@@ -7,6 +7,9 @@ import { View, Text, StyleSheet } from 'react-native';
 
 const HomeScreen = ({navigation}) => {
   const { deliveryMan } = useSelector(state => state.deliveryManState);
+
+  useState(()=> {
+  },[])
   return (
     <View style={styles.homescreen_container}>
         <Text>HomeScreen</Text>

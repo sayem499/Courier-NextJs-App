@@ -13,12 +13,8 @@ export const deliveryManSlice = createSlice({
         setDeliveryMan: (state, action) => {
             state.deliveryMan = action.payload
         },
-
-        logoutDeliveryMan: (state) => {
-            state.deliveryMan = null
-        },
     },
 });
 
-export const { resetDeliveryMan, setDeliveryMan, logoutDeliveryMan } = deliveryManSlice.actions;
+export const { resetDeliveryMan, setDeliveryMan} = deliveryManSlice.actions;
 export default deliveryManSlice.reducer; 

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLogoutDeliveryManMutation } from '../redux/deliveryMan/deliveryManApiSlice';
-import { logoutDeliveryMan } from '../redux/deliveryMan/deliveryManSlice';
+import { resetDeliveryMan } from '../redux/deliveryMan/deliveryManSlice'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingsScreen = ({navigation}) => {
@@ -10,18 +10,18 @@ const SettingsScreen = ({navigation}) => {
   const { deliveryMan } = useSelector(state => state.deliveryManState);
   const [logoutDeliveryManMutation] = useLogoutDeliveryManMutation();
   const dispatch = useDispatch();
-  const logOut = async (navigation) => {
+  const logOut = async () => {
     try{
       await AsyncStorage.removeItem('deliveryman');
       const res = await logoutDeliveryManMutation().unwrap();
       console.log(res);
       if(res){
-        dispatch(logoutDeliveryMan());
+        dispatch(resetDeliveryMan());
         navigation.replace('LoginScreen');
       }
       
     }catch(err){
-      console.error(err);
+      console.error(err.error || err.data?.message);
     }
     
   } 
@@ -34,8 +34,8 @@ const SettingsScreen = ({navigation}) => {
             <Text>SettingsScreen</Text>
           </View>
           <View style={styles.logout_Button_Container}>
-            <Pressable style={styles.logout_Button}>
-              <Text onPress={()=>logOut(navigation)} style={styles.logout_Text}>Logout</Text>
+            <Pressable style={styles.logout_Button} onPress={logOut}>
+              <Text style={styles.logout_Text}>Logout</Text>
             </Pressable>  
           </View>  
         </View>

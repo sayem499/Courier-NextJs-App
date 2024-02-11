@@ -16,10 +16,10 @@ const LoginScreen = ({ navigation }) => {
   const loginDeliveryMan = async () => {
     try {
       const res = await loginDeliveryManMutation({ deliveryMan_phonenumber, deliveryMan_password }).unwrap();
+      const jsonValue = JSON.stringify(res);
       if(res){
-        await setStorageData(res);
         dispatch(setDeliveryMan(res));
-        navigation.replace('HomeScreen');
+        await setStorageData(jsonValue, res);        
       }
     } catch (err) {
       console.error(err);
@@ -28,10 +28,10 @@ const LoginScreen = ({ navigation }) => {
 
   const setStorageData = async (data) => {
     try {
-      const jsonValue = JSON.stringify(data);
-      await AsyncStorage.setItem('deliveryman', jsonValue);
+      await AsyncStorage.setItem('deliveryman', data); 
+      navigation.replace('HomeScreen');
     } catch (err) {
-      console.error(err);
+      console.error(err.error);
     }
   }
 
