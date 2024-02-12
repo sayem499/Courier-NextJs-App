@@ -1,78 +1,168 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, TextInput } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import { View, Text, StyleSheet, ScrollView, Pressable, TextInput, RefreshControl, Platform, Linking, ToastAndroid } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetDeliveryWithPhonenumberMutation } from '../redux/delivery/deliveryApiSlice';
-import { setDeliveries } from '../redux/delivery/deliverySlice';
+import { useGetParcelStatusesWithIdsMutation } from '../redux/parcelStatus/parcelStatusApiSlice';
 import { AntDesign } from '@expo/vector-icons';
+import { resetParcelStatus, setParcelStatuses } from '../redux/parcelStatus/parcelStatusSlice';
+import { setDeliveryMan } from '../redux/deliveryMan/deliveryManSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FontAwesome } from '@expo/vector-icons';
+import { useGetParcelsWithTrackerIdMutation } from '../redux/parcel/parcelApiSlice';
 
 
 const PickupsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const [ searchText, setSearchText ] = useState('');
-  const { deliveries } = useSelector((state) => state.deliveryState);
-  const [ showSearchResult, setShowSearchResult] = useState(false);
   const { deliveryMan } = useSelector((state) => state.deliveryManState);
-  let tempDeliveries = [];
+  const [searchText, setSearchText] = useState('');
+  const { parcelStatuses } = useSelector((state) => state.parcelStatusState);
+  const [showSearchResult, setShowSearchResult] = useState(false);
+  const [getParcelStatusesWithIds] = useGetParcelStatusesWithIdsMutation();
+  const [getParcelsWithTrackerId] = useGetParcelsWithTrackerIdMutation();
+  const isFocused = useIsFocused();
+  const [refresh, setRefresh] = useState(false);
+  let temp;
   const [getDeliveryWithPhonenumber] = useGetDeliveryWithPhonenumberMutation();
 
+  const onRefresh = () => {
+    setRefresh(true);
+    getDeliveriesFunction();
+    setTimeout(() => {
+      setRefresh(false);
+    }, 1000)
+  };
+
   useEffect(() => {
-    if(deliveries.length === 0)
-      getDeliveriesFunction(deliveryMan);
+    if (isFocused) {
+      dispatch(resetParcelStatus());
+      if (deliveryMan?.length > 0) {
+        onRefresh();
+      } else {
+        getDeliveryManData();
+      }
+    } else {
+      dispatch(resetParcelStatus());
+    }
 
+  }, [isFocused, deliveryMan])
 
-  }, [])
-
-  if(deliveries?.length !== tempDeliveries?.length ){
-    tempDeliveries = deliveries;
+  const getDeliveryManData = async () => {
+    try {
+      const res = await AsyncStorage.getItem('deliveryman');
+      res && dispatch(setDeliveryMan(res));
+    } catch (err) {
+      console.error(err.error || err.data?.message)
+    }
   }
 
-  const getDeliveriesFunction = async (deliveryMan) => {
+  const getFilteredPickups = async (ids) => {
     try {
-      let temp = JSON.parse(deliveryMan)
-      let deliveryMan_phonenumber = temp.deliveryMan_phonenumber;
-      const res = await getDeliveryWithPhonenumber({ deliveryMan_phonenumber }).unwrap();
-      if (res.length > 0) {
-        dispatch(setDeliveries(res));
+      if (ids) {
+        const resParcelStatus = await getParcelStatusesWithIds({ ids }).unwrap();
+        if (resParcelStatus?.length > 0) {
+          dispatch(setParcelStatuses(resParcelStatus));
+        }
+      } else {
+        dispatch(resetParcelStatus());
       }
 
     } catch (err) {
-      console.log(err?.data?.message || err.error);
+      console.error(err.error || err.data?.message);
+    }
+  }
+
+
+  const callNumber = async (item) => {
+    try {
+      let tracker_id = item._id;
+      const parcelRes = await getParcelsWithTrackerId({ tracker_id }).unwrap();
+
+      if (parcelRes?.length > 0) {
+        let phoneNumber;
+
+        if (Platform.OS !== 'android') {
+          phoneNumber = `telprompt:${parcelRes[0].senderPhonenumber}`;
+        } else {
+          phoneNumber = `tel:${parcelRes[0].senderPhonenumber}`;
+        }
+
+        try {
+          const response = await Linking.canOpenURL(phoneNumber);
+          if (response) {
+            await Linking.openURL(phoneNumber);
+          } else {
+            ToastAndroid.show('Invalid Phonenumber Data.');
+          }
+        } catch (err) {
+          ToastAndroid.show(err.error || err.data?.message);
+        }
+      }
+
+    } catch (err) {
+      console.error(err.error || err.data?.message);
+    }
+
+  }
+
+
+  const getDeliveriesFunction = async () => {
+    try {
+      temp = JSON.parse(deliveryMan);
+      let deliveryMan_phonenumber = temp.deliveryMan_phonenumber;
+      const resDeliveries = await getDeliveryWithPhonenumber({ deliveryMan_phonenumber }).unwrap();
+      if (resDeliveries.length > 0) {
+        resDeliveries.map(item => {
+          getFilteredPickups(item.pickups)
+        })
+
+      }
+
+    } catch (err) {
+      console.error(err?.data?.message || err.error);
     }
 
   }
 
   const searchDeliveries = () => {
-   setShowSearchResult(true);
+    setShowSearchResult(true);
   }
-  
+
 
   return (
     <View style={styles.pickupsScreen_container}>
       <View style={styles.searchBar_container}>
-        <TextInput style={[styles.searchInput, styles.boxShadow]} placeholder='Search...' value={searchText} onChangeText={setSearchText}/>
+        <TextInput style={[styles.searchInput, styles.boxShadow]} placeholder='Search...' value={searchText} onChangeText={setSearchText} />
         <Pressable style={[styles.searchButton, styles.boxShadow]} onPress={searchDeliveries}>
           <AntDesign name="search1" size={24} color="black" />
         </Pressable>
       </View>
 
-      <ScrollView style={styles.pickupsCard_container}>
-        { tempDeliveries.map((item) => 
-           showSearchResult ? item.pickups.filter((item) => ( item.toLowerCase().includes(searchText.toLowerCase()))).map((item)=>{
-           return <Pressable key={item} onPress={() => navigation.push('DeliveryDetailsScreen', { item })}>
-           <View style={[styles.pickupsCard, styles.boxShadow]}>
-             <Text style={styles.cardInnerTextStyles} >Tracker ID : {item}</Text>
-           </View>
-         </Pressable>
-          }): 
-          item.pickups.map((item) => {
-              return <Pressable key={item} onPress={() => navigation.push('DeliveryDetailsScreen', { item })}>
-                  <View style={[styles.pickupsCard, styles.boxShadow]}>
-                    <Text style={styles.cardInnerTextStyles} >Tracker ID : {item}</Text>
-                  </View>
+      <ScrollView style={styles.pickupsCard_container} contentContainerStyle={{ justifyContent: 'center' }}
+        refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />}>
+        {
+          showSearchResult ? parcelStatuses?.filter((item) => (item._id.toLowerCase().includes(searchText.toLowerCase()) && item.isPicked !== true)).map((item) => {
+            return <Pressable style={styles.pickupsCardPressable} key={item._id} onPress={() => navigation.push('DeliveryDetailsScreen', { item: item._id, isPickup: true })}>
+              <View style={[styles.pickupsCard, styles.boxShadow]}>
+                <Text style={styles.cardInnerTextStyles} >{item._id}</Text>
+                <Pressable onPress={() => callNumber(item)}>
+                  <FontAwesome name="mobile-phone" size={40} color="black" />
                 </Pressable>
+              </View>
+            </Pressable>
+          }) :
+            parcelStatuses?.filter((item) => (item.isPicked !== true)).map((item) => {
+              return <Pressable style={styles.pickupsCardPressable} key={item._id} onPress={() => navigation.push('DeliveryDetailsScreen', { item: item._id, isPickup: true })}>
+                <View style={[styles.pickupsCard, styles.boxShadow]}>
+                  <Text style={styles.cardInnerTextStyles} >{item._id}</Text>
+                  <Pressable onPress={() => callNumber(item)}>
+                    <FontAwesome name="mobile-phone" size={40} color="black" />
+                  </Pressable>
+                </View>
+              </Pressable>
             })
-      )
-    }
+
+        }
 
       </ScrollView>
     </View>
@@ -85,15 +175,19 @@ const styles = StyleSheet.create({
   },
 
   pickupsCard_container: {
-    flex: 1, width: '90%', marginBottom: 80, marginTop: 20,
+    flex: 1, width: '100%', marginBottom: 80, marginTop: 20,
   },
 
   pickupsCard: {
-    width: '100%', height: 150, marginBottom: 10, backgroundColor: 'white', alignItems: 'center',
-    justifyContent: 'center', borderRadius: 8,
+    width: '90%', height: 150, marginBottom: 10, backgroundColor: 'white', alignItems: 'center',
+    justifyContent: 'center', borderRadius: 10, marginTop: 10, flexDirection: 'row',
   },
 
-  cardInnerTextStyles: { fontSize: 20, },
+  pickupsCardPressable: {
+    alignItems: 'center', justifyContent: 'center',
+  },
+
+  cardInnerTextStyles: { fontSize: 30, marginRight: 20 },
 
   searchBar_container: {
     alignItems: 'center', justifyContent: 'center', flexDirection: 'row',
@@ -119,8 +213,8 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
-    elevation: 2,
+    shadowOpacity: 0.7,
+    elevation: 10,
   },
 
 

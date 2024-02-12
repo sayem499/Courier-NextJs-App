@@ -1,19 +1,23 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Modal } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Modal, ToastAndroid, Platform, Linking } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetParcelsWithTrackerIdMutation } from '../redux/parcel/parcelApiSlice';
 import { setParcels } from '../redux/parcel/parcelSlice';
+import { useUpdateParcelStatusWithTrackerIdMutation } from '../redux/parcelStatus/parcelStatusApiSlice';
+import { updatedParcelStatuses } from '../redux/parcelStatus/parcelStatusSlice';
 
 
 
-const DeliveryDetailsScreen = () => {
+const DeliveryDetailsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const [updateParcelStatusWithId] = useUpdateParcelStatusWithTrackerIdMutation();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [getParcelsWithTrackerId] = useGetParcelsWithTrackerIdMutation();
   const { parcels } = useSelector((state) => state.parcelState);
   const route = useRoute();
   const pickup = route.params?.item;
+  const isPickup = route.params?.isPickup;
 
   const getParcelDetails = async (pickup) => {
     try {
@@ -21,7 +25,7 @@ const DeliveryDetailsScreen = () => {
       const result = await getParcelsWithTrackerId({ tracker_id }).unwrap();
       dispatch(setParcels(result));
     } catch (err) {
-      console.log(err.error || err.data?.message);
+      ToastAndroid.show(err.error || err.data?.message);
     }
 
   }
@@ -31,15 +35,59 @@ const DeliveryDetailsScreen = () => {
     getParcelDetails(pickup);
   }, [])
 
+
+
   const confirmModal = () => {
     setShowConfirmationModal(true);
   }
-  const confirmDone = () => {
+
+
+  const confirmDone = async (_id) => {
+
+    try {
+      let datetime = new Date();
+      let isPicked = true;
+      let parcelStatus = `${datetime.toLocaleString()}: Parcel picked up by delivery man.`;
+      const res = await updateParcelStatusWithId({ _id, parcelStatus, isPicked }).unwrap();
+      if (res) {
+        dispatch(updatedParcelStatuses(res));
+        setShowConfirmationModal(false);
+      }
+    } catch (err) {
+      console.log(err.error || err.data?.message || err.message);
+    }
 
   }
 
   const cancelModal = () => {
     setShowConfirmationModal(false);
+  }
+
+  const cancelBack = () => {
+    navigation.goBack();
+  }
+
+  const callNumber = async (number) => {
+    let phoneNumber;
+
+    if (Platform.OS !== 'android') {
+      phoneNumber = `telprompt:${number}`;
+    } else {
+      phoneNumber = `tel:${number}`;
+    }
+
+    try {
+      const response = await Linking.canOpenURL(phoneNumber);
+      if (response) {
+        await Linking.openURL(phoneNumber);
+      } else {
+        ToastAndroid.show('Invalid Phonenumber Data.');
+      }
+    } catch (err) {
+      ToastAndroid.show(err.error || err.data?.message);
+    }
+
+
   }
 
   return (
@@ -56,7 +104,7 @@ const DeliveryDetailsScreen = () => {
               <Text style={styles.detailsText}>Confirm Pickups ?</Text>
             </View>
             <View style={styles.modalButtonView}>
-              <Pressable style={[styles.confirmButton, styles.boxShadow]} onPress={confirmDone}>
+              <Pressable style={[styles.confirmButton, styles.boxShadow]} onPress={() => confirmDone(pickup)}>
                 <Text style={[styles.buttonText]}>Confirm</Text>
               </Pressable>
               <Pressable style={[styles.cancelButton, styles.boxShadow]} onPress={cancelModal}>
@@ -69,18 +117,24 @@ const DeliveryDetailsScreen = () => {
 
       {
         parcels.map((item) => (
-          <View key={item} style={styles.detailsUpper_container}>
+          <View key={item} style={[styles.detailsUpper_container,  styles.boxShadow]}>
             <Text style={styles.detailsText}>Tracker ID : {item.tracker_id}</Text>
-            <Text style={styles.detailsText}>Sender Phonenumber : {item.senderPhonenumber}</Text>
+            {
+              isPickup ? <View style={styles.phoneNumber}><Text style={[styles.detailsText]}>Sender Phonenumber : </Text><View><Pressable onPress={() => callNumber(item.senderPhonenumber)}><Text style={styles.detailsText} >{item.senderPhonenumber}</Text></Pressable></View></View> :
+                <View style={styles.phoneNumber}><Text style={[styles.detailsText]}>Receiver Phonenumber : </Text><View><Pressable onPress={() => callNumber(item.receiverPhonenumber)}><Text style={styles.detailsText}>{item.receiverPhonenumber}</Text></Pressable></View></View>
+            }
             <Text style={styles.detailsText}>Sender Name : {item.senderName}</Text>
-            <Text style={styles.deliveryCostText}>Delivery Cost: {"    " + item.deliveryCost + 'Tk.'}</Text>
+            <Text style={styles.deliveryCostText}>Delivery Cost : {"    " + item.deliveryCost + 'Tk.'}</Text>
           </View>
         ))
       }
 
-      <View style={styles.detailsLower_container}>
+      <View style={[styles.detailsLower_container, styles.boxShadow]}>
         <Pressable style={[styles.doneButton, styles.boxShadow]} onPress={confirmModal}>
           <Text style={styles.buttonText}>Done</Text>
+        </Pressable>
+        <Pressable style={[styles.backButton, styles.boxShadow]} onPress={cancelBack}>
+          <Text style={styles.buttonText}>Back</Text>
         </Pressable>
       </View>
     </View>
@@ -106,7 +160,12 @@ const styles = StyleSheet.create({
 
   doneButton: {
     width: '30%', height: 50, justifyContent: 'center', alignItems: 'center',
-    backgroundColor: 'green', borderRadius: 5,
+    backgroundColor: 'green', borderRadius: 5, marginRight: 10,
+  },
+
+  backButton: {
+    width: '30%', height: 50, justifyContent: 'center', alignItems: 'center',
+    backgroundColor: 'red', borderRadius: 5, marginLeft: 10,
   },
 
   modalContainer: {
@@ -114,7 +173,7 @@ const styles = StyleSheet.create({
   },
 
   modalInnerContainer: {
-    width: '80%', height: '30%', alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', 
+    width: '80%', height: '30%', alignItems: 'center', justifyContent: 'center', backgroundColor: 'white',
     borderRadius: 5,
   },
 
@@ -124,7 +183,7 @@ const styles = StyleSheet.create({
   },
 
   modalTextView: {
-    height: '10%', width: '100%', alignItems: 'center', justifyContent: 'center', 
+    height: '10%', width: '100%', alignItems: 'center', justifyContent: 'center',
   },
 
   confirmButton: {
@@ -149,15 +208,19 @@ const styles = StyleSheet.create({
     alignItems: 'center', color: 'white',
   },
 
+  phoneNumber: {
+    flexDirection: 'row',
+  },
+
   boxShadow: {
-    shadowColor: 'gray',
+    shadowColor: '#0c94f5',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.9,
     shadowRadius: 6,
-    elevation: 3,
+    elevation: 10,
   },
 })
 
