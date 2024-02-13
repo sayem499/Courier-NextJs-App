@@ -55,7 +55,11 @@ function SplashScreen({ navigation }) {
 
   return (
     <View style={styles.splashView_container}>
-      <Animated.View style={[{ transform: [{ translateX: slideInAnim.interpolate({ inputRange: [0, 1], outputRange: [-800, 0] }) }] }]}><Image source={logoImg} style={styles.splashLogo} /></Animated.View>
+      <Animated.View style={[
+        { transform: 
+          [{ translateX: slideInAnim.interpolate({ inputRange: [0, 1], outputRange: [-800, 0] }) }] 
+        }
+      ]}><Image source={logoImg} style={styles.splashLogo} /></Animated.View>
       <Text style={styles.splashText_1}>NextCourier</Text>
     </View>
   )
