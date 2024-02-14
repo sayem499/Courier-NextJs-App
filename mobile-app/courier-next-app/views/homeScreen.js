@@ -55,17 +55,17 @@ const styles = StyleSheet.create({
     },
 
     homescreenLogo_container: {
-      width: '90%', height: '6%', backgroundColor: 'white', borderRadius: 10, marginBottom: 10,
+      width: '90%', height: '7%', backgroundColor: 'white', borderRadius: 10, marginBottom: 10,
       flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     },
 
     logoText: { 
-      fontSize: 18,
+      fontSize: 20,
       fontStyle: 'italic',
      },
 
      logoImage: {
-      width: 30, height: 30, 
+      width: 40, height: 40, 
      },
 
     homescreenInner_container: { 
