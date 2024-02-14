@@ -8,6 +8,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from './views/loginScreen';
 import PickupsScreen from './views/pickupsScreen';
 import DeliveryDetailsScreen from './views/deliveryDetailsScreen';
+import DeliveredParcelScreen from './views/deliveredParcelScreen';
+import PickedParcelScreen from './views/pickedParcelScreen';
 import Tabs from './components/bottomTabs';
 
 const Stack = createNativeStackNavigator();
@@ -22,6 +24,8 @@ export default function App() {
         <Stack.Screen name='HomeScreen' component={Tabs}/>
         <Stack.Screen name='PickupsScreen' component={PickupsScreen}/>
         <Stack.Screen name='DeliveryDetailsScreen' component={DeliveryDetailsScreen}/>
+        <Stack.Screen name='PickedParcelScreen' component={PickedParcelScreen}/>
+        <Stack.Screen name='DeliveredParcelScreen' component={DeliveredParcelScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>

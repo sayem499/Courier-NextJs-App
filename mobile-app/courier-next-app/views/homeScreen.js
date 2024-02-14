@@ -12,7 +12,14 @@ const HomeScreen = ({navigation}) => {
 
   useState(()=> {
   },[])
+  
+  const openPicked = () => {
+    navigation.push('PickedParcelScreen');
+  }
 
+  const openDelivered = () => {
+    navigation.push('DeliveredParcelScreen');
+  }
 
   return (
     <View style={styles.homescreen_container}>
@@ -22,13 +29,13 @@ const HomeScreen = ({navigation}) => {
         </View>
         <View style={styles.homescreenInner_container}>
           <View style={styles.homescreenInner_1stRow}>
-            <Pressable style={styles.homescreen_pressable}>
+            <Pressable style={styles.homescreen_pressable} onPress={openPicked}>
               <FontAwesome5 style={styles.homescreenImage_pressable} name="box" size={40} color="blue" />
               <Text style={styles.homescreenText_pressable}>Picked{'\n'}Parcels</Text>
             </Pressable>
             
             <View style={styles.boxShadow}>
-              <Pressable style={styles.homescreen_pressable}>
+              <Pressable style={styles.homescreen_pressable} onPress={openDelivered}>
                 <FontAwesome5 style={styles.homescreenImage_pressable} name="box-open" size={40} color="green" />
                 <Text style={styles.homescreenText_pressable}>Delivered{'\n'}Parcels</Text>
               </Pressable>
