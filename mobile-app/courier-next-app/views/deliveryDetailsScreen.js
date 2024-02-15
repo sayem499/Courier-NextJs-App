@@ -46,13 +46,27 @@ const DeliveryDetailsScreen = ({ navigation }) => {
 
     try {
       let datetime = new Date();
-      let isPicked = true;
-      let parcelStatus = `${datetime.toLocaleString()}: Parcel picked up by delivery man.`;
-      const res = await updateParcelStatusWithId({ _id, parcelStatus, isPicked }).unwrap();
-      if (res) {
-        dispatch(updatedParcelStatuses(res));
-        setShowConfirmationModal(false);
+      if (isPickup) {
+        let isPicked = true;
+        let parcelStatus = `${datetime.toLocaleString()}: Parcel picked up by delivery man.`;
+        const res = await updateParcelStatusWithId({ _id, parcelStatus, isPicked }).unwrap();
+        if (res) {
+          dispatch(updatedParcelStatuses(res));
+          setShowConfirmationModal(false);
+          navigation.goBack();
+        }
+      } else {
+        let stepAction = 3;
+        parcelStatus = `${datetime.toLocaleString()}: Parcel delivered successfully.`;
+        const resDelivered = await updateParcelStatusWithId({ _id, parcelStatus, stepAction }).unwrap();
+        if (resDelivered) {
+          dispatch(updatedParcelStatuses(resDelivered));
+          setShowConfirmationModal(false);
+          navigation.goBack();   
+        }
       }
+
+
     } catch (err) {
       console.log(err.error || err.data?.message || err.message);
     }
@@ -117,7 +131,7 @@ const DeliveryDetailsScreen = ({ navigation }) => {
 
       {
         parcels.map((item) => (
-          <View key={item} style={[styles.detailsUpper_container,  styles.boxShadow]}>
+          <View key={item} style={[styles.detailsUpper_container, styles.boxShadow]}>
             <Text style={styles.detailsText}>Tracker ID : {item.tracker_id}</Text>
             {
               isPickup ? <View style={styles.phoneNumber}><Text style={[styles.detailsText]}>Sender Phonenumber : </Text><View><Pressable onPress={() => callNumber(item.senderPhonenumber)}><Text style={styles.detailsText} >{item.senderPhonenumber}</Text></Pressable></View></View> :

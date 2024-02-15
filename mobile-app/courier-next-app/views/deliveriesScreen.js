@@ -155,7 +155,7 @@ const DeliveriesScreen = ({ navigation }) => {
               </View>
             </Pressable>
           }) :
-            parcelStatusesDeliveries?.map((item) => {
+            parcelStatusesDeliveries?.filter((item) => (item.stepAction === 2)).map((item) => {
               return <Pressable style={styles.pickupsCardPressable} key={item._id} onPress={() => navigation.push('DeliveryDetailsScreen', { item: item._id, isPickup: false })}>
                 <View style={[styles.pickupsCard, styles.boxShadow]}>
                   <Text style={styles.cardInnerTextStyles} >{item._id}</Text>
