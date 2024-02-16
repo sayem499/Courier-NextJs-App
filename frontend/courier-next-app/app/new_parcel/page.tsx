@@ -192,8 +192,10 @@ const Newparcel = () => {
           let parcelStatus: [string] = [`${datetime.toLocaleString()}: Request pending for approval.`];
           let stepAction = 0;
           let isPicked = false;
+          let isPickupAssigned = false;
+          let isDeliveryAssigned = false; 
           try {
-            const statusRes = await setParcelStatus({ _id, parcelStatus, parcel_id, stepAction, sender_id, isPaid, deliveryCost, isReturned}).unwrap();
+            const statusRes = await setParcelStatus({ _id, parcelStatus, parcel_id, stepAction, sender_id, isPaid, deliveryCost, isReturned, isPicked, isPickupAssigned, isDeliveryAssigned}).unwrap();
             if(statusRes){
               toast.success('Parcel created successfully!');
               handleReset();
