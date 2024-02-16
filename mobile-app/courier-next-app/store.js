@@ -1,5 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { devToolsEnhancer } from '@redux-devtools/remote';
 import { apiSlice } from "./redux/api/apiSlice";
+import { Platform } from 'react-native';
 import deliveryManReducer from './redux/deliveryMan/deliveryManSlice';
 import deliveryReducer from './redux/delivery/deliverySlice';
 import parcelReducer from './redux/parcel/parcelSlice';
@@ -14,5 +16,13 @@ export const store = configureStore({
         [apiSlice.reducerPath]: apiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
-    devTools: true,
+    devTools: false,
+    enhancers:[
+        /* devToolsEnhancer({
+            realtime: true,
+            hostname: "192.168.0.112",
+            port: 4000,
+            secure: false,
+        }), */
+    ],
 });
