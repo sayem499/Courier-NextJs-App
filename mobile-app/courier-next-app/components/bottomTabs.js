@@ -16,8 +16,8 @@ const Tabs = () => {
                 height: 60,
                 position: 'absolute',
                 bottom: 20,
-                left: 20,
-                right: 20,
+                left: 18,
+                right: 18,
                 elevation: 0,
                 backgroundColor: '#ffff',
                 borderRadius: 15

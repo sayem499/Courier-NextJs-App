@@ -1,73 +1,104 @@
-import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLogoutDeliveryManMutation } from '../redux/deliveryMan/deliveryManApiSlice';
-import { resetDeliveryMan } from '../redux/deliveryMan/deliveryManSlice'; 
+import { resetDeliveryMan } from '../redux/deliveryMan/deliveryManSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SettingsScreen = ({navigation}) => {
-
+const SettingsScreen = ({ navigation }) => {
+  const profileImg = require('../assets/profileImg.jpg');
   const { deliveryMan } = useSelector(state => state.deliveryManState);
   const [logoutDeliveryManMutation] = useLogoutDeliveryManMutation();
   const dispatch = useDispatch();
+  let temp;
+
+  useEffect(() => {
+  }, [])
+
+  if(deliveryMan){
+    temp = JSON.parse(deliveryMan)
+  }
   const logOut = async () => {
-    try{
+    try {
       await AsyncStorage.removeItem('deliveryman');
       const res = await logoutDeliveryManMutation().unwrap();
       console.log(res);
-      if(res){
+      if (res) {
         dispatch(resetDeliveryMan());
         navigation.replace('LoginScreen');
       }
-      
-    }catch(err){
+
+    } catch (err) {
       console.error(err.error || err.data?.message);
     }
-    
-  } 
+
+  }
 
 
   return (
     <View style={styles.settingsScreen_container}>
-        <View style={styles.settings_InnerContianer}>
-          <View style={styles.settingsMenu_Container}>
-            <Text>SettingsScreen</Text>
-          </View>
-          <View style={styles.logout_Button_Container}>
-            <Pressable style={styles.logout_Button} onPress={logOut}>
-              <Text style={styles.logout_Text}>Logout</Text>
-            </Pressable>  
-          </View>  
+      <View style={styles.settingsTop_InnerContainer}>
+        <Image source={temp?.deliveryMan_image || profileImg} style={styles.profileImage} />
+        <View style={styles.profileDetails}>
+          <Text>{temp?.deliveryMan_username}</Text>
+          <Text>{temp?.deliveryMan_email}</Text>
+          <Text>{temp?.deliveryMan_phonenumber}</Text>
         </View>
-        
+
+
+      </View>
+      <View style={styles.settingsBottom_InnerContianer}>
+        <View style={styles.settingsMenu_Container}>
+          <Text>SettingsScreen</Text>
+        </View>
+        <View style={styles.logout_Button_Container}>
+          <Pressable style={styles.logout_Button} onPress={logOut}>
+            <Text style={styles.logout_Text}>Logout</Text>
+          </Pressable>
+        </View>
+      </View>
+
     </View>
   )
-}  
+}
 
 const styles = StyleSheet.create({
-    settingsScreen_container: {
-      flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#e1e3e3',
-    },
+  settingsScreen_container: {
+    flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#e1e3e3',
+  },
 
-    settings_InnerContianer: {
-       height: '75%', width: '90%', backgroundColor: 'white', borderRadius: 10, padding: '10%',
-    },
-    
-    logout_Button: {
-      height: 50, width: '70%', borderRadius: 5, backgroundColor: '#cc2b2b', alignItems: 'center', justifyContent: 'center',
-    },
+  settingsTop_InnerContainer: {
+    height: '10%', width: '90%', backgroundColor: 'white', borderRadius: 10, marginBottom: 10,
+    flexDirection: 'row', alignItems: 'center',
+  },
 
-    logout_Text: {
-      color: 'white', fontSize: 18,
-    },
+  profileImage: {
+    width: '20%', height: '85%', borderRadius: 50, marginLeft: 20,
+  },
 
-    logout_Button_Container: {
-      flex: 1, alignItems: 'center',
-    },
+  profileDetails: {
+    justifyContent: 'center', alignItems: 'flex-start', width: '80%', height: '90%', marginLeft: 30,
+  },
 
-    settingsMenu_Container: {
-      flex: 5,
-    }
+  settingsBottom_InnerContianer: {
+    height: '70%', width: '90%', backgroundColor: 'white', borderRadius: 10, padding: '10%', marginBottom: 30,
+  },
+
+  logout_Button: {
+    height: 50, width: '70%', borderRadius: 5, backgroundColor: '#cc2b2b', alignItems: 'center', justifyContent: 'center',
+  },
+
+  logout_Text: {
+    color: 'white', fontSize: 18,
+  },
+
+  logout_Button_Container: {
+    alignItems: 'center',
+  },
+
+  settingsMenu_Container: {
+
+  }
 })
 
 export default SettingsScreen;
