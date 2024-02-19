@@ -32,6 +32,7 @@ const setDeliveryMan = expressAsyncHandler(async (req, res) => {
         deliveryMan_phonenumber: body.deliveryMan_phonenumber,
         deliveryMan_email: body.deliveryMan_email,
         deliveryMan_password: body.deliveryMan_password,
+        delieryMan_image: body.deliveryMan_image,
     });
 
     if (deliveryMan) {
@@ -40,6 +41,7 @@ const setDeliveryMan = expressAsyncHandler(async (req, res) => {
             deliveryMan_username: deliveryMan.deliveryMan_username,
             deliveryMan_phonenumber: deliveryMan.deliveryMan_phonenumber,
             deliveryMan_email: deliveryMan.deliveryMan_email,
+            delieryMan_image: deliveryMan.deliveryMan_image,
         });
     } else {
         res.status(400);
@@ -64,6 +66,7 @@ const authDeliveryMan = expressAsyncHandler(async (req, res) => {
             deliveryMan_username: deliveryMan.deliveryMan_username,
             deliveryMan_phonenumber: deliveryMan.deliveryMan_phonenumber,
             deliveryMan_email: deliveryMan.deliveryMan_email,
+            deliveryMan_image: deliveryMan.deliveryMan_image,
         });
     } else {
         res.status(400);
@@ -71,11 +74,75 @@ const authDeliveryMan = expressAsyncHandler(async (req, res) => {
     }
 })
 
+
+//@desc Update deliveryman
+//@route PUT /api/deliveryman/update_deliveryman
+//@access Private
+const updateDelievryman = expressAsyncHandler(async (req, res) => {
+    const body = req.body;
+    const deliveryMan = await DeliveryMans.findById(body._id);
+    let salt;
+
+    if (deliveryMan) {
+        if(body.deliveryMan_password) {
+            salt = await bcrypt.genSalt(10);
+            body.deliveryMan_password = await bcrypt.hash(body.deliveryMan_password, salt);
+        } 
+        deliveryMan.deliveryMan_password = body.deliveryMan_password || deliveryMan.deliveryMan_password
+        deliveryMan._id = body._id || deliveryMan._id;
+        deliveryMan.deliveryMan_username = body.deliveryMan_username || deliveryMan.deliveryMan_username;
+        deliveryMan.deliveryMan_phonenumber = body.deliveryMan_phonenumber || deliveryMan.deliveryMan_phonenumber;
+        deliveryMan.deliveryMan_email = body.deliveryMan_email || deliveryMan.deliveryMan_email;
+        deliveryMan.deliveryMan_image = body.deliveryMan_image || deliveryMan.deliveryMan_image;
+
+        const updatedDelievryman = await deliveryMan.save();
+
+        if (updatedDelievryman) {
+            res.status(201).json(
+                {
+                    _id: updatedDelievryman._id,
+                    deliveryMan_username: updatedDelievryman.deliveryMan_username,
+                    deliveryMan_phonenumber: updatedDelievryman.deliveryMan_phonenumber,
+                    deliveryMan_email: updatedDelievryman.deliveryMan_email,
+                    deliveryMan_image: updatedDelievryman.deliveryMan_image,
+                }
+            )
+        } else {
+            res.status(400);
+            throw new Error('Invalid Data!');
+        }
+    }
+})
+
+
+//@desc Get deliveryman with phonenumber
+//@route POST /api/deliveryman/get_with_phonenumber_admin
+//@access Private
+
+const getDeliverymanWithPhonenumber = expressAsyncHandler(async (req, res) => {
+    const body = req.body;
+    const deliveryMan = await DeliveryMans.find({ deliveryMan_phonenumber: body.deliveryMan_phonenumber });
+    
+    if (deliveryMan) {
+        res.status(201).json([{
+            _id: deliveryMan[0]._id,
+            deliveryMan_username: deliveryMan[0].deliveryMan_username,
+            deliveryMan_phonenumber: deliveryMan[0].deliveryMan_phonenumber,
+            deliveryMan_email: deliveryMan[0].deliveryMan_email,
+            deliveryMan_image: deliveryMan[0].delieryMan_image,
+        }])
+    }else {
+       res.status(400);
+       throw new Error('Invalid deliveryman data!') 
+    }
+})
+
+
 //@desc logout delivery man
 //@route POST /api/deliveryman/logout_deliveryman
 //@access Private
 
-const logoutDelieryMan = expressAsyncHandler( async(req, res) => {
+const logoutDelieryMan = expressAsyncHandler(async (req, res) => {
     res.cookie('jwt', '', {
         httpOnly: true,
         expires: new Date(0),
@@ -85,7 +152,7 @@ const logoutDelieryMan = expressAsyncHandler( async(req, res) => {
 })
 
 const generateToken = (res, _id) => {
-    const token = jwt.sign({_id}, process.env.JWT_SECRET);
+    const token = jwt.sign({ _id }, process.env.JWT_SECRET);
     res.cookie('jwt', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV !== 'development',
@@ -94,4 +161,4 @@ const generateToken = (res, _id) => {
 }
 
 
-export { setDeliveryMan, authDeliveryMan, logoutDelieryMan }
+export { setDeliveryMan, authDeliveryMan, updateDelievryman, getDeliverymanWithPhonenumber, logoutDelieryMan }

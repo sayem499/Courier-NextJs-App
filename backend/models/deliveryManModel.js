@@ -6,6 +6,7 @@ const deliveryManSchema = mongoose.Schema({
     deliveryMan_phonenumber: {type: String, required: true},
     deliveryMan_email: {type: String, required: true},
     deliveryMan_password: {type: String, required: true},
+    deliveryMan_image: {type: String, default: null},
 },{
     timeStamps: true,
 })
