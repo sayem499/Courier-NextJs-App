@@ -48,11 +48,11 @@ const Nav: React.FC<{ user: User | null, admin: Admin | null }> = ({ user, admin
   }
 
   const routeCreateDeliveryman = () => {
-    router.push('/admin/create_deliveryman');
+    router.push('/admin/deliveryman');
   }
 
   const routeCreateAdmin = () => {
-    router.push('/admin/create_admin');
+    router.push('/admin/admin');
   }
 
 
@@ -84,11 +84,11 @@ const Nav: React.FC<{ user: User | null, admin: Admin | null }> = ({ user, admin
 
         {admin && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
                          dark:hover:text-white cursor-pointer flex justify-center items-center h-[100%] 
-                          ${path === '/admin/create_deliveryman' ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`} onClick={routeCreateDeliveryman}>Register Deliveryman</li>}
+                          ${path === '/admin/deliveryman' ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`} onClick={routeCreateDeliveryman}>Deliveryman</li>}
 
         {admin && <li className={`ml-6 mr-6 text-slate-900 dark:text-slate-300 hover:drop-shadow-lg
                          dark:hover:text-white cursor-pointer flex justify-center items-center h-[100%] 
-                          ${path === '/admin/create_admin' ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`} onClick={routeCreateAdmin}>Register Admin</li>}
+                          ${path === '/admin/admin' ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`} onClick={routeCreateAdmin}>Admin</li>}
       </ul>
     </div>
   )

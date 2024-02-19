@@ -7,11 +7,12 @@ interface Deliveryman {
     deliveryMan_phonenumber: string,
     deliveryMan_email: string,
     deliveryMan_password: string,
+    deliveryMan_image: string,
 }
 
 type DeliverymanState = {
     deliveryman: Deliveryman | null,
-    deliverymans: Deliveryman[] | [],
+    deliverymans: Deliveryman[] | []
 }
 
 const initialState: DeliverymanState = {
@@ -27,10 +28,14 @@ export const deliveryManSlice = createSlice({
 
         setDeliveryManData: (state, action: PayloadAction<Deliveryman>) => {
             state.deliveryman = action.payload
+        },
+
+        setDeliveryMansData: (state, action: PayloadAction<Deliveryman[]>) => {
+            state.deliverymans = action.payload
         }
     }
 
 })
 
-export const { resetDeliveryman, setDeliveryManData } = deliveryManSlice.actions
+export const { resetDeliveryman, setDeliveryManData, setDeliveryMansData } = deliveryManSlice.actions
 export default deliveryManSlice.reducer
