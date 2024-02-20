@@ -2,22 +2,33 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLogoutDeliveryManMutation } from '../redux/deliveryMan/deliveryManApiSlice';
-import { resetDeliveryMan } from '../redux/deliveryMan/deliveryManSlice';
+import { resetDeliveryMan, setDeliveryMan } from '../redux/deliveryMan/deliveryManSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingsScreen = ({ navigation }) => {
-  const profileImg = require('../assets/profileImg.jpg');
   const { deliveryMan } = useSelector(state => state.deliveryManState);
+  const profileImg = require('../assets/profileImg.jpg'); 
   const [logoutDeliveryManMutation] = useLogoutDeliveryManMutation();
   const dispatch = useDispatch();
   let temp;
 
   useEffect(() => {
-  }, [])
+    if(deliveryMan.length === 0){
+      getDeliveryManData();      
+    }
 
-  if(deliveryMan){
-    temp = JSON.parse(deliveryMan)
+  }, [deliveryMan])
+  
+  const getDeliveryManData = async () => {
+    try {
+      const res = await AsyncStorage.getItem('deliveryman');
+      result = JSON.parse(res);
+      res && dispatch(setDeliveryMan(res));
+    } catch (err) {
+      console.error(err.error || err.data?.message)
+    }
   }
+
   const logOut = async () => {
     try {
       await AsyncStorage.removeItem('deliveryman');
@@ -38,11 +49,11 @@ const SettingsScreen = ({ navigation }) => {
   return (
     <View style={styles.settingsScreen_container}>
       <View style={styles.settingsTop_InnerContainer}>
-        <Image source={temp?.deliveryMan_image || profileImg} style={styles.profileImage} />
+        <Image source={ {uri: deliveryMan[0]?.deliveryMan_image } || profileImg} style={styles.profileImage} />
         <View style={styles.profileDetails}>
-          <Text>{temp?.deliveryMan_username}</Text>
-          <Text>{temp?.deliveryMan_email}</Text>
-          <Text>{temp?.deliveryMan_phonenumber}</Text>
+          <Text style={{fontWeight: 'bold'}}>{deliveryMan[0]?.deliveryMan_username}</Text>
+          <Text>{deliveryMan[0]?.deliveryMan_email}</Text>
+          <Text>{deliveryMan[0]?.deliveryMan_phonenumber}</Text>
         </View>
 
 

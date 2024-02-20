@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    deliveryMan: null,
+    deliveryMan: [],
 }
 
 export const deliveryManSlice = createSlice({
@@ -11,7 +11,7 @@ export const deliveryManSlice = createSlice({
         resetDeliveryMan: () => initialState,
 
         setDeliveryMan: (state, action) => {
-            state.deliveryMan = action.payload
+            state.deliveryMan.push(action.payload);
         },
     },
 });

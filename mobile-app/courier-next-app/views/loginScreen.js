@@ -19,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
       const jsonValue = JSON.stringify(res);
       if(res){
         dispatch(setDeliveryMan(res));
-        await setStorageData(jsonValue, res);        
+        await setStorageData(jsonValue);        
       }
     } catch (err) {
       console.error(err);

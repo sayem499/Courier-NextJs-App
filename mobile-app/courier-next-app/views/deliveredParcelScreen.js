@@ -43,8 +43,7 @@ const DeliveredParcelScreen = ({ navigation }) => {
     //Function to fetch deliveries using deliveryman phonenumber
     const getDeliveriesFunction = async () => {
         try {
-            let temp = JSON.parse(deliveryMan);
-            let deliveryMan_phonenumber = temp.deliveryMan_phonenumber;
+            let deliveryMan_phonenumber = deliveryMan[0].deliveryMan_phonenumber;
             const resDeliveries = await getDeliveryWithPhonenumber({ deliveryMan_phonenumber }).unwrap();
             if (resDeliveries.length > 0) {
                 resDeliveries.map(item => {

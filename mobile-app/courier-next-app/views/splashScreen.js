@@ -24,8 +24,9 @@ function SplashScreen({ navigation }) {
     const getStorageData = async () => {
       try {
         let res = await AsyncStorage.getItem('deliveryman');
+        let result = JSON.parse(res)
         if (res) {
-          dispatch(setDeliveryMan(res));
+          dispatch(setDeliveryMan(result));
           navigation.replace('HomeScreen');
         } else {
           setTimeout(() => {

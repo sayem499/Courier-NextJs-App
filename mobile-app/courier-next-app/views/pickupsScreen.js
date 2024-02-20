@@ -50,7 +50,8 @@ const PickupsScreen = ({ navigation }) => {
   const getDeliveryManData = async () => {
     try {
       const res = await AsyncStorage.getItem('deliveryman');
-      res && dispatch(setDeliveryMan(res));
+      const parsedResult = JSON.parse(res);
+      res && dispatch(setDeliveryMan(parsedResult));
     } catch (err) {
       console.error(err.error || err.data?.message)
     }
@@ -108,8 +109,7 @@ const PickupsScreen = ({ navigation }) => {
 
   const getDeliveriesFunction = async () => {
     try {
-      temp = JSON.parse(deliveryMan);
-      let deliveryMan_phonenumber = temp.deliveryMan_phonenumber;
+      let deliveryMan_phonenumber = deliveryMan[0].deliveryMan_phonenumber;
       const resDeliveries = await getDeliveryWithPhonenumber({ deliveryMan_phonenumber }).unwrap();
       if (resDeliveries.length > 0) {
         resDeliveries.map(item => {
