@@ -45,6 +45,7 @@ const Requests = () => {
   const [showParceltable, setShowParcelTable] = useState(false);
   const [getParcelWithAdminLocationPickup] = useGetParcelWithAdminLocationPickupMutation();
   let parcelStatusMessage: string, deliveryCost: number;
+  const [deliveryCostFlag, setDeliveryCostFlag] = useState(true);
   const [getParcelWithId] = useGetParcelWithIdMutation();
   const [getParcelsWithIds] = useGetParcelsWithIdsMutation();
   const [getParcelStatusesWithIds] = useGetParcelStatusesWithIdsMutation();
@@ -82,7 +83,7 @@ const Requests = () => {
         const row = cell.getValue();
         return (row.stepAction === 3 || row.stepAction === 4 ? row.isReturned ? <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white'>Delete</button>
           : <button className='rounded-full bg-blue-500 px-4 py-2 text-gray-50 hover:text-white' onClick={() => handleReturnedClick(row._id)}>Returned</button>
-          : row.stepAction === 0 ? <><input className='p-1 border rounded text-black ' type='number' placeholder='Enter parcel cost' value={deliveryCost} onChange={(e) => { deliveryCost = e.target.valueAsNumber }}></input><button className='rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => acceptClickButton(row._id, row.parcel_id)}>Accept</button>
+          : row.stepAction === 0 ? <><input className='p-1 border rounded text-black ' type='number' placeholder='Enter parcel cost' value={deliveryCost} onSelect={() => setDeliveryCostFlag(false)} onChange={(e) => { deliveryCost = e.target.valueAsNumber }} required></input><button className={`rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1 ${ deliveryCostFlag ? ' opacity-50' : ' opacity-100' }`} onClick={() => acceptClickButton(row._id, row.parcel_id)} disabled={deliveryCostFlag}>Accept</button>
             <button className='rounded-full bg-red-500 px-4 py-2 text-gray-50 hover:text-white m-1' onClick={() => cancelClickButton(row._id)}>Cancel</button></>
             : row.stepAction === 2 ? <><input className='p-1 border rounded text-black' type='text' placeholder='Enter phonenumber' value={deliveryMan_phonenumber} onChange={(e) => { deliveryMan_phonenumber = e.target.value }} />
               <button className={'rounded-full bg-green-500 px-4 py-2 text-gray-50 hover:text-white m-1' + (row.isDeliveryAssigned ? ' opacity-50' : ' opacity-100')} onClick={() => assignDeliveryMan(row._id)} disabled={row.isDeliveryAssigned}>Assign</button>
@@ -117,7 +118,6 @@ const Requests = () => {
     try {
       let _id = parcel_id;
       res = await getParcelWithId({ _id }).unwrap();
-      console.log(res)
       res && dispatch(getParcels(res));
     } catch (err: any) {
       toast.error(err?.data?.message || err.error);
@@ -309,7 +309,7 @@ const acceptClickButton = async (id: any, parcel_id: any) => {
       await updateParcelWithIdMutation({ _id, deliveryCost }).unwrap();
     _id = id;
     stepOne ? isPaid = true : 0;
-    stepAction ? stepAction++ : 0 ;
+    stepAction ? stepAction++ : stepAction = 1;
     res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction, isPaid, deliveryCost, isReturned, deliveryMan_phonenumber }).unwrap();
     if (res) {
       getParcelStatus();
@@ -317,6 +317,7 @@ const acceptClickButton = async (id: any, parcel_id: any) => {
 
   } catch (err: any) {
     toast.error(err?.data?.message || err.error);
+    console.log(err.error || err.data?.message);
   }
 
 
