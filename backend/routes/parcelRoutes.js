@@ -11,7 +11,7 @@ router.route('/update').put(protectAdmin, updateParcelWithId);
 router.route('/get_with_id').post(protectAdmin, getUserParcelWithId);
 router.route('/get_with_ids_admin').post(protectAdmin, getParcelsWithIds);
 router.route('/get_with_ids').post(protect, getParcelsWithIds);
-router.route('/get_parcel_with_tracker_id').post(protect, getUserParcelWithTrackerId)
+router.route('/get_with_tracker_id').post(protect, getUserParcelWithTrackerId)
 router.route('/get_with_location_pickup').post(protectAdmin, getUserParcelWithAdminLocationForPickup);
 router.route('/get_with_location_delivery').post (protectAdmin, getUserParcelWithAdminLocationForDelivery);
 

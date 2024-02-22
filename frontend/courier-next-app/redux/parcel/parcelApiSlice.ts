@@ -60,8 +60,16 @@ export const parcelApiSlice = apiSlice.injectEndpoints({
             })
         }),
 
+        getParcelWithTrackerId: builder.mutation({
+            query: (data) => ({
+                url: `${PARCEL_URL}/get_with_tracker_id`,
+                method: 'POST',
+                body: data
+            })
+        })
+
     })
 
 })
 
-export const { useSetparcelMutation, useGetparcelsMutation, useUpdateParcelWithIdMutation, useGetParcelsWithIdsMutation, useGetParcelWithIdMutation, useGetParcelWithAdminLocationPickupMutation, useGetParcelWithAdminLocationDeliveryMutation } = parcelApiSlice;
+export const { useSetparcelMutation, useGetparcelsMutation, useUpdateParcelWithIdMutation, useGetParcelsWithIdsMutation, useGetParcelWithIdMutation, useGetParcelWithAdminLocationPickupMutation, useGetParcelWithAdminLocationDeliveryMutation, useGetParcelWithTrackerIdMutation } = parcelApiSlice;
