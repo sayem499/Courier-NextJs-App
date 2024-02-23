@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, } from 'react'
 import { useRouter } from 'next/navigation';
 import Table from '@/components/table';
 import { toast } from 'react-toastify';
@@ -13,24 +13,25 @@ import { useGetParcelWithTrackerIdMutation } from '@/redux/parcel/parcelApiSlice
 
 
 const Parcel = () => {
+  
   const [getparcels, { isLoading }] = useGetparcelsMutation();
   const { user } = useAppSelector((state: any) => state.userState);
-  const { parcels } = useAppSelector((state: any)  => state.parcelState);
+  const { parcels } = useAppSelector((state: any) => state.parcelState);
   const dispatch = useAppDispatch();
   const [tracker_id, setTrackeId] = useState('');
   const [showTag, setShowTag] = useState(false);
   const [parcelData, setParcelData] = useState([]);
   const [getParcelWithTrackerId] = useGetParcelWithTrackerIdMutation();
-  
+
   const getParcelDataFunc = async (tracker_id: any) => {
-       try{
-        const parcelTempData = await getParcelWithTrackerId({tracker_id}).unwrap();
-        setParcelData(parcelTempData)
-        setShowTag(true);
-       }catch(err: any){
-        toast.error(err.error || err.data.message);
-       } 
-    } 
+    try {
+      const parcelTempData = await getParcelWithTrackerId({ tracker_id }).unwrap();
+      setParcelData(parcelTempData)
+      setShowTag(true);
+    } catch (err: any) {
+      toast.error(err.error || err.data.message);
+    }
+  }
 
 
   let hiddenCols = { courierType: true, parcelPrice: true, cashCollectionAmount: true };
@@ -108,7 +109,7 @@ const Parcel = () => {
       accessorFn: (row: any) => row,
       cell: (cell: any) => {
         const row = cell.getValue();
-        return(<><button onClick={() => handleViewTag(row.tracker_id)} className='w-12 h-8 bg-gray-300 text-black rounded-md shadow-md'>Tag</button></>)
+        return (<><button onClick={() => handleViewTag(row.tracker_id)} className='w-12 h-8 bg-gray-300 text-black rounded-md shadow-md'>Tag</button></>)
       },
     },
   ]
@@ -139,10 +140,10 @@ const Parcel = () => {
           {parcels.length > 0 ? <Table data={parcels} columns={columns} hiddenCols={hiddenCols} /> : 'Loading...'}
         </div>
       </div>
-        {
-          showTag && <Parceltag closeParceltag={closeParceltag} tracker_id={tracker_id} parcelData={parcelData}/>
-        }
-          
+      {
+        showTag && <Parceltag closeParceltag={closeParceltag} tracker_id={tracker_id} parcelData={parcelData} />
+      }
+
     </div>
   )
 }
