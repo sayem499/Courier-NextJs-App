@@ -21,6 +21,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import { v4 as uuidv4 } from 'uuid';
+import BarcodeReader from 'react-barcode-reader';
 
 
 
@@ -282,6 +283,14 @@ const Requests = () => {
 
 }
 
+const handleScan = (data: string) => {
+  parcelStatuses.map((parcelStatus: any) => {
+    if(parcelStatus._id === data){
+      acceptClickButton(parcelStatus._id, parcelStatus.parcel_id);
+    }
+  })
+
+}
 
 //function to update parcel status
 const acceptClickButton = async (id: any, parcel_id: any) => {
@@ -447,6 +456,10 @@ let hiddenCols = {};
 
 return (
   <div className='h-[100%] w-[100%] flex flex-col items-center z-0'>
+    <BarcodeReader
+      onScan={handleScan}
+      onError={(data: any) => toast.error(data)}
+    />
     <div className='h-[20%] w-[70] flex items-center'>
       <button onClick={stepZeroSelected} className={`m-2 h-fit w-fit ${stepZero ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`}>Approval</button>
       <button onClick={stepOneSelected} className={`m-2 h-fit w-fit ${stepOne ? 'border-b-4  border-b-blue-500  dark:border-b-indigo-500' : ''}`}>Pick-up</button>
