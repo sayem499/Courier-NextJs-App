@@ -137,9 +137,10 @@ const Header: React.FC = () => {
     return (
         <>
             <header className={`flex w-full h-[10%] justify-between items-center dark:bg-slate-700  bg-slate-50 ${showLogin ? '' : 'drop-shadow-md'}`}>
-
-                <span className="text-sm text-slate-900 dark:text-slate-300 md:text-xl xl:text-3xl ml-5 italic ">NextCourier-&gt;</span>
-
+                <div className='flex justify-normal items-center bg-slate-50 ml-6 rounded-sm dark:shadow-white '>
+                    <span className="text-sm text-slate-900 md:text-xl xl:text-3xl ml-5 italic ">NextCourier</span>
+                    <img className='w-14 h-12 mr-6' src={'/fast-delivery-truck.png'}/>
+                </div>
                 {user ? <button className=' sm:flex items-center justify-center hidden h-[60%] w-[10%]  
                     dark:border  rounded-lg text-sm shadow-md' onClick={openTrack}><GpsFixedIcon className='text-sm mr-1' />Track Parcel</button> : ''}
 

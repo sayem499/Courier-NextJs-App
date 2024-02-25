@@ -62,7 +62,7 @@ const Track: React.FC<{ closeTrack: (event: React.MouseEvent<HTMLDivElement> | v
             <div className='h-[85%] w-[75%] flex flex-col items-center bg-white dark:bg-slate-700 pt-28 rounded '>
                 {user && <div className='flex'>
                     <input value={trackerId} onChange={e => setTrackerId(e.target.value)} placeholder='Enter tracker ID'
-                        className='rounded-l-md text-center text-black' type='text'></input>
+                        className='rounded-l-md text-center text-black border-2 dark:border-none' type='text'></input>
 
                     <button className="bg-blue-500 hover:bg-blue-700 hover:shadow-blue-500
                      text-white sm:text-xs text-sm p-2 item-center rounded-r-md" onClick={handleClick}>Track</button>
@@ -94,7 +94,7 @@ const Track: React.FC<{ closeTrack: (event: React.MouseEvent<HTMLDivElement> | v
 
                 </div>
 
-                {parcelStatus && <div className='h-[50%] w-[70%] bg-white rounded-md pt-2 flex flex-col overflow-scroll'>
+                {parcelStatus && <div className='h-[50%] w-[70%] bg-white rounded-md pt-2 flex flex-col overflow-scroll border-2 dark:border-none'>
                     {
                         parcelStatus?.parcelStatus.map((item) => (
                             <span className='m-2 text-black text-sm'>{item}</span>
