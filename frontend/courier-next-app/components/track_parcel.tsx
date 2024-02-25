@@ -73,7 +73,7 @@ const Track: React.FC<{ closeTrack: (event: React.MouseEvent<HTMLDivElement> | v
                     {parcelStatus && <ul className=' w-[100%] h-[100%] flex justify-center m-auto text-sm' id='progress-ul'>
                         {steps.map((item, index) => (
                             
-                                <li className='flex flex-col h-[90%] w-[10%]'>
+                                <li key={index} className='flex flex-col h-[90%] w-[10%]'>
                                     <section className={`flex items-center h-[50%] w-[100%] ml-5
                                         after:content-[" "] after:h-1 after:w-[100%] ${index === 3 ? 'after:bg-transparent' : ''}
                                         ${index < 3 && parcelStatus && parcelStatus.stepAction <= index   ? 'dark:after:bg-gray-400  after:bg-gray-200': ' after:bg-green-500'}
@@ -97,7 +97,7 @@ const Track: React.FC<{ closeTrack: (event: React.MouseEvent<HTMLDivElement> | v
                 {parcelStatus && <div className='h-[50%] w-[70%] bg-white rounded-md pt-2 flex flex-col overflow-scroll border-2 dark:border-none'>
                     {
                         parcelStatus?.parcelStatus.map((item) => (
-                            <span className='m-2 text-black text-sm'>{item}</span>
+                            <span key={item} className='m-2 text-black text-sm'>{item}</span>
                         ))
 
 

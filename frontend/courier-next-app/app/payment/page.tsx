@@ -16,7 +16,12 @@ const Payment = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    getTableData();
+    if(!user){
+      router.push('/');
+    }else{
+      getTableData();
+    }
+    
   },[])
 
   const hiddenCols = {}
@@ -54,13 +59,13 @@ const Payment = () => {
     }
   }
 
-  return user ? (
+  return (
     <div className="h-[100%] w-[100%] flex flex-col">
       <div className='flex items-center justify-center h-[100%] w-[100%]'>
       { parcelStatuses.length > 0 ? <Table data={parcelStatuses} columns={columns} hiddenCols={hiddenCols}/> : 'Loading...' }
       </div>
     </div>
-  ) : router.push('/');
+  ) 
 }
 
 export default Payment
