@@ -6,6 +6,7 @@ interface Admin {
     admin_email: string,
     admin_password: string,
     admin_location: string,
+    admin_token: string,
 }
 
 type AdminState = {

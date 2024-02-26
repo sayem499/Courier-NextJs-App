@@ -26,12 +26,13 @@ const authUser = asyncHandler ( async (req, res) => {
     const body = req.body;
     const user = await Users.findOne({user_email: body.user_email})
     if( user && (await bcrypt.compare(body.user_password, user.user_password)) ) {
-        generateToken(res, user._id);
+       let token = generateToken(res, user._id);
         res.status(201).json({
             _id: user._id,
             user_firstname: user.user_firstname,
             user_lastname: user.user_lastname,
             user_email: user.user_email,
+            user_token: token,
         });
     } else {
         res.status(400);
@@ -73,12 +74,13 @@ const registerUser = asyncHandler ( async (req, res) => {
     });
 
     if(user) {
-        generateToken(res, user._id);
+        let token = generateToken(res, user._id);
         res.status(201).json({
             _id: user._id,
             user_firstname: user.user_firstname,
             user_lastname: user.user_lastname,
             user_email: user.user_email,
+            user_token: token
         });
     } else {
         res.status(400);
@@ -155,9 +157,10 @@ const generateToken = (res, _id) => {
     httpOnly: process.env.NODE_ENV === 'development',
     secure: process.env.NODE_ENV !== 'development',
     sameSite: 'strict',
-    domain: '.netlify.app',
     maxAge:  24 * 60 * 60 * 1000 ,
    });
+
+   return token;
 }
 
 export { tokenCheck, authUser, registerUser, logoutUser, getUserProfile, updateUserProfile };

@@ -5,8 +5,12 @@ import Admins from '../models/adminModel.js';
 
 const protect = expressAsyncHandler( async (req, res, next) => {
     let token;
-
-    token = req.cookies.jwt;
+    if(req.cookies.jwt){
+        token = req.cookies.jwt
+    }else if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+        token = req.headers.authorization.split(' ')[1];
+    }
+     
 
     if (token) {
         try {
@@ -25,7 +29,13 @@ const protect = expressAsyncHandler( async (req, res, next) => {
 });
 
 const protectAdmin = expressAsyncHandler( async (req, res, next) => {
-    let token = req.cookies.jwtadmin;
+    let token;
+
+    if(req.cookies.jwtadmin){
+        token = req.cookies.jwtadmin;
+    }else if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+        token = req.headers.authorization.split(' ')[1];
+    }
 
     if(token){
 

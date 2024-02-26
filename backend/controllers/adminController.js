@@ -22,11 +22,12 @@ const authAdmin = expressAsyncHandler( async (req, res) => {
     const body = req.body;
     const admin = await Admins.findOne({admin_email: body.admin_email});
     if( admin && (await bcrypt.compare(body.admin_password, admin.admin_password))){
-        generateToken(res, body._id);
+       let token = generateToken(res, body._id);
         res.status(201).json({
             _id: admin._id,
             admin_email: admin.admin_email,
             admin_location: admin.admin_location,
+            admin_token: token,
         })
     }else {
         res.status(400);
@@ -139,9 +140,10 @@ const generateToken = (res, _id) => {
      httpOnly: process.env.NODE_ENV === 'development',
      secure: process.env.NODE_ENV !== 'development',
      sameSite: 'strict',
-     domain: '.netlify.app',
      maxAge:  6 * 60 * 60 * 1000 ,
     });
+
+    return token;
  }
 
 export { adminTokenCheck, getAdmin, authAdmin, registerAdmin, logoutAdmin, updateAdminData };

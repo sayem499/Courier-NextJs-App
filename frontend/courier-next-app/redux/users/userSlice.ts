@@ -8,6 +8,7 @@ interface User {
     user_lastname: string;
     user_email: string;
     user_phonenumber: string;
+    user_token: string;
 };
 
 

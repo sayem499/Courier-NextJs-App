@@ -1,6 +1,21 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'; 
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { RootState } from '@/app/store';
 
-const baseQuery = fetchBaseQuery({baseUrl:'https://courier-nextjs-app.onrender.com', credentials: 'include'});
+const baseQuery = fetchBaseQuery({
+    baseUrl:'https://courier-nextjs-app.onrender.com',
+    credentials: 'include',
+    prepareHeaders: (headers, { getState }) => {
+        let token = null;
+        if ((getState() as RootState).userState.user)
+            token = (getState() as RootState).userState.user?.user_token
+        if ((getState() as RootState).adminState.admin)
+            token = (getState() as RootState).adminState.admin?.admin_token
+        if (token) {
+            headers.set('authorization', `Bearer ${token}`)
+        }
+        return headers;
+    },
+});
 
 export const apiSlice = createApi({
     baseQuery,
