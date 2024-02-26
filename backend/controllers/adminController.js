@@ -139,7 +139,7 @@ const generateToken = (res, _id) => {
      httpOnly: process.env.NODE_ENV === 'development',
      secure: process.env.NODE_ENV !== 'development',
      sameSite: 'strict',
-     domain: 'couriernext.netlify.app',
+     domain: '.netlify.app',
      maxAge:  6 * 60 * 60 * 1000 ,
     });
  }
