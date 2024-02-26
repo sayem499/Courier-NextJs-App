@@ -16,11 +16,6 @@ function Home() {
     if(!user){
       router.push('/');
     }
-
-    if (user) {
-      tokenCheck();
-      router.push('/home');
-  } 
   })
   const tokenCheck = async () => {
     try {

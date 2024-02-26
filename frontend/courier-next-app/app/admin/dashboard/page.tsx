@@ -19,11 +19,6 @@ useEffect(() => {
   if(!admin){
     router.push('/admin');
   }
-  if (admin) {
-    adminTokenCheck();
-    router.push('/admin/dashboard');
-}
-  
 },[admin])
 
 const adminTokenCheck = async () => {
