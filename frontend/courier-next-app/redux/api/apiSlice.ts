@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'; 
 
-const baseQuery = fetchBaseQuery({baseUrl:'http://localhost:8000', credentials: 'include'});
+const baseQuery = fetchBaseQuery({baseUrl:'https://courier-nextjs-app.onrender.com', credentials: 'include'});
 
 export const apiSlice = createApi({
     baseQuery,
