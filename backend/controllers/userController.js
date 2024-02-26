@@ -155,6 +155,7 @@ const generateToken = (res, _id) => {
     httpOnly: process.env.NODE_ENV === 'development',
     secure: process.env.NODE_ENV !== 'development',
     sameSite: 'strict',
+    domain: 'https://couriernext.netlify.app',
     maxAge:  24 * 60 * 60 * 1000 ,
    });
 }
