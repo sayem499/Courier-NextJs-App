@@ -5,10 +5,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import React, { useState, useEffect } from 'react';
 import Dropdownmenu from './dropdownmenu';
 import { useLogoutMutation } from '@/redux/users/userApiSlice';
-import { useCheckTokenMutation } from '@/redux/users/userApiSlice';
-import { useCheckTokenAdminMutation } from '@/redux/admin/adminApiSlice';
-import { useLogoutAdminMutation } from '@/redux/admin/adminApiSlice';
-import { logoutAdmin } from '@/redux/admin/adminSlice';
 import { logout } from '@/redux/users/userSlice';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useRouter, usePathname } from 'next/navigation';
@@ -17,6 +13,8 @@ import Nav from './nav_options';
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 import { toast } from 'react-toastify';
 import Track from './track_parcel';
+import { useLogoutAdminMutation } from '@/redux/admin/adminApiSlice';
+import { logoutAdmin } from '@/redux/admin/adminSlice';
 
 
 const Header: React.FC = () => {
@@ -24,27 +22,16 @@ const Header: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
     const [showTrack, setShowTrack] = useState(false);
+    const [logoutAdminApi] = useLogoutAdminMutation();
 
     const dispatch = useAppDispatch();
     const router = useRouter();
     const path = usePathname();
     const [logoutApi] = useLogoutMutation();
-    const [checkToken] = useCheckTokenMutation();
-    const [logoutAdminApi] = useLogoutAdminMutation();
-    const [checkAdminToken] = useCheckTokenAdminMutation();
     const { user } = useAppSelector(state => state.userState);
     const { admin } = useAppSelector(state => state.adminState);
 
     useEffect(() => {
-
-        if (user && !admin) {
-            tokenCheck();
-            router.push('/home');
-        } else if (admin && !user) {
-            adminTokenCheck();
-            router.push('/admin/dashboard');
-        }
-
         const themePreference = window.matchMedia('(prefers-color-scheme: dark)').matches;
         if (appMode === 'dark') {
             document.documentElement.classList.add('dark');
@@ -55,37 +42,6 @@ const Header: React.FC = () => {
         }
 
     }, [appMode, user, router])
-
-    const tokenCheck = async () => {
-        try {
-            await checkToken().unwrap();
-            return;
-        } catch (err: any) {
-            if (err?.data?.message === 'Not authorized, no token!') {
-                await logoutApi().unwrap();
-                dispatch(logout());
-                router.push('/');
-                toast.error(err?.data?.message || err.error);
-                toast.error('Please login again!');
-            }
-
-        }
-    }
-
-    const adminTokenCheck = async () => {
-        try {
-            await checkAdminToken().unwrap();
-            return;
-        } catch (err: any) {
-            if (err?.data?.message === 'Not authorizied, no token!') {
-                await logoutAdminApi().unwrap();
-                dispatch(logoutAdmin());
-                router.push('/admin');
-                toast.error(err?.data?.message || err.error);
-                toast.error('Please login again!');
-            }
-        }
-    }
 
     const logoutFunction = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();

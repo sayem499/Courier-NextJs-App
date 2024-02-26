@@ -1,20 +1,42 @@
 "use client"
 import { useRouter } from "next/navigation";
-import { useAppSelector } from "../hooks"
+import { useAppSelector, useAppDispatch } from "../hooks"
 import { useEffect } from "react";
+import { useCheckTokenMutation } from '@/redux/users/userApiSlice';
+import { logout } from '@/redux/users/userSlice';
+import { toast } from "react-toastify";
 
 function Home() {
-
+  const dispatch = useAppDispatch();
   const {user} = useAppSelector( state => state.userState);
   const router = useRouter();
+  const [checkToken] = useCheckTokenMutation();
 
   useEffect(() => {
     if(!user){
       router.push('/');
-     }
+    }
+
+    if (user) {
+      tokenCheck();
+      router.push('/home');
+  } 
   })
-  
-  return (
+  const tokenCheck = async () => {
+    try {
+        await checkToken().unwrap();
+        return;
+    } catch (err: any) {
+        if (err?.data?.message === 'Not authorized, no token!') {
+            dispatch(logout());
+            router.push('/');
+            toast.error(err?.data?.message || err.error);
+            toast.error('Please login again!');
+        }
+
+    }
+}
+return (
     <div className="h-[100%] w-[100%] flex flex-col">
       <div className="h-[30%] w-[100%] flex ">
 
