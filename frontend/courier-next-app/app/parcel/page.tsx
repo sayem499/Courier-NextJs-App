@@ -134,9 +134,9 @@ const Parcel = () => {
   }
 
   return (
-    <div className="h-[100%] w-[100%] flex flex-col overflow-auto items-center">
+    <div className="h-[100%] w-[100%] flex flex-col overflow-scroll items-center">
       <div className='h-[100%] w-[100%] flex items-center justify-center'>
-        <div className='h-[100%] w-[100%] flex items-center justify-center '>
+        <div className='h-[100%] w-[100%] flex items-center justify-center overflow-scroll'>
           {parcels.length > 0 ? <Table data={parcels} columns={columns} hiddenCols={hiddenCols} /> : 'Loading...'}
         </div>
       </div>

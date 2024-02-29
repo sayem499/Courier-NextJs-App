@@ -1,6 +1,7 @@
 import Imageslider from '@/components/imageslider';
 import Choice from '@/components/choice_section';
 import Signup from '@/components/signup_section';
+import '../globals.css'
 
 interface Slide {
   url: string;
@@ -27,7 +28,7 @@ export default function Home() {
     <>
 
     
-      <div className="flex w-full h-[100%] flex-col justify-center md:justify-start overflow-auto">
+      <div className="flex w-full h-[100%] flex-col justify-center md:justify-start overflow-auto no-scrollbar">
         <div className='flex w-full h-full md:justify-start 
           justify-center sm:flex-row sm:h-full flex-col'>
 

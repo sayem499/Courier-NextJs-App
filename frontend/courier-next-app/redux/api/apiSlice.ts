@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '@/app/store';
 
 const baseQuery = fetchBaseQuery({
-    baseUrl:'https://courier-nextjs-app.onrender.com',
+    baseUrl:'https://courier-nextjs-app.onrender.com' && 'http://localhost:8000',
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
         let token = null;

@@ -1,4 +1,4 @@
-import './globals.css'
+import '../globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import  Providers  from './provider'
@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en" className='w-full h-full'>
       
       <body className={`${inter.className} w-full h-full dark:bg-slate-900
-       bg-white text-black dark:text-slate-300 `}>
+       bg-white text-black dark:text-slate-300  no-scrollbar`}>
         <Providers>
           <Header/>
           <ToastContainer/>

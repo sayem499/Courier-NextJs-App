@@ -92,28 +92,31 @@ const Header: React.FC = () => {
 
     return (
         <>
-            <header className={`flex w-full h-[10%] justify-between items-center dark:bg-slate-700  bg-slate-50 ${showLogin ? '' : 'drop-shadow-md'}`}>
-                <div className='flex justify-normal items-center bg-slate-50 ml-6 rounded-sm dark:shadow-white '>
-                    <span className="text-sm text-slate-900 md:text-xl xl:text-3xl ml-5 italic ">NextCourier</span>
-                    <img className='w-14 h-12 mr-6' src={'/fast-delivery-truck.png'}/>
+            <header className={`flex w-full h-[10%] md:justify-center justify-between items-center dark:bg-slate-700  bg-slate-50 ${showLogin ? '' : 'drop-shadow-md'}`}>
+                <div className='inline-flex w-[20%] sm:[15%] h-[85%] justify-center items-center bg-slate-50 ml-4 rounded-sm dark:shadow-white mr-4'>
+                    <span className="md:text-sm lg:text-base test-xs text-slate-900 ml-1 italic ">NextCourier</span>
+                    <img className='md:w-[20%] md:h-[70%] h-6 w-10 mr-1' src={'/fast-delivery-truck.png'} />
                 </div>
-                {user ? <button className=' sm:flex items-center justify-center hidden h-[60%] w-[10%]  
+                <div className='sm:inline-flex hidden w-[70%] h-[100%] justify-center items-center'>
+                    {user ? <button className='xl:flex hidden items-center justify-center h-[70%] w-[15%]  
                     dark:border  rounded-lg text-sm shadow-md' onClick={openTrack}><GpsFixedIcon className='text-sm mr-1' />Track Parcel</button> : ''}
 
-                <Nav user={user} admin={admin} />
+                    <Nav user={user} admin={admin} />
 
 
-                {user ? <div className='sm:flex items-center justify-center hidden w-[10%] h-[60%]'>
+                    {user ? <div className='xl:flex items-center justify-center hidden w-[15%] h-[100%] '>
 
-                    <button className='h-[100%] w-[100%] border rounded-lg text-sm dark:bg-transparent
-                     hover:text-white text-slate-100 bg-blue-500' onClick={routeNewParcel}>Create Parcel</button>
-
-
-                </div> : ''
-                }
+                        <button className='h-[70%] w-[100%] border rounded-lg text-sm dark:bg-transparent
+                     hover:text-white text-slate-100 bg-blue-500 p-2' onClick={routeNewParcel}>Create Parcel</button>
 
 
-                <div className='sm:flex items-center justify-between hidden'>
+                    </div> : ''
+                    }
+                </div>
+
+
+                
+                <div className='xl:flex items-center justify-between hidden'>
                     {appMode === 'light' ? <button className='m-5' onClick={(event) => changeMode(event, 'dark')}>
                         <LightModeOutlinedIcon className='text-slate-900 dark:text-slate-300' /></button> :
                         <button className='m-5' onClick={(event) => changeMode(event, 'light')}><DarkModeOutlinedIcon
@@ -131,7 +134,7 @@ const Header: React.FC = () => {
                     }
 
                     {
-                         admin ? <button onClick={logoutAdminFunction}
+                        admin ? <button onClick={logoutAdminFunction}
                             className="mr-5 rounded-full bg-red-500 
                         px-4 py-2 text-gray-50 hover:text-white">Logout</button>
 
@@ -140,7 +143,7 @@ const Header: React.FC = () => {
 
                 </div>
 
-                <div className='flex mr-5 items-center cursor-pointer sm:hidden'>
+                <div className='flex mr-5 items-center cursor-pointer xl:hidden'>
                     {appMode === 'light' ? <button className='m-5' onClick={(event) => changeMode(event, 'dark')}>
                         <LightModeOutlinedIcon className='text-slate-900 dark:text-slate-300' /></button> :
                         <button className='m-5' onClick={(event) => changeMode(event, 'light')}><DarkModeOutlinedIcon
@@ -148,7 +151,7 @@ const Header: React.FC = () => {
 
                     <MenuIcon className='dark:text-slate-300 text-black' onClick={(event: React.MouseEvent<SVGSVGElement>) => menuOpen(event)} />
 
-                    {isMenuOpen && <Dropdownmenu />}
+                    {isMenuOpen && <Dropdownmenu openTrack={openTrack} />}
                 </div>
 
             </header>

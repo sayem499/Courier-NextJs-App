@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../hooks';
 import { useRouter } from 'next/navigation';
 import Table from '@/components/table';
 import { getParcelStatuses } from '@/redux/parcelStatus/parcelStatusSlice';
-import { useGetParcelStatusWithStepActionMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
+import { useGetParcelStatusWithSenderIdMutation } from '@/redux/parcelStatus/parcelStatusApiSlice';
 import { toast } from 'react-toastify';
 
 const Return = () => {
@@ -13,7 +13,7 @@ const Return = () => {
   const { parcelStatuses } = useAppSelector(state => state.parcelStatusState);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [getParcelStatusWithActionStatus, { isLoading }] = useGetParcelStatusWithStepActionMutation();
+  const [getParcelStatusWithSenderId, { isLoading }] = useGetParcelStatusWithSenderIdMutation();
 
   useEffect(() => {
     if (!user) {
@@ -24,10 +24,10 @@ const Return = () => {
   },[])
 
   const getData = async () => {
-    let stepAction = 4;
+    let sender_id = user?._id
     try {
 
-      const res = await getParcelStatusWithActionStatus({ stepAction }).unwrap();
+      const res = await getParcelStatusWithSenderId({ sender_id }).unwrap();
       dispatch(getParcelStatuses(res));
 
     } catch (err: any) {
