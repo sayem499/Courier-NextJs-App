@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 
@@ -8,11 +8,13 @@ const logoImg = require('../assets/fast-delivery-truck.png');
 
 
 const HomeScreen = ({navigation}) => {
-  const { deliveryMan } = useSelector(state => state.deliveryManState);
+
+  const {appTheme} = useSelector(state => state.themeState);
+
 
   useState(()=> {
   },[])
-  
+
   const openPicked = () => {
     navigation.push('PickedParcelScreen');
   }

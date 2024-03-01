@@ -3,12 +3,16 @@ import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setDeliveryMan } from "../redux/deliveryMan/deliveryManSlice";
+import { setThemeState } from "../redux/theme/themeSlice";
+import {Appearance} from 'react-native';
 
 const logoImg = require('../assets/fast-delivery-truck.png');
 
 
 
 function SplashScreen({ navigation }) {
+  const {appTheme} = useSelector(state => state.themeState);
+  const systemTheme = Appearance.getColorScheme();
   const dispatch = useDispatch();
   const slideInAnim = useRef(new Animated.Value(0)).current;
   const startAnimation = () => {
@@ -19,6 +23,7 @@ function SplashScreen({ navigation }) {
     }).start();
   }
   useEffect(() => {
+    getThemeData();  
     startAnimation();
 
     const getStorageData = async () => {
@@ -39,20 +44,20 @@ function SplashScreen({ navigation }) {
 
     }
     getStorageData()
-
     
-
   }, [])
-  const removeItem = async () => {
-    try {
-      await AsyncStorage.removeItem('deliveryman');
-    } catch (err) {
+  
+  const getThemeData = async () => {
+    try{
+      const val = await AsyncStorage.getItem('theme');
+      if(val === 'dark' || val === 'light')
+        dispatch(setThemeState(val));
+      else
+        dispatch(setThemeState(systemTheme));
+    }catch(err){
       console.error(err);
     }
-
   }
-
-  
 
   return (
     <View style={styles.splashView_container}>
