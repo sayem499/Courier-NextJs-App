@@ -1,14 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLogoutDeliveryManMutation } from '../redux/deliveryMan/deliveryManApiSlice';
 import { resetDeliveryMan, setDeliveryMan } from '../redux/deliveryMan/deliveryManSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RadioButton } from 'react-native-paper';
+import { setThemeState } from '../redux/theme/themeSlice';
+import {Appearance} from 'react-native';
 
 const SettingsScreen = ({ navigation }) => {
+  const { appTheme } = useSelector(state => state.themeState);
+  const systemTheme = Appearance.getColorScheme();
   const { deliveryMan } = useSelector(state => state.deliveryManState);
   const profileImg = require('../assets/profileImg.jpg'); 
   const [logoutDeliveryManMutation] = useLogoutDeliveryManMutation();
+  const [radioValue, setRadioValue] = useState('');
   const dispatch = useDispatch();
   let temp;
 
@@ -16,8 +22,31 @@ const SettingsScreen = ({ navigation }) => {
     if(deliveryMan.length === 0){
       getDeliveryManData();      
     }
+    getThemeData();
 
   }, [deliveryMan])
+
+  const getThemeData = async () => {
+    try{
+      const val = await AsyncStorage.getItem('theme');
+      if(val === 'dark' || val === 'light')
+        dispatch(setThemeState(val));
+      else
+      dispatch(setThemeState(systemTheme));
+      setRadioValue(val);
+    }catch(err){
+      console.error(err.error);
+    }
+  }
+
+  const setThemeData = async (data) => {
+    try {
+      await AsyncStorage.setItem('theme', data); 
+      setRadioValue(data);
+    } catch (err) {
+      console.error(err.error);
+    }
+  }
   
   const getDeliveryManData = async () => {
     try {
@@ -60,7 +89,41 @@ const SettingsScreen = ({ navigation }) => {
       </View>
       <View style={styles.settingsBottom_InnerContianer}>
         <View style={styles.settingsMenu_Container}>
-          <Text>SettingsScreen</Text>
+          <View style={styles.themeMode}>
+            <Text style={styles.settingsTitle}>Theme</Text>
+            <View style={styles.radioGroup}>
+              <View style={styles.radioButtonGroup}>
+                <Text style={styles.radioButtonLabel}>Dark</Text>
+                <RadioButton.Android 
+                  style={styles.radioButton}
+                  value='dark' 
+                  onPress={() => setThemeData('dark')} 
+                  status={radioValue === 'dark' ? 'checked' : 'unchecked'} 
+                  color="#007BFF"
+                  uncheckedColor='black'/>
+              </View>
+              <View style={styles.radioButtonGroup}>
+                <Text style={styles.radioButtonLabel}>Light</Text>
+                <RadioButton.Android 
+                  style={styles.radioButton}
+                  value='light' 
+                  onPress={() => setThemeData('light')} 
+                  status={radioValue === 'light' ? 'checked' : 'unchecked'} 
+                  color="#007BFF"
+                  uncheckedColor='black'/>
+              </View>
+              <View style={styles.radioButtonGroup}>
+                <Text style={styles.radioButtonLabel}>System</Text>
+                <RadioButton.Android 
+                  style={styles.radioButton}
+                  value='system' 
+                  onPress={() => setThemeData('system')} 
+                  status={radioValue === 'system' ? 'checked' : 'unchecked'} 
+                  color="#007BFF"
+                  uncheckedColor='black'/>
+              </View>
+            </View>
+          </View>
         </View>
         <View style={styles.logout_Button_Container}>
           <Pressable style={styles.logout_Button} onPress={logOut}>
@@ -92,11 +155,13 @@ const styles = StyleSheet.create({
   },
 
   settingsBottom_InnerContianer: {
-    height: '70%', width: '90%', backgroundColor: 'white', borderRadius: 10, padding: '10%', marginBottom: 30,
+    height: '70%', width: '90%', backgroundColor: 'white', borderRadius: 10, paddingTop: '10%', 
+    paddingLeft: '3%', paddingRight: '3%', marginBottom: 30,
   },
 
   logout_Button: {
-    height: 50, width: '70%', borderRadius: 5, backgroundColor: '#cc2b2b', alignItems: 'center', justifyContent: 'center',
+    height: '100%', width: '70%', borderRadius: 5, backgroundColor: '#cc2b2b', 
+    alignItems: 'center', justifyContent: 'center',
   },
 
   logout_Text: {
@@ -104,12 +169,38 @@ const styles = StyleSheet.create({
   },
 
   logout_Button_Container: {
-    alignItems: 'center',
+    alignItems: 'center', height: '10%', width: '100%', justifyContent: 'center',
   },
 
   settingsMenu_Container: {
+    justifyContent: 'flex-start', alignItems: 'center', width: '100%', height: '85%',
+  },
 
-  }
+  themeMode: {
+    width:'100%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', 
+    borderRadius: 2, borderColor: 'black', height: '15%', borderBottomWidth: 0.2,
+  },
+
+  radioGroup: {
+    flexDirection: 'row', width:'50%', alignItems: 'center', justifyContent: 'center',
+     height: '100%', marginLeft: 70,
+    
+  },
+
+  radioButtonGroup:{
+    justifyContent: 'center', alignitems: 'center', marginLeft: 20,
+  }, 
+  
+  settingsTitle: {
+    fontSize: 15,
+  },
+
+  radioButton: {
+  },
+
+  radioButtonLabel: {
+    fontSize: 12, color: 'gray',
+  },  
 })
 
 export default SettingsScreen;
