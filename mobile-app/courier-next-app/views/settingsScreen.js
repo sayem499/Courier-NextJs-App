@@ -16,7 +16,6 @@ const SettingsScreen = ({ navigation }) => {
   const [logoutDeliveryManMutation] = useLogoutDeliveryManMutation();
   const [radioValue, setRadioValue] = useState('');
   const dispatch = useDispatch();
-  let temp;
 
   useEffect(() => {
     if(deliveryMan.length === 0){
@@ -43,6 +42,10 @@ const SettingsScreen = ({ navigation }) => {
     try {
       await AsyncStorage.setItem('theme', data); 
       setRadioValue(data);
+      if(data === 'dark' || data === 'light')
+        dispatch(setThemeState(data));
+      else
+        dispatch(setThemeState(systemTheme));
     } catch (err) {
       console.error(err.error);
     }
