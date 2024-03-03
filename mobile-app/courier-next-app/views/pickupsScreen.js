@@ -13,6 +13,7 @@ import { useGetParcelsWithTrackerIdMutation } from '../redux/parcel/parcelApiSli
 
 
 const PickupsScreen = ({ navigation }) => {
+  const { appTheme } = useSelector((state) => state.themeState);
   const dispatch = useDispatch();
   const { deliveryMan } = useSelector((state) => state.deliveryManState);
   const [searchText, setSearchText] = useState('');
@@ -22,7 +23,6 @@ const PickupsScreen = ({ navigation }) => {
   const [getParcelsWithTrackerId] = useGetParcelsWithTrackerIdMutation();
   const isFocused = useIsFocused();
   const [refresh, setRefresh] = useState(false);
-  let temp;
   const [getDeliveryWithPhonenumber] = useGetDeliveryWithPhonenumberMutation();
 
   const onRefresh = () => {
@@ -130,11 +130,11 @@ const PickupsScreen = ({ navigation }) => {
 
 
   return (
-    <View style={styles.pickupsScreen_container}>
+    <View style={[styles.pickupsScreen_container, appTheme === 'dark' ? styles.bgColorDark1 : styles.bgColorLight1]}>
       <View style={styles.searchBar_container}>
-        <TextInput style={[styles.searchInput, styles.boxShadow]} placeholder='Search...' value={searchText} onChangeText={setSearchText} />
-        <Pressable style={[styles.searchButton, styles.boxShadow]} onPress={searchDeliveries}>
-          <AntDesign name="search1" size={24} color="black" />
+        <TextInput style={[styles.searchInput, styles.boxShadow, appTheme === 'dark' ? styles.textColorDark : styles.textColorLight, appTheme === 'dark' ? styles.bgColorDark2 : styles.bgColorLight2, appTheme === 'dark' ? styles.boxShadowDark : styles.boxShadowLight]} placeholder='Search...' placeholderTextColor={appTheme === 'dark' ? '#d6d6d6' : 'gray'} value={searchText} onChangeText={setSearchText} />
+        <Pressable style={[styles.searchButton, styles.boxShadow, appTheme === 'dark' ? styles.bgColorDark2 : styles.bgColorLight2]} onPress={searchDeliveries}>
+          <AntDesign name="search1" size={24} color={appTheme === 'dark' ? '#d6d6d6' : 'black'} />
         </Pressable>
       </View>
 
@@ -143,20 +143,20 @@ const PickupsScreen = ({ navigation }) => {
         {
           showSearchResult ? parcelStatuses?.filter((item) => (item._id.toLowerCase().includes(searchText.toLowerCase()) && item.isPicked !== true)).map((item) => {
             return <Pressable style={styles.pickupsCardPressable} key={item._id} onPress={() => navigation.push('DeliveryDetailsScreen', { item: item._id, isPickup: true })}>
-              <View style={[styles.pickupsCard, styles.boxShadow]}>
-                <Text style={styles.cardInnerTextStyles} >{item._id}</Text>
+              <View style={[styles.pickupsCard, styles.boxShadow, appTheme === 'dark' ? styles.bgColorDark2 : styles.bgColorLight2, appTheme === 'dark' ? styles.boxShadowDark : styles.boxShadowLight]}>
+                <Text style={[styles.cardInnerTextStyles, appTheme === 'dark' ? styles.textColorDark : styles.textColorLight]} >{item._id}</Text>
                 <Pressable onPress={() => callNumber(item)}>
-                  <FontAwesome name="mobile-phone" size={40} color="black" />
+                  <FontAwesome name="mobile-phone" size={40} color={appTheme === 'dark' ? '#d6d6d6' : "black"} />
                 </Pressable>
               </View>
             </Pressable>
           }) :
             parcelStatuses?.filter((item) => (item.isPicked !== true)).map((item) => {
               return <Pressable style={styles.pickupsCardPressable} key={item._id} onPress={() => navigation.push('DeliveryDetailsScreen', { item: item._id, isPickup: true })}>
-                <View style={[styles.pickupsCard, styles.boxShadow]}>
-                  <Text style={styles.cardInnerTextStyles} >{item._id}</Text>
+                <View style={[styles.pickupsCard, styles.boxShadow, appTheme === 'dark' ? styles.bgColorDark2 : styles.bgColorLight2, appTheme === 'dark' ? styles.boxShadowDark : styles.boxShadowLight]}>
+                  <Text style={[styles.cardInnerTextStyles, appTheme === 'dark' ? styles.textColorDark : styles.textColorLight]} >{item._id}</Text>
                   <Pressable onPress={() => callNumber(item)}>
-                    <FontAwesome name="mobile-phone" size={40} color="black" />
+                    <FontAwesome name="mobile-phone" size={40} color={appTheme === 'dark' ? '#d6d6d6' : "black"} />
                   </Pressable>
                 </View>
               </Pressable>
@@ -208,13 +208,44 @@ const styles = StyleSheet.create({
   },
 
   boxShadow: {
-    shadowColor: '#0c94f5',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.7,
     elevation: 10,
+  },
+
+  boxShadowDark: {
+    shadowColor: '#cbddf7',
+  },
+
+  boxShadowLight: {
+    shadowColor: '#0c94f5',
+  },
+
+  bgColorDark1: {
+    backgroundColor: '#020538',
+  },
+
+  bgColorLight1: {
+    backgroundColor: '#e1e3e3',
+  },
+
+  bgColorDark2: {
+    backgroundColor: '#263375',
+  },
+
+  bgColorLight2: {
+    backgroundColor: 'white',
+  },
+
+  textColorDark: {
+    color: 'white',
+  },
+
+  textColorLight: {
+    color: 'black',
   },
 
 
