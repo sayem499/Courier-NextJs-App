@@ -8,6 +8,7 @@ import { resetParcelStatus, setParcelStatuses } from '../redux/parcelStatus/parc
 import { useGetParcelStatusesWithIdsMutation } from '../redux/parcelStatus/parcelStatusApiSlice';
 
 const PickedParcelScreen = ({ navigation }) => {
+  const { appTheme } = useSelector((state) => state.themeState);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const { parcelStatuses } = useSelector((state) => state.parcelStatusState);
@@ -76,21 +77,21 @@ const PickedParcelScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.pickedParcelScreen_container}>
-      <View style={styles.pickedParcelScreen_topContainer}>
+    <View style={[styles.pickedParcelScreen_container, appTheme === 'dark' ? styles.bgColorDark1 : styles.bgColorLight1]}>
+      <View style={[styles.pickedParcelScreen_topContainer, appTheme === 'dark' ? styles.bgColorDark2 : styles.bgColorLight2]}>
         <Pressable onPress={goBackButton}>
-          <Ionicons style={styles.backButton} name="arrow-back" size={24} color="black" />
+          <Ionicons style={styles.backButton} name="arrow-back" size={24} color={appTheme === 'dark' ? '#d6d6d6' : 'black'} />
         </Pressable>
       </View>
 
-      <View style={styles.pickedParcelScreen_bottomContainer}>
+      <View style={[styles.pickedParcelScreen_bottomContainer, appTheme === 'dark' ? styles.bgColorDark2 : styles.bgColorLight2]}>
         <ScrollView style={styles.pickedParcelList_container} contentContainerStyle={{ justifyContent: 'center' }}
           refreshControl={<RefreshControl refreshing={refresh} onRefresh={onRefresh} />} >
           {
             parcelStatuses?.filter((item) => item.isPicked === true).map((item) => {
               return <Pressable style={styles.listItemPressable} key={item._id}>
-                <View style={[styles.listItem, styles.boxShadow]}>
-                  <Text style={styles.listItemText}>{item._id}</Text>
+                <View style={[styles.listItem, styles.boxShadow, appTheme === 'dark' ? styles.bgColorDark1 : styles.bgColorLight2]}>
+                  <Text style={[styles.listItemText, appTheme === 'dark' ? styles.textColorDark : styles.textColorLight]}>{item._id}</Text>
                 </View>
               </Pressable>
             })
@@ -137,10 +138,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 
-
-
-
-
   boxShadow: {
     shadowColor: '#0d8c2e',
     shadowOffset: {
@@ -151,7 +148,29 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
 
+  bgColorDark1: {
+    backgroundColor: '#020538',
+  },
 
+  bgColorLight1: {
+    backgroundColor: '#e1e3e3',
+  },
+
+  bgColorDark2: {
+    backgroundColor: '#263375',
+  },
+
+  bgColorLight2: {
+    backgroundColor: 'white',
+  },
+
+  textColorDark: {
+    color: 'white',
+  },
+
+  textColorLight: {
+    color: 'black',
+  },
 })
 
 export default PickedParcelScreen
