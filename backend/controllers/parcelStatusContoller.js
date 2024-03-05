@@ -125,7 +125,7 @@ const updateParcelStatusWithId = expressAsyncHandler(async (req, res) => {
         parcelStatus.stepAction = body.stepAction || parcelStatus.stepAction;
         parcelStatus.isPaid = body.isPaid || parcelStatus.isPaid;
         parcelStatus.sender_id = body.sender_id || parcelStatus.sender_id;
-        parcelStatus.deliveryCost = body.deliiveryCost || parcelStatus.deliveryCost;
+        parcelStatus.deliveryCost = body.deliveryCost || parcelStatus.deliveryCost;
         parcelStatus.isReturned = body.isReturned || parcelStatus.isReturned;
         parcelStatus.deliveryMan_phonenumber = body.deliveryMan_phonenumber || parcelStatus.deliveryMan_phonenumber;
         parcelStatus.isPicked = body.isPicked || parcelStatus.isPicked;
