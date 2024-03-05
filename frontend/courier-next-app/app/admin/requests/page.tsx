@@ -319,6 +319,7 @@ const acceptClickButton = async (id: any, parcel_id: any) => {
     _id = id;
     stepOne ? isPaid = true : 0;
     stepAction ? stepAction++ : stepAction = 1;
+    console.log(deliveryCost);
     res = await updateParcelStatusWithTrackerIdAdmin({ _id, parcelStatus, stepAction, isPaid, deliveryCost, isReturned, deliveryMan_phonenumber }).unwrap();
     if (res) {
       getParcelStatus();
