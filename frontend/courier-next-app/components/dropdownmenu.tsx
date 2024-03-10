@@ -6,7 +6,7 @@ import Track from './track_parcel';
 import React, {useState} from 'react';
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 
-export default function Dropdownmenu(openTrack: any){
+export default function Dropdownmenu(openTrack: () => void){
 
     const dispatch = useAppDispatch();
     const router = useRouter();

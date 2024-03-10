@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "201191312824",
+    "project_id": "couriernextapp",
+    "storage_bucket": "couriernextapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201191312824:android:83fc9fd9c0864410c1134d",
+        "android_client_info": {
+          "package_name": "com.sayem499.couriernextdeliverymanapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqPvC2opu6ki2QUlY0lC31Y5aAg2pQx9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

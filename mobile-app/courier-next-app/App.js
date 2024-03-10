@@ -10,11 +10,15 @@ import PickupsScreen from './views/pickupsScreen';
 import DeliveryDetailsScreen from './views/deliveryDetailsScreen';
 import DeliveredParcelScreen from './views/deliveredParcelScreen';
 import PickedParcelScreen from './views/pickedParcelScreen';
+import { usePushNotifications } from './utils/notifications';
 import Tabs from './components/bottomTabs';
 
 const Stack = createNativeStackNavigator();
 
+
 export default function App() {
+  const { expoPushToken } = usePushNotifications();
+  console.log(expoPushToken);
   return (
     <Provider store={store}>
     <NavigationContainer>

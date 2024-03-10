@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "courier-next-app",
-    "slug": "courier-next-app",
+    "name": "courier-next-deliveryman-app",
+    "slug": "courier-next-deliveryman-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/fast-delivery-truck.png",
@@ -16,10 +16,18 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/fast-delivery-truck.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.sayem499.couriernextdeliverymanapp",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/fast-delivery-truck.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "82a082eb-d3bc-4f88-88eb-f3a2d8c62546"
+      }
+    },
+    "owner": "sayem499"
   }
 }
