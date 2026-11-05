@@ -108,7 +108,7 @@ const Footer = () => {
                   className="mt-1 shrink-0 text-blue-500"
                 />
                 <p className="leading-7 text-slate-400">
-                  35, East Hajipara,
+                  East Hajipara,
                   <br />
                   Rampura, Dhaka-1219,
                   <br />
