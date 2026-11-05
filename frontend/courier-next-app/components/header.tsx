@@ -127,6 +127,7 @@ const Header: React.FC = () => {
                                 height={32}
                                 className="object-contain"
                                 priority
+                                unoptimized
                             />
                         </div>
 
